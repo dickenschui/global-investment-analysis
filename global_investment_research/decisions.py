@@ -12,7 +12,7 @@ import math
 import numpy as np
 import pandas as pd
 
-from .income import income_row
+from .income import distribution_history, income_row, sustainable_yield
 
 # Risk policy (see HANDBOOK.md section 4). Change here, not in the reports.
 RISK_PER_POSITION = 0.005      # portfolio fraction lost if the invalidation level hits
@@ -59,7 +59,7 @@ def equity_call(m: dict, regime_stressed: bool = False, is_fund: bool = False) -
 
 def income_call(row: dict, m: dict, band=(0.06, 0.08)) -> dict:
     """Income mandate: buy for yield only inside the band, stage entries in a down-trend."""
-    y, cash, price = row["yield"], row["trailing_cash"], row["price"]
+    y, cash, price = row.get("yield_sustainable", row["yield"]), row["trailing_cash"], row["price"]
     state = m["trend"]["state"] if m else None
     if y is None:
         return {"stance": "Watch", "rule": "no distribution data", "price_for_band": None}
@@ -194,7 +194,9 @@ def portfolio_overlay(calls: list[dict], prices: pd.DataFrame, window: int = 52)
             "gross_before": float(sum(sizes.values()))}
 
 
-def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08), prices: pd.DataFrame | None = None) -> dict:
+def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08), prices: pd.DataFrame | None = None,
+                    dist_history: dict | None = None) -> dict:
+    """dist_history: optional {symbol: IBKR corporate actions over several years} for the income screen."""
     posture = macro_posture(mon["regime"])
     calls = []
     for sym, inst in meta.items():
@@ -211,6 +213,9 @@ def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08), prices: pd.DataFra
             price = snap.get("last") or m["last"]
             row = income_row(sym, price, pd.Timestamp(mon["as_of"]), inst.get("dividends", []),
                              snap.get("dividend_yield_pct"), band)
+            if dist_history is not None:
+                hist = distribution_history(dist_history.get(sym, []), pd.Timestamp(mon["as_of"]))
+                row.update(sustainable_yield(row, hist))
             ic = income_call(row, m, band)
             c.update(income=row, income_call=ic)
         calls.append(c)

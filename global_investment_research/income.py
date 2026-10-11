@@ -53,3 +53,34 @@ def income_row(symbol: str, price: float, as_of: pd.Timestamp, dividends: list[d
         "yield": y, "yield_basis": basis, "vendor_yield_pct": vendor_yield_pct, "target_fit": fit,
         "yield_after_cut": {f"{int(c*100)}%": (None if y is None else y * (1 - c)) for c in (0.1, 0.2, 0.3)},
     }
+
+
+def distribution_history(corp_actions: list[dict], as_of: pd.Timestamp, years: int = 3) -> dict | None:
+    """Cash paid in each of the `years` twelve-month windows before the latest one, from IBKR corporate
+    actions (CashDividends, in the listing currency). None when any window has no payment on record."""
+    pays = [(pd.Timestamp(a["date"]), float(a["value"])) for a in corp_actions
+            if a.get("type") == "CashDividends" and a.get("value") not in (None, "")]
+    prior = []
+    for k in range(1, years + 1):
+        hi, lo = as_of - pd.Timedelta(days=365 * k), as_of - pd.Timedelta(days=365 * (k + 1))
+        w = [v for d, v in pays if lo < d <= hi]
+        if not w:
+            return None
+        prior.append(sum(w))
+    return {"prior_12m": prior, "avg_prior": sum(prior) / len(prior)}
+
+
+def sustainable_yield(row: dict, hist: dict | None) -> dict:
+    """Yield on the lower of last-12-month cash and the four-year average, plus what the history says.
+    A one-off special or a payment-timing shift inflates the last twelve months; a cut shows as a fall."""
+    y, ltm = row.get("yield"), row.get("trailing_cash")
+    if y is None or not ltm or not hist:
+        return {"yield_sustainable": y, "history_flag": "no multi-year history" if hist is None else None}
+    ratio = ltm / hist["avg_prior"]
+    y4 = y * (ltm + sum(hist["prior_12m"])) / (1 + len(hist["prior_12m"])) / ltm
+    all_years = [ltm] + hist["prior_12m"]
+    flag = ("last 12 months above the prior three-year average: special or timing; using the four-year average"
+            if ratio > 1.25 else "distributions falling: last 12 months below the prior three-year average"
+            if ratio < 0.8 else "volatile: lowest year under 70% of the highest" if min(all_years) / max(all_years) < 0.7 else "steady")
+    return {"yield_sustainable": min(y, y4), "yield_4y_avg": y4, "ltm_vs_prior": ratio,
+            "cash_by_year": [ltm] + hist["prior_12m"], "history_flag": flag}

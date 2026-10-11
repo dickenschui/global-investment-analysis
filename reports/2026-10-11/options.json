@@ -43,6 +43,10 @@
     "+10%": 2.0800821355236145,
     "+20%": 2.0800821355236145
    },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
+   },
    "one_sd_move": 0.13097177387233105,
    "return_at_1sd": 2.0800821355236145,
    "score": 0.1924799437866992
@@ -88,6 +92,10 @@
     "+0%": -0.9542752629172382,
     "+10%": -1.0,
     "+20%": -1.0
+   },
+   "earnings": {
+    "status": "none",
+    "text": "Fund: no company results date."
    },
    "one_sd_move": -0.08860748888656056,
    "return_at_1sd": 2.161369865284184,
@@ -135,6 +143,10 @@
     "+10%": 1.661596958174905,
     "+20%": 1.661596958174905
    },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
+   },
    "one_sd_move": 0.1539623085658135,
    "return_at_1sd": 1.661596958174905,
    "score": 0.07452972046881445
@@ -180,6 +192,10 @@
     "+0%": -0.914624505928855,
     "+10%": 1.7421343873517778,
     "+20%": 1.7667984189723325
+   },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
    },
    "one_sd_move": 0.11377855484312627,
    "return_at_1sd": 1.7667984189723325,
@@ -227,6 +243,10 @@
     "+10%": -1.0,
     "+20%": -1.0
    },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
+   },
    "one_sd_move": -0.22037157172630117,
    "return_at_1sd": 1.2900763358778629,
    "score": 0.014784389775002293
@@ -272,6 +292,10 @@
     "+0%": -1.0,
     "+10%": 1.5559105431309908,
     "+20%": 1.5559105431309908
+   },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
    },
    "one_sd_move": 0.16103636659313225,
    "return_at_1sd": 1.5559105431309908,
@@ -321,6 +345,10 @@
     "+10%": 1.9295328582739506,
     "+20%": 1.9295328582739506
    },
+   "earnings": {
+    "status": "none",
+    "text": "Fund: no company results date."
+   },
    "one_sd_move": 0.08904930792876464,
    "return_at_1sd": 1.663890300535042,
    "score": -0.017123746553164287
@@ -367,6 +395,10 @@
     "+10%": 2.726403530277028,
     "+20%": 2.726403530277028
    },
+   "earnings": {
+    "status": "none",
+    "text": "Fund: no company results date."
+   },
    "one_sd_move": 0.06027591550799727,
    "return_at_1sd": 1.2799225073332425,
    "score": -0.1713102077658228
@@ -407,6 +439,10 @@
     "+0%": -1.0,
     "+10%": -1.0,
     "+20%": -1.0
+   },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
    },
    "one_sd_move": -0.2197439346561706,
    "return_at_1sd": 1.419187581338024,
@@ -449,6 +485,10 @@
     "+10%": 0.8883185840707983,
     "+20%": 3.8757522123893757
    },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
+   },
    "one_sd_move": 0.12954720128615338,
    "return_at_1sd": 1.7710216115203203,
    "score": -0.19829463832685623
@@ -489,6 +529,10 @@
     "+0%": -1.0,
     "+10%": 0.2609768637532166,
     "+20%": 2.619125964010285
+   },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
    },
    "one_sd_move": 0.15813773899206596,
    "return_at_1sd": 1.6319514327044193,
@@ -531,6 +575,10 @@
     "+10%": 0.22559414990859583,
     "+20%": 2.796709323583182
    },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
+   },
    "one_sd_move": 0.15268444271558734,
    "return_at_1sd": 1.580171850734955,
    "score": -0.3191664682304581
@@ -571,6 +619,10 @@
     "+0%": -1.0,
     "+10%": -1.0,
     "+20%": -1.0
+   },
+   "earnings": {
+    "status": "none",
+    "text": "Fund: no company results date."
    },
    "one_sd_move": -0.08973912517955462,
    "return_at_1sd": 1.7157816527671983,
@@ -613,6 +665,10 @@
     "+10%": 0.8952258064516114,
     "+20%": 5.23174193548387
    },
+   "earnings": {
+    "status": "unverified",
+    "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."
+   },
    "one_sd_move": 0.10896480123526175,
    "return_at_1sd": 1.283985857954422,
    "score": -0.4586254002317786
@@ -654,6 +710,10 @@
     "+10%": 2.4045372050816725,
     "+20%": 9.222867513611611
    },
+   "earnings": {
+    "status": "none",
+    "text": "Fund: no company results date."
+   },
    "one_sd_move": 0.07952804676344272,
    "return_at_1sd": 1.0086918128054023,
    "score": -0.5494176348548696
@@ -694,6 +754,10 @@
     "+0%": -1.0,
     "+10%": 7.460729613733934,
     "+20%": 24.168240343347637
+   },
+   "earnings": {
+    "status": "none",
+    "text": "Fund: no company results date."
    },
    "one_sd_move": 0.05137779013128596,
    "return_at_1sd": -0.6628313170567961,

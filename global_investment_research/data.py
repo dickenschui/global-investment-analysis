@@ -29,7 +29,7 @@ def load_ibkr_snapshot(directory: str | Path, universe: dict) -> tuple[pd.DataFr
     directory = Path(directory)
     by_symbol = {i["symbol"]: i for i in universe["instruments"]}
     series, meta = {}, {}
-    files = sorted(f for f in directory.glob("*.json") if f.name != "options.json")  # chains load separately
+    files = sorted(f for f in directory.glob("*.json") if f.name not in ("options.json", "rates.json"))  # loaded separately
     if not files:
         raise FileNotFoundError(f"no snapshot JSON files in {directory}")
     for f in files:
@@ -112,7 +112,8 @@ def fetch_yahoo(universe: dict, period: str = "1y", interval: str = "1d") -> tup
 
 def load_cash_yield(directory: str | Path) -> pd.Series | None:
     """13-week US T-bill yield (annual, decimal) from rates.json in a history directory, if collected.
-    IBKR's IRX index is quoted in percent; values above 25 are taken as tenths of a percent (CBOE x10 quote)."""
+    CBOE's IRX index is quoted at ten times the yield in percent (40.57 = 4.057%). Weeks before the series
+    starts have no value; callers treat them as 0%."""
     path = Path(directory) / "rates.json"
     if not path.exists():
         return None
@@ -122,6 +123,8 @@ def load_cash_yield(directory: str | Path) -> pd.Series | None:
             s = pd.Series(w["close"], index=pd.to_datetime(w["time"]).tz_localize(None), dtype=float)
             s.index = s.index.to_period("W-FRI").end_time.normalize()
             s = s[~s.index.duplicated(keep="last")].sort_index()
-            scale = 1000.0 if s.median() > 25 else 100.0
-            return (s / scale).clip(lower=0)
+            y = (s / 1000.0).clip(lower=0)
+            if y.max() > 0.12:
+                raise ValueError("IRX scale check failed: a T-bill yield above 12% means the quote is not x10")
+            return y
     return None

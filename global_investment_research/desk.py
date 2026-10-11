@@ -114,15 +114,18 @@ def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str
     inc = [c for c in calls if c.get("income")]
     inc.sort(key=lambda c: (STANCE_ORDER_INC.get(c["income_call"]["stance"], 9), -(c["income"]["yield"] or 0)))
     irows = [[f"<b>{H.esc(c['symbol'])}</b> {H.esc(c['name'])}", H.chip(c["income_call"]["stance"], STANCE_TONE[c["income_call"]["stance"]]),
-              H.pct(c["income"]["yield"], signed=False, digits=2), H.num(c["income"]["price"], 3),
+              H.pct(c["income"]["yield"], signed=False, digits=2),
+              H.pct(c["income"].get("yield_sustainable", c["income"]["yield"]), signed=False, digits=2),
+              H.esc(c["income"].get("history_flag") or "n/a"), H.num(c["income"]["price"], 3),
               H.num(c["income_call"].get("price_for_7pct"), 3), H.num(c["income_call"].get("price_for_8pct"), 3),
               H.pct(c["income"]["yield_after_cut"]["20%"], signed=False, digits=2), H.pct(c["ret_1y"]),
               H.esc(c["income_call"]["rule"]), H.esc(PRIOR_THESES.get(c["symbol"], ""))] for c in inc]
     body += H.section("4 · Singapore income desk (6–8% target)",
-                      H.table(["Name", "Decision", "Trailing yield", "Price", "Price for 7%", "Price for 8%", "Yield if cut 20%",
-                               "1y price", "Plan", "Distribution record (9 Oct note)"],
-                              irows, numeric={2, 3, 4, 5, 6, 7}, wrap={8, 9}),
-                      "The income call is separate from the price-trend call: a REIT can be a staged income buy while its price trend is down. "
+                      H.table(["Name", "Decision", "Yield (12m)", "Sustainable yield", "Payout history", "Price", "Price for 7%",
+                               "Price for 8%", "Yield if cut 20%", "1y price", "Plan", "Distribution record (9 Oct note)"],
+                              irows, numeric={2, 3, 5, 6, 7, 8, 9}, wrap={4, 10, 11}),
+                      "The decision uses the sustainable yield: the lower of last-12-month cash and the four-year average, from IBKR "
+                      "corporate actions. The income call is separate from the price-trend call: a REIT can be a staged income buy while its price trend is down. "
                       "Use the 7% and 8% prices as limit-order levels for the second and third tranche.")
 
     # 5. FX desk

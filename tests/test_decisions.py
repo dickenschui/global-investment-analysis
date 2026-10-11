@@ -91,3 +91,20 @@ def test_workbook_formulas_reference_policy(tmp_path):
     assert ds["O2"].value.startswith("=IF(AND(F2=\"Accumulate\"") and "Policy!$B$4" in ds["O2"].value
     assert ds["P2"].value == "=IF(O2=\"\",\"\",O2*Policy!$B$3*Policy!$B$2)"
     assert wb["Policy"]["B2"].fill.fgColor.rgb.endswith("FFFF00")  # user input highlighted
+
+
+def test_sustainable_yield_discounts_a_special_and_flags_cuts():
+    import pandas as pd
+    from global_investment_research.income import distribution_history, sustainable_yield
+    asof = pd.Timestamp("2026-10-09")
+    ca = [{"type": "CashDividends", "date": d, "value": v} for d, v in
+          [("20260801", "0.05"), ("20260201", "0.05"), ("20250801", "0.03"), ("20250201", "0.03"),
+           ("20240801", "0.03"), ("20240201", "0.03"), ("20230801", "0.03"), ("20230201", "0.03")]]
+    h = distribution_history(ca, asof)
+    assert [round(x, 4) for x in h["prior_12m"]] == [0.06, 0.06, 0.06]
+    out = sustainable_yield({"yield": 0.10, "trailing_cash": 0.10}, h)   # last year paid 0.10 vs 0.06 before
+    assert out["yield_sustainable"] < 0.10 and "special or timing" in out["history_flag"]
+    cut = sustainable_yield({"yield": 0.05, "trailing_cash": 0.04}, h)
+    assert cut["yield_sustainable"] == 0.05 * 1 or cut["yield_sustainable"] <= 0.05
+    assert "falling" in cut["history_flag"]
+    assert distribution_history(ca[:2], asof) is None                     # no multi-year record: say so, never guess

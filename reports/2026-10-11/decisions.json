@@ -58,7 +58,12 @@
    "ret_1y": 0.513840428006513,
    "momentum": 1.511370472014722,
    "vol": 0.2300542931086422,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.029298950572531884,
+   "cluster": [
+    "XLE",
+    "XOM"
+   ]
   },
   {
    "stance": "Accumulate",
@@ -82,7 +87,9 @@
    "ret_1y": 0.4096716683999406,
    "momentum": 1.41291302176624,
    "vol": 0.23285023472655472,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.02236088693980489,
+   "cluster": null
   },
   {
    "stance": "Accumulate",
@@ -106,7 +113,12 @@
    "ret_1y": 0.505167498218104,
    "momentum": 1.3868796749964443,
    "vol": 0.260157158462401,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.03205587639731112,
+   "cluster": [
+    "XLE",
+    "XOM"
+   ]
   },
   {
    "stance": "Accumulate",
@@ -130,7 +142,9 @@
    "ret_1y": 0.33168153287082935,
    "momentum": 1.038871310773212,
    "vol": 0.18902737571441325,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.047100034487258954,
+   "cluster": null
   },
   {
    "stance": "Accumulate",
@@ -154,7 +168,14 @@
    "ret_1y": 0.39489842461668023,
    "momentum": 0.9781263174236828,
    "vol": 0.23763477981645204,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.021896839049316174,
+   "cluster": [
+    "QQQ",
+    "SOXX",
+    "SPY",
+    "XLK"
+   ]
   },
   {
    "stance": "Accumulate",
@@ -178,7 +199,14 @@
    "ret_1y": 0.19226057394873064,
    "momentum": 0.9280042621941922,
    "vol": 0.12044525183982586,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.04562758701893323,
+   "cluster": [
+    "QQQ",
+    "SOXX",
+    "SPY",
+    "XLK"
+   ]
   },
   {
    "stance": "Accumulate",
@@ -202,7 +230,9 @@
    "ret_1y": 0.37252823419089154,
    "momentum": 0.9190194616280561,
    "vol": 0.23946287601209423,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.02608920143632225,
+   "cluster": null
   },
   {
    "stance": "Accumulate",
@@ -226,7 +256,14 @@
    "ret_1y": 0.27441899915182355,
    "momentum": 0.8454045139588844,
    "vol": 0.18329985932302917,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.03316157093195564,
+   "cluster": [
+    "QQQ",
+    "SOXX",
+    "SPY",
+    "XLK"
+   ]
   },
   {
    "stance": "Accumulate",
@@ -250,7 +287,9 @@
    "ret_1y": 0.20195623108859317,
    "momentum": 0.8258693868051881,
    "vol": 0.1597972410644716,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.041503528265567996,
+   "cluster": null
   },
   {
    "stance": "Accumulate",
@@ -274,7 +313,9 @@
    "ret_1y": 0.48649448366234105,
    "momentum": 0.6974549942705075,
    "vol": 0.3376849365111104,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.07607778002336825,
+   "cluster": null
   },
   {
    "stance": "Accumulate",
@@ -298,7 +339,9 @@
    "ret_1y": 0.25180170342869634,
    "momentum": 0.5228763724287293,
    "vol": 0.32382684378588755,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.029433503289403834,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -322,7 +365,12 @@
    "ret_1y": 1.270009285051068,
    "momentum": 1.5909439031297412,
    "vol": 0.5466556792892971,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.006279445536488289,
+   "cluster": [
+    "CRWD",
+    "PANW"
+   ]
   },
   {
    "stance": "Hold",
@@ -346,7 +394,9 @@
    "ret_1y": 1.1357544314742758,
    "momentum": 1.369560738528492,
    "vol": 0.5473068312641706,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.01708237501427348,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -370,7 +420,14 @@
    "ret_1y": 1.0566932607816462,
    "momentum": 1.3282690969116726,
    "vol": 0.3835641701916377,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.02099201760359297,
+   "cluster": [
+    "QQQ",
+    "SOXX",
+    "SPY",
+    "XLK"
+   ]
   },
   {
    "stance": "Hold",
@@ -394,7 +451,12 @@
    "ret_1y": 1.0080556221529609,
    "momentum": 1.2866850953371176,
    "vol": 0.5024584477888902,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.00738052741079362,
+   "cluster": [
+    "CRWD",
+    "PANW"
+   ]
   },
   {
    "stance": "Hold",
@@ -418,7 +480,13 @@
    "ret_1y": 0.047185689682166965,
    "momentum": 0.5837658721152027,
    "vol": 0.3739658543598121,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.018389230706179836,
+   "cluster": [
+    "IGV",
+    "MSFT",
+    "NOW"
+   ]
   },
   {
    "stance": "Hold",
@@ -442,7 +510,9 @@
    "ret_1y": 0.4064892926670993,
    "momentum": 0.5750741418772266,
    "vol": 0.4919145724965039,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.013046276713854468,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -466,7 +536,9 @@
    "ret_1y": 0.03086112493778015,
    "momentum": 0.4527915234696397,
    "vol": 0.17001541463900757,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.055207543758265,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -490,7 +562,9 @@
    "ret_1y": 0.21287609187965062,
    "momentum": 0.38228404657223886,
    "vol": 0.36953481005518646,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.04339650478858494,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -514,7 +588,13 @@
    "ret_1y": 0.0051744134177893475,
    "momentum": 0.322457376064392,
    "vol": 0.34797584429780526,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.020443107860971716,
+   "cluster": [
+    "IGV",
+    "MSFT",
+    "NOW"
+   ]
   },
   {
    "stance": "Hold",
@@ -538,7 +618,9 @@
    "ret_1y": 0.045438153624233646,
    "momentum": 0.29605432556548217,
    "vol": 0.13458201021102906,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.0551779938879787,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -562,7 +644,9 @@
    "ret_1y": 0.018956472423082404,
    "momentum": 0.1056078546597575,
    "vol": 0.4396666968878612,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.027487184938870365,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -586,7 +670,13 @@
    "ret_1y": -0.22056219566179713,
    "momentum": 0.07463676750337495,
    "vol": 0.5842205756639705,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.018511616780586673,
+   "cluster": [
+    "IGV",
+    "MSFT",
+    "NOW"
+   ]
   },
   {
    "stance": "Hold",
@@ -610,7 +700,9 @@
    "ret_1y": -0.19419775014801666,
    "momentum": -0.09426189808896077,
    "vol": 0.3508384093311713,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.05298717446448561,
+   "cluster": null
   },
   {
    "stance": "Hold",
@@ -634,7 +726,9 @@
    "ret_1y": -0.06737068513272482,
    "momentum": -0.1138354255710761,
    "vol": 0.21616728714280264,
-   "trend": "up"
+   "trend": "up",
+   "size_standalone": 0.08,
+   "cluster": null
   },
   {
    "stance": "Watch",
@@ -669,14 +763,24 @@
      "10%": 0.03258620689655173,
      "20%": 0.028965517241379315,
      "30%": 0.025344827586206896
-    }
+    },
+    "yield_sustainable": 0.03181034482758621,
+    "yield_4y_avg": 0.03181034482758621,
+    "ltm_vs_prior": 1.1931818181818181,
+    "cash_by_year": [
+     1.05,
+     0.98,
+     0.86,
+     0.8
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Hold",
-    "rule": "Yield 3.62% below band; would reach 6% at 17.500.",
-    "price_for_7pct": 15.0,
-    "price_for_8pct": 13.125,
-    "price_for_6pct": 17.5
+    "rule": "Yield 3.18% below band; would reach 6% at 15.375.",
+    "price_for_7pct": 13.178571428571429,
+    "price_for_8pct": 11.531250000000002,
+    "price_for_6pct": 15.375000000000002
    }
   },
   {
@@ -712,14 +816,24 @@
      "10%": 0.03901308615049073,
      "20%": 0.03467829880043621,
      "30%": 0.03034351145038168
-    }
+    },
+    "yield_sustainable": 0.03441930207197383,
+    "yield_4y_avg": 0.03441930207197383,
+    "ltm_vs_prior": 1.3786127167630058,
+    "cash_by_year": [
+     3.18,
+     2.64,
+     2.1,
+     2.1799999999999997
+    ],
+    "history_flag": "last 12 months above the prior three-year average: special or timing; using the four-year average"
    },
    "income_call": {
     "stance": "Hold",
-    "rule": "Yield 4.33% below band; would reach 6% at 53.000.",
-    "price_for_7pct": 45.42857142857142,
-    "price_for_8pct": 39.75,
-    "price_for_6pct": 53.00000000000001
+    "rule": "Yield 3.44% below band; would reach 6% at 42.083.",
+    "price_for_7pct": 36.07142857142857,
+    "price_for_8pct": 31.5625,
+    "price_for_6pct": 42.083333333333336
    }
   },
   {
@@ -944,14 +1058,24 @@
      "10%": 0.020729366602687142,
      "20%": 0.018426103646833013,
      "30%": 0.016122840690978888
-    }
+    },
+    "yield_sustainable": 0.017514395393474085,
+    "yield_4y_avg": 0.017514395393474085,
+    "ltm_vs_prior": 1.469387755102041,
+    "cash_by_year": [
+     0.24000000000000002,
+     0.17,
+     0.16,
+     0.16
+    ],
+    "history_flag": "last 12 months above the prior three-year average: special or timing; using the four-year average"
    },
    "income_call": {
     "stance": "Hold",
-    "rule": "Yield 2.30% below band; would reach 6% at 4.000.",
-    "price_for_7pct": 3.4285714285714284,
-    "price_for_8pct": 3.0,
-    "price_for_6pct": 4.000000000000001
+    "rule": "Yield 1.75% below band; would reach 6% at 3.042.",
+    "price_for_7pct": 2.6071428571428563,
+    "price_for_8pct": 2.2812499999999996,
+    "price_for_6pct": 3.041666666666666
    }
   },
   {
@@ -1113,7 +1237,17 @@
      "10%": 0.03581081081081081,
      "20%": 0.03183183183183183,
      "30%": 0.027852852852852848
-    }
+    },
+    "yield_sustainable": 0.03978978978978979,
+    "yield_4y_avg": 0.04498248248248248,
+    "ltm_vs_prior": 0.8517857142857143,
+    "cash_by_year": [
+     1.5899999999999999,
+     2.27,
+     1.73,
+     1.6
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Hold",
@@ -1324,14 +1458,24 @@
      "10%": 0.03710804020100502,
      "20%": 0.03298492462311558,
      "30%": 0.028861809045226127
-    }
+    },
+    "yield_sustainable": 0.03836055276381909,
+    "yield_4y_avg": 0.03836055276381909,
+    "ltm_vs_prior": 1.1023287057769815,
+    "cash_by_year": [
+     0.1641,
+     0.1503,
+     0.1502,
+     0.1461
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Hold",
-    "rule": "Yield 4.12% below band; would reach 6% at 2.735.",
-    "price_for_7pct": 2.344285714285714,
-    "price_for_8pct": 2.05125,
-    "price_for_6pct": 2.735
+    "rule": "Yield 3.84% below band; would reach 6% at 2.545.",
+    "price_for_7pct": 2.181071428571428,
+    "price_for_8pct": 1.9084374999999998,
+    "price_for_6pct": 2.544583333333333
    }
   },
   {
@@ -1514,14 +1658,24 @@
      "10%": 0.0392688679245283,
      "20%": 0.03490566037735849,
      "30%": 0.030542452830188676
-    }
+    },
+    "yield_sustainable": 0.03856132075471697,
+    "yield_4y_avg": 0.03856132075471697,
+    "ltm_vs_prior": 1.183368869936034,
+    "cash_by_year": [
+     0.185,
+     0.189,
+     0.131,
+     0.149
+    ],
+    "history_flag": "volatile: lowest year under 70% of the highest"
    },
    "income_call": {
     "stance": "Avoid",
-    "rule": "Yield 4.36% below band; would reach 6% at 3.083.",
-    "price_for_7pct": 2.642857142857143,
-    "price_for_8pct": 2.3125,
-    "price_for_6pct": 3.0833333333333335
+    "rule": "Yield 3.86% below band; would reach 6% at 2.725.",
+    "price_for_7pct": 2.335714285714285,
+    "price_for_8pct": 2.0437499999999997,
+    "price_for_6pct": 2.7249999999999996
    }
   },
   {
@@ -1578,14 +1732,24 @@
      "10%": 0.05107853403141361,
      "20%": 0.04540314136125654,
      "30%": 0.03972774869109947
-    }
+    },
+    "yield_sustainable": 0.055811518324607325,
+    "yield_4y_avg": 0.055811518324607325,
+    "ltm_vs_prior": 1.0226415094339623,
+    "cash_by_year": [
+     0.0542,
+     0.0536,
+     0.053,
+     0.0524
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Avoid",
-    "rule": "Yield 5.68% below band; would reach 6% at 0.903.",
-    "price_for_7pct": 0.7742857142857141,
-    "price_for_8pct": 0.6775,
-    "price_for_6pct": 0.9033333333333333
+    "rule": "Yield 5.58% below band; would reach 6% at 0.888.",
+    "price_for_7pct": 0.7614285714285713,
+    "price_for_8pct": 0.66625,
+    "price_for_6pct": 0.8883333333333334
    }
   },
   {
@@ -1810,7 +1974,17 @@
      "10%": 0.04270982142857142,
      "20%": 0.037964285714285714,
      "30%": 0.03321875
-    }
+    },
+    "yield_sustainable": 0.04745535714285714,
+    "yield_4y_avg": 0.049765624999999994,
+    "ltm_vs_prior": 0.9390459363957597,
+    "cash_by_year": [
+     0.1063,
+     0.1026,
+     0.13040000000000002,
+     0.1066
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Avoid",
@@ -1916,14 +2090,24 @@
      "10%": 0.0558718309859155,
      "20%": 0.04966384976525823,
      "30%": 0.04345586854460094
-    }
+    },
+    "yield_sustainable": 0.049712441314554,
+    "yield_4y_avg": 0.049712441314554,
+    "ltm_vs_prior": 1.3616984759027873,
+    "cash_by_year": [
+     0.13223000000000001,
+     0.10035000000000001,
+     0.08881,
+     0.10216
+    ],
+    "history_flag": "last 12 months above the prior three-year average: special or timing; using the four-year average"
    },
    "income_call": {
-    "stance": "Accumulate",
-    "rule": "Yield in target band but price in down-trend: stage in thirds (now, at 1.889 for 7% yield, and after trend repair).",
-    "price_for_7pct": 1.889,
-    "price_for_8pct": 1.652875,
-    "price_for_6pct": 2.2038333333333338
+    "stance": "Avoid",
+    "rule": "Yield 4.97% below band; would reach 6% at 1.765.",
+    "price_for_7pct": 1.5126785714285713,
+    "price_for_8pct": 1.3235937500000001,
+    "price_for_6pct": 1.764791666666667
    }
   },
   {
@@ -1980,7 +2164,17 @@
      "10%": 0.06054999999999999,
      "20%": 0.053822222222222216,
      "30%": 0.04709444444444444
-    }
+    },
+    "yield_sustainable": 0.06727777777777777,
+    "yield_4y_avg": 0.07586805555555554,
+    "ltm_vs_prior": 0.8545219334352582,
+    "cash_by_year": [
+     0.07266,
+     0.07797,
+     0.088,
+     0.08912
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Accumulate",
@@ -2023,7 +2217,17 @@
      "10%": 0.06172131147540984,
      "20%": 0.05486338797814208,
      "30%": 0.04800546448087431
-    }
+    },
+    "yield_sustainable": 0.0685792349726776,
+    "yield_4y_avg": 0.07226775956284152,
+    "ltm_vs_prior": 0.9330855018587362,
+    "cash_by_year": [
+     0.1255,
+     0.1341,
+     0.1347,
+     0.1347
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Accumulate",
@@ -2066,7 +2270,17 @@
      "10%": 0.05260434782608695,
      "20%": 0.04675942028985507,
      "30%": 0.04091449275362318
-    }
+    },
+    "yield_sustainable": 0.05844927536231884,
+    "yield_4y_avg": 0.058613526570048306,
+    "ltm_vs_prior": 0.9962671204677077,
+    "cash_by_year": [
+     0.12098999999999999,
+     0.1217,
+     0.12042,
+     0.12221
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Avoid",
@@ -2109,7 +2323,17 @@
      "10%": 0.05989915966386555,
      "20%": 0.0532436974789916,
      "30%": 0.04658823529411765
-    }
+    },
+    "yield_sustainable": 0.0665546218487395,
+    "yield_4y_avg": 0.07023109243697478,
+    "ltm_vs_prior": 0.9313994511956096,
+    "cash_by_year": [
+     0.0792,
+     0.0794,
+     0.0882,
+     0.0875
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Accumulate",
@@ -2152,7 +2376,17 @@
      "10%": 0.061684931506849325,
      "20%": 0.05483105022831051,
      "30%": 0.04797716894977169
-    }
+    },
+    "yield_sustainable": 0.06853881278538813,
+    "yield_4y_avg": 0.06938013698630137,
+    "ltm_vs_prior": 0.9838966941245876,
+    "cash_by_year": [
+     0.1501,
+     0.15158,
+     0.14965,
+     0.15644
+    ],
+    "history_flag": "steady"
    },
    "income_call": {
     "stance": "Accumulate",
@@ -2227,5 +2461,49 @@
    "state": "up",
    "ret_3m": 0.026809734376449512
   }
- ]
+ ],
+ "portfolio": {
+  "gross": 0.8409867578766999,
+  "risk_to_exits": 0.12319696182294788,
+  "vol": 0.08850998793837044,
+  "vol_if_independent": 0.05270005146629407,
+  "clusters": [
+   {
+    "members": [
+     "XLE",
+     "XOM"
+    ],
+    "risk_before": 0.01,
+    "factor": 1.0
+   },
+   {
+    "members": [
+     "QQQ",
+     "SOXX",
+     "SPY",
+     "XLK"
+    ],
+    "risk_before": 0.02,
+    "factor": 1.0
+   },
+   {
+    "members": [
+     "CRWD",
+     "PANW"
+    ],
+    "risk_before": 0.01,
+    "factor": 1.0
+   },
+   {
+    "members": [
+     "IGV",
+     "MSFT",
+     "NOW"
+    ],
+    "risk_before": 0.015,
+    "factor": 1.0
+   }
+  ],
+  "gross_before": 0.8409867578766999
+ }
 }

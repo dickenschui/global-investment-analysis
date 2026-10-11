@@ -604,17 +604,20 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#sheet
 
 /* ---------- SG income ---------- */
 function rIncome() {
-  const rows = D.calls.filter(c => c.income).sort((a, b) => b.income.yield - a.income.yield);
-  const inBand = rows.filter(c => c.income.yield >= 0.06 && c.income.yield <= 0.08);
+  const sy = c => c.income.yield_sustainable ?? c.income.yield;
+  const rows = D.calls.filter(c => c.income).sort((a, b) => sy(b) - sy(a));
+  const inBand = rows.filter(c => sy(c) >= 0.06 && sy(c) <= 0.08);
   $("#v-income").innerHTML = `
-    <div class="banner ok"><p class="lead">${inBand.length} Singapore names yield 6–8% on trailing distributions.</p>
-      <p class="mut small">Yield is cash paid over the last year divided by the weekly close. A live price recomputes it. The plan buys in thirds: now, at the 7% price, and after the price trend repairs.</p></div>
+    <div class="banner ok"><p class="lead">${inBand.length} Singapore names yield 6–8% on a sustainable basis.</p>
+      <p class="mut small">Sustainable yield uses the lower of last-12-month cash and the four-year average, so a one-off special or a payment shifted between years does not flatter it. A live price recomputes both. The plan buys in thirds: now, at the 7% price, and after the price trend repairs.</p></div>
     <div class="row">${cap.mcp ? `<button class="btn" id="inc-live">Price these live</button><span class="small mut" id="lc-msg"></span>` : ""}</div>
     <div class="progress"><i id="lc-bar"></i></div>
-    <div class="tw"><table><thead><tr><th>Name</th><th>Income call</th><th>Price call</th><th class="n">Price</th><th class="n">Yield</th><th class="n">Add at 7%</th><th class="n">6% / 8% price</th><th class="n">Yield if paid 20% less</th><th>Basis</th></tr></thead>
-    <tbody>${rows.map(c => { const q = live[c.symbol], p = q?.price ?? c.last, y = c.income.yield * c.last / p;
+    <div class="tw"><table><thead><tr><th>Name</th><th>Income call</th><th>Price call</th><th class="n">Price</th><th class="n">Yield (12m)</th><th class="n">Sustainable</th><th>Payout history</th><th class="n">Add at 7%</th><th class="n">6% / 8% price</th><th class="n">Yield if paid 20% less</th><th>Basis</th></tr></thead>
+    <tbody>${rows.map(c => { const q = live[c.symbol], p = q?.price ?? c.last, y = c.income.yield * c.last / p, ys = (c.income.yield_sustainable ?? c.income.yield) * c.last / p;
       return `<tr class="click" data-sym="${esc(c.symbol)}" tabindex="0"><td><b class="mono">${esc(c.symbol)}</b><span class="nm">${esc(c.name)}</span></td><td>${stanceChip(c.income.stance)}</td><td>${stanceChip(c.stance)}</td>
-      <td class="n">${px(p)}${q ? `<span class="nm">live</span>` : ""}</td><td class="n"><b>${pct(y, false, 2)}</b>${y >= 0.06 && y <= 0.08 ? ` <span class="chip up">in band</span>` : ""}</td>
+      <td class="n">${px(p)}${q ? `<span class="nm">live</span>` : ""}</td><td class="n">${pct(y, false, 2)}</td>
+      <td class="n"><b>${pct(ys, false, 2)}</b>${ys >= 0.06 && ys <= 0.08 ? ` <span class="chip up">in band</span>` : ""}</td>
+      <td class="small"><span class="chip ${/steady/.test(c.income.history_flag || "") ? "up" : c.income.history_flag ? "warn" : ""}">${esc((c.income.history_flag || "n/a").split(":")[0])}</span></td>
       <td class="n">${px(c.income.price_for_7pct)}</td><td class="n">${px(c.income.price_for_6pct)} / ${px(c.income.price_for_8pct)}</td>
       <td class="n">${pct(c.income.yield_after_cut?.["20%"], false, 2)}</td><td class="small mut">${esc(c.income.basis || "")}</td></tr>`; }).join("")}</tbody></table></div>
     <p class="note">One year of distributions only: a single special dividend can inflate the yield. Check the payout history before buying.</p>`;
@@ -680,7 +683,7 @@ function rEvidence() {
     ${yrs.length ? `<div class="panel"><header><h2>Year by year</h2><span class="small mut">Shading scales with the size of the gain or loss</span></header>
       <div class="tw heat"><table><thead><tr><th>Year</th><th class="n">Equal weight</th>${rules.map(v => `<th class="n">${esc(short(v))}</th>`).join("")}</tr></thead>
       <tbody>${yrs.map(y => `<tr><td class="mono">${y}</td><td class="n" style="${heat(bench.years[y])}">${pct(bench.years[y])}</td>${rules.map(v => `<td class="n" style="${heat(v.years?.[y])}">${pct(v.years?.[y])}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>` : ""}
-    ${e.data_fixes?.length ? `<p class="note">${e.data_fixes.map(f => `Excluded bad print: ${esc(f.symbol)} ${esc(f.date)} closed ${f.close} between ${f.previous} and ${f.next}.`).join(" ")}</p>` : ""}
+    ${e.data_fixes?.length ? `<p class="note">${e.data_fixes.map(f => f.reason ? `Excluded ${esc(f.symbol)} ${esc(f.date)}: ${esc(f.reason)}` : `Excluded bad print: ${esc(f.symbol)} ${esc(f.date)} closed ${f.close} between ${f.previous} and ${f.next}.`).join(" ")}</p>` : ""}
     <p class="note">Limits: today's instrument list (survivorship), price returns in local currency, weekly closes, no costs, taxes or dividends, no macro overlay.</p>`;
 }
 

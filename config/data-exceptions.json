@@ -1,0 +1,7 @@
+{
+  "note": "Windows the backtest ignores because the source prices are known to be unreliable there. Raw files stay as returned. Add an entry only with evidence, and say what it is.",
+  "exceptions": [
+    {"symbol": "RR.", "from": "2020-09-28", "to": "2020-11-06",
+     "reason": "Rolls-Royce rights issue (October 2020): IBKR weekly closes jump from 1.13 to 2.19, hold near 2.2-2.4 for three weeks, then fall to 0.70, consistent with a corporate-action adjustment applied part-way through. Not verifiable against a second source in this environment."}
+  ]
+}

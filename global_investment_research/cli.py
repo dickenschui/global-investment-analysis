@@ -74,7 +74,10 @@ def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str |
     (out / "us-tech.html").write_text(reports.us_tech_report(mon, meta, prices, standalone), encoding="utf-8")
     (out / "uk-fx.html").write_text(reports.uk_fx_report(mon, meta, prices, standalone), encoding="utf-8")
     (out / "sg-income.html").write_text(reports.sg_income_report(mon, meta, prices, standalone=standalone), encoding="utf-8")
-    dec = decisions.build_decisions(mon, meta, prices=prices)
+    hist_path = Path("data/history/sg_distributions_5y.json")
+    dist = ({i["symbol"]: i["corp_actions"] for i in json.loads(hist_path.read_text())["instruments"]}
+            if hist_path.exists() else None)
+    dec = decisions.build_decisions(mon, meta, prices=prices, dist_history=dist)
     conf = None
     if (out / "backtest.json").exists():
         conf = evidence.confidence_note(json.loads((out / "backtest.json").read_text()))
@@ -182,7 +185,9 @@ def main(argv=None) -> int:
         rated = {i["symbol"] for i in universe["instruments"] if i["kind"] not in ("fx", "macro_proxy")}
         funds = {i["symbol"] for i in universe["instruments"] if i["kind"] != "stock"}
         cash = data.load_cash_yield(args.history)
-        res = backtest.run(prices[[c for c in prices.columns if c in rated]], cash=cash, funds=funds)
+        exc_path = Path(args.universe).parent / "data-exceptions.json"
+        exceptions = json.loads(exc_path.read_text())["exceptions"] if exc_path.exists() else []
+        res = backtest.run(prices[[c for c in prices.columns if c in rated]], cash=cash, funds=funds, exceptions=exceptions)
         res["universe_note"] = (f"{len(res['instruments'])} of the {len(rated)} instruments the Desk rates"
                                 + ("; cash earns the 13-week T-bill yield" if cash is not None else "; cash earns 0%"))
         out = Path(args.out)

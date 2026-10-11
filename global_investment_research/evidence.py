@@ -135,8 +135,9 @@ def evidence_page(res: dict, standalone=True) -> str:
         "Instruments join the test when their history starts (for example XLC in 2018); each week the rule and the "
         "benchmark use the same set of instruments.",
         f"{len(res['instruments'])} instruments, {res['observations']:,} weekly observations from {res['first_date']}: still a small sample for a market regime test.",
-    ] + [f"Bad print excluded: {f['symbol']} {f['date']} closed {f['close']:g} between {f['previous']:g} and {f['next']:g} "
-         "(a unit error at the source; the raw file is kept as returned)." for f in res.get("data_fixes", [])]))
+    ] + [(f"Excluded {f['symbol']} {f['date']}: {f['reason']}" if "reason" in f else
+          f"Bad print excluded: {f['symbol']} {f['date']} closed {f['close']:g} between {f['previous']:g} and {f['next']:g} "
+          "(a unit error at the source; the raw file is kept as returned).") for f in res.get("data_fixes", [])]))
     span = round((pd.Timestamp(res["last_date"]) - pd.Timestamp(res["first_date"])).days / 365.25)
     page = H.page("Rule Evidence", f"Backtest {res['first_date']} to {res['last_date']}",
                   f"Walk-forward test of the Decision Desk rules on {span} years of weekly prices, using only data available at each date.",

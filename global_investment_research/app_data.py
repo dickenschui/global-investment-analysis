@@ -56,7 +56,9 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
             row["income"] = {"yield": inc["yield"], "basis": inc.get("yield_basis"), "payments": inc.get("payments"),
                              "stance": ic["stance"], "rule": ic["rule"], "price_for_6pct": ic.get("price_for_6pct"),
                              "price_for_7pct": ic.get("price_for_7pct"), "price_for_8pct": ic.get("price_for_8pct"),
-                             "yield_after_cut": inc.get("yield_after_cut")}
+                             "yield_after_cut": inc.get("yield_after_cut"), "yield_sustainable": inc.get("yield_sustainable"),
+                             "yield_4y_avg": inc.get("yield_4y_avg"), "history_flag": inc.get("history_flag"),
+                             "cash_by_year": inc.get("cash_by_year")}
         row["contract"] = contracts.get(c["symbol"])
         row["spark"] = spark(c["symbol"])
         calls.append(row)

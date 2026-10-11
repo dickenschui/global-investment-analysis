@@ -1,7 +1,7 @@
 <b>Weekly investment brief · week to 2026-10-09</b>
 Deploy 100% of the normal risk budget (Volatility calm).
 
-⚠️ Rule confidence: LOW. On 36 instruments from 2008-01-04 to 2026-10-09, Accumulate calls returned +0.2% versus the average instrument over the next 13 weeks and Avoid calls -0.1%. Following the calls returned 5.8% a year against 8.7% for holding everything equally (worst fall -36% vs -46%). Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
+⚠️ Rule confidence: LOW. On 83 instruments from 2008-01-04 to 2026-10-09, Accumulate calls returned +0.2% versus the average instrument over the next 13 weeks and Avoid calls -0.4%. Following the calls returned 8.8% a year against 9.8% for holding everything equally (worst fall -41% vs -44%). Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
 
 <b>Markets (1w / 3m)</b>
 • US: +1.2% / +3.1% (up)
@@ -28,7 +28,6 @@ Deploy 100% of the normal risk budget (Volatility calm).
 • A17U 6.9%; add at 2.144 (7%)
 • M44U 6.7%; add at 1.038 (7%)
 • N2IU 6.7%; add at 1.131 (7%)
-• AJBU 6.2%; add at 1.889 (7%)
 
 <b>Options sleeve (max 1% each, 5% total)</b>
 • XOM Bull call spread: Buy 170C / Sell 185C 2026-12-18, $487/contract, PoP 39%

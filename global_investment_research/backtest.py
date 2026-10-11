@@ -190,8 +190,23 @@ def drop_bad_prints(prices: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
     return out, fixes
 
 
-def run(prices: pd.DataFrame, cash: pd.Series | None = None, funds: set | None = None) -> dict:
+def apply_exceptions(prices: pd.DataFrame, exceptions: list[dict] | None) -> tuple[pd.DataFrame, list[dict]]:
+    """Blank documented windows of unreliable source prices (config/data-exceptions.json)."""
+    out, used = prices.copy(), []
+    for e in exceptions or []:
+        if e["symbol"] in out:
+            m = (out.index >= pd.Timestamp(e["from"])) & (out.index <= pd.Timestamp(e["to"]))
+            if out.loc[m, e["symbol"]].notna().any():
+                out.loc[m, e["symbol"]] = np.nan
+                used.append({"symbol": e["symbol"], "date": f"{e['from']} to {e['to']}", "reason": e["reason"]})
+    return out, used
+
+
+def run(prices: pd.DataFrame, cash: pd.Series | None = None, funds: set | None = None,
+        exceptions: list[dict] | None = None) -> dict:
+    prices, excluded = apply_exceptions(prices, exceptions)
     prices, fixes = drop_bad_prints(prices)
+    fixes = fixes + excluded
     df = stance_panel(prices, funds)
     if df.empty:
         raise ValueError("not enough history to backtest")
