@@ -18,7 +18,7 @@ from . import analytics as an
 
 MARKET_PROXIES = {"US": "SPY", "UK": "ISF", "SG": "ES3", "HK": "2800", "China": "3188"}
 MACRO_FACTORS = {"US dollar": "UUP", "Long Treasuries": "TLT", "Gold": "GLD", "Crude oil": "USO",
-                 "Copper": "CPER", "Volatility (VIX)": "VIX"}
+                 "Copper": "CPER", "Volatility (VIX)": "VIX", "High-yield credit": "HYG"}
 
 
 def _get(metrics: dict, sym: str, key: str):
@@ -71,6 +71,8 @@ def regime_readings(metrics: dict) -> list[dict]:
         ("Copper vs gold", "CPER", "GLD", "Copper outpacing gold (growth-positive)", "Gold outpacing copper (caution)"),
         ("Asia vs US", "2800", "SPY", "Hong Kong outperforming US", "US outperforming Hong Kong"),
         ("China A vs US", "3188", "SPY", "China A-shares outperforming US", "US outperforming China A-shares"),
+        ("Credit", "HYG", "LQD", "High-yield keeping pace with investment grade (credit calm)",
+         "High-yield lagging investment grade (credit stress building)"),
     ]:
         ra, rb = _get(metrics, a, "ret_3m"), _get(metrics, b, "ret_3m")
         if ra is not None and rb is not None:

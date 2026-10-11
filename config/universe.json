@@ -886,6 +886,24 @@
       "kind": "stock",
       "sector": "Utilities",
       "yahoo": "600900.SS"
+    },
+    {
+      "group": "credit",
+      "symbol": "HYG",
+      "name": "iShares iBoxx High Yield Corporate Bond ETF",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "High-yield credit",
+      "yahoo": "HYG"
+    },
+    {
+      "group": "credit",
+      "symbol": "LQD",
+      "name": "iShares iBoxx Investment Grade Corporate Bond ETF",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "Investment-grade credit",
+      "yahoo": "LQD"
     }
   ]
 }

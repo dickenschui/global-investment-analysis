@@ -14,11 +14,11 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 | Macro calendar (CPI, payrolls, central banks) | **Missing** | Hourly alerts should know when a release is due | Bigdata.com economic calendar (needs credit) | High |
 | Fundamentals: valuation, margins, FCF, estimates | **Missing** | Trend calls can hide stretched valuations | Financial Datasets (needs credit) or company filings | High |
 | Interest rates and curve (2y/10y, policy rates) | **Proxy only** (TLT/IEF prices) | Rates drive REITs, growth and FX | Financial Datasets interest rates, or FRED (blocked) | Medium |
-| Credit spreads | **Missing** | Early warning of risk-off | Add HYG and LQD to the universe (IBKR) | Medium, cheap |
+| Credit spreads | **Added 2026-10-11** (HYG vs LQD reading and tilt) | Early warning of risk-off | IBKR | — |
 | Breadth beyond the monitored names | **Partial** | 9–15 names per market is a thin breadth sample | Add equal-weight ETFs (RSP) and advance/decline via IBKR | Medium |
 | News and sentiment | **Missing** | Explains exceptions in hourly alerts | Bigdata.com search/sentiment (needs credit) | Medium |
 | Positioning: short interest, futures positioning (COT), put/call ratios | **Missing** | Crowding risk | IBKR option volumes; CFTC (blocked) | Low |
-| Longer price history (5–10 years) | **Missing** | Rules are untested beyond one year | IBKR FIVE_YEARS weekly bars | **High**: needed to backtest the rules |
+| Longer price history (5 years) | **Added 2026-10-11** for 36 instruments | Backtest of the decision rules | IBKR FIVE_YEARS weekly bars; extend to the full universe | Medium |
 | Total return (dividends in) | **Missing** for equities | Understates income names | IBKR corporate actions for all stocks | Medium |
 | Live and delayed quotes | **Delayed / frozen at weekends** | Option prices must be re-checked live | IBKR market-data subscription | Note only |
 

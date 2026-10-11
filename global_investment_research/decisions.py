@@ -113,6 +113,8 @@ def macro_posture(regime: list[dict]) -> dict:
         tilt("Favour quality and defensives over consumer cyclicals", r["Growth vs defensives"])
     if "US outperforming" in r.get("China A vs US", ""):
         tilt("Underweight China A-shares; wait for relative strength to turn", r["China A vs US"])
+    if "stress building" in r.get("Credit", ""):
+        tilt("Reduce high-beta and leveraged names; credit is leading equities lower", r["Credit"])
     if "US outperforming" in r.get("Asia vs US", ""):
         tilt("Keep Hong Kong at or below benchmark weight", r["Asia vs US"])
     return {"risk_budget": risk_budget, "stressed": stressed, "tilts": tilts,

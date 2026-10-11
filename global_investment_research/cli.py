@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import alerts, brief, data, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
+from . import alerts, backtest, brief, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -101,6 +101,7 @@ DELIVERABLES = [
     ("decision-desk.html", "Decision Desk", "Every instrument's decision with buy zone, exit level and position size."),
     ("decision-book.xlsx", "Decision Book (Excel)", "Editable limits drive sizes and limit prices; includes the decision log."),
     ("options.html", "Speculative Options Sleeve", "Defined-risk call/put ideas from real chains, capped at 5% of portfolio."),
+    ("evidence.html", "Rule Evidence", "Five-year walk-forward test of the decision rules."),
     ("handbook.html", "Investment Handbook", "The routine, rules, risk limits and review loop."),
     ("monitor.html", "Global Markets Monitor", "Markets, macro readings, factor links, sectors, all instruments."),
     ("us-tech.html", "US Tech Watchlist", "Large-cap tech ranked by risk-adjusted momentum."),
@@ -113,7 +114,7 @@ def index_page(as_of: str, out: Path) -> str:
     from . import html as H
     items = "".join(
         f'<li><a href="{f}">{H.esc(t)}</a> <span class="mut">· {H.esc(d)}</span></li>'
-        for f, t, d in DELIVERABLES if (out / f).exists() or (f.endswith(".html") and f != "options.html"))
+        for f, t, d in DELIVERABLES if (out / f).exists() or (f.endswith(".html") and f not in ("options.html", "evidence.html")))
     return H.page("Global Investment Pack", f"Week to {as_of}",
                   "Start with the Brief, act from the Desk, follow the Handbook.",
                   H.section("Deliverables", f'<ul class="notes">{items}</ul>'),
@@ -141,6 +142,9 @@ def main(argv=None) -> int:
     sub.choices["review"].add_argument("--log", default="config/decision-log.csv")
     d = sub.add_parser("demo")
     d.add_argument("--out", required=True)
+    bt = sub.add_parser("backtest", help="walk-forward test of the decision rules on long weekly history")
+    bt.add_argument("--history", required=True, help="directory of 5-year weekly JSON files")
+    bt.add_argument("--out", required=True)
     wl = sub.add_parser("watchlist", help="symbols the hourly pulse must quote, from this week's reports")
     wl.add_argument("--reports", required=True)
     al = sub.add_parser("alerts", help="evaluate a live pulse against this week's levels; print new exceptions")
@@ -155,6 +159,17 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
     universe = data.load_universe(args.universe)
 
+    if args.cmd == "backtest":
+        prices, _ = data.load_ibkr_snapshot(args.history, universe)
+        res = backtest.run(prices)
+        out = Path(args.out)
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "backtest.json").write_text(json.dumps(_clean(res), indent=1, default=_json_default))
+        (out / "evidence.html").write_text(evidence.evidence_page(res), encoding="utf-8")
+        v = res["verdict"]
+        print(f"Backtest {res['first_date']}..{res['last_date']}: {len(res['instruments'])} instruments; "
+              f"supported both halves={v['supported_both_halves']}, significant={v['significant']}")
+        return 0
     if args.cmd in ("watchlist", "alerts"):
         rep = Path(args.reports)
         dec = json.loads((rep / "decisions.json").read_text())
