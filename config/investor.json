@@ -1,0 +1,14 @@
+{
+  "source": "Mandate confirmed by the owner in the ChatGPT/Codex session (dickenschui/global-investment config/investor-objectives.json, copied 2026-10-11). Planning preferences, not verified limits.",
+  "base_currency": "GBP",
+  "secondary_currency": "USD",
+  "horizon_years": [5, 10],
+  "drawdown_tolerance": 0.20,
+  "illustrative_principal": {"amount": 100000, "currency": "USD"},
+  "sleeves": {
+    "sg_income": {"markets": ["SG"], "yield_band": [0.06, 0.08], "objective": "Long-term stable cash income"},
+    "global_growth": {"markets": ["HK", "China", "UK", "US"], "objective": "Mainly long-term capital growth"},
+    "speculative": {"allocation_cap": 0.10, "loss_budget": 0.05, "objective": "Small separate high-return sleeve"}
+  },
+  "income_use": "Reinvest Singapore distributions; withdraw when needed (no date set)"
+}

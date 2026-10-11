@@ -1,0 +1,12 @@
+{
+ "algorithm": "sha256",
+ "files": {
+  "sg_distributions_5y.json": {
+   "bytes": 149824,
+   "sha256": "deca4d9c82e28d635d09e1393fa800f4232c8098bde36964f00c5cdd81779a92"
+  }
+ },
+ "instruments": [],
+ "note": "Integrity manifest: verify with integrity.verify_manifest; not an instrument group.",
+ "schema_version": 1
+}

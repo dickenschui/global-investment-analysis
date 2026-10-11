@@ -1,0 +1,829 @@
+<title>Global Investment Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87.5,500;87.5,600;87.5,700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an operator's desk. Sticky masthead with the week's verdict, tab rail, one working surface per tab;
+   detail opens in a side sheet (full-screen on phones). Data is read from data.json beside this page. */
+:root{
+  --bg:#eef2f1; --panel:#ffffff; --sunk:#f6f8f8; --ink:#13201e; --muted:#5a6966; --rule:#d3dcda; --rule-soft:#e5ebe9;
+  --accent:#0d6b62; --accent-ink:#ffffff; --accent-soft:#dcefec;
+  --up:#1b7a49; --down:#b1362e; --warn:#9a6700; --info:#2f5f9e;
+  --up-soft:#e2f2e8; --down-soft:#f8e3e1; --warn-soft:#f8eed8; --info-soft:#e3ebf7;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif; --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:6px; --shadow:0 1px 2px rgb(19 32 30 / .06),0 8px 24px rgb(19 32 30 / .06);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1312; --panel:#131d1b; --sunk:#0f1817; --ink:#e1ebe8; --muted:#93a5a0; --rule:#26332f; --rule-soft:#1d2826;
+  --accent:#4cb5a8; --accent-ink:#06201d; --accent-soft:#16312d;
+  --up:#4cc283; --down:#ef7a70; --warn:#e2b04a; --info:#7fa8e6;
+  --up-soft:#132b1f; --down-soft:#341a18; --warn-soft:#30260f; --info-soft:#17233a;
+  --shadow:0 1px 2px rgb(0 0 0 / .3),0 8px 24px rgb(0 0 0 / .25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1312; --panel:#131d1b; --sunk:#0f1817; --ink:#e1ebe8; --muted:#93a5a0; --rule:#26332f; --rule-soft:#1d2826;
+  --accent:#4cb5a8; --accent-ink:#06201d; --accent-soft:#16312d;
+  --up:#4cc283; --down:#ef7a70; --warn:#e2b04a; --info:#7fa8e6;
+  --up-soft:#132b1f; --down-soft:#341a18; --warn-soft:#30260f; --info-soft:#17233a;
+  --shadow:0 1px 2px rgb(0 0 0 / .3),0 8px 24px rgb(0 0 0 / .25); color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--f-display);font-stretch:87.5%;text-wrap:balance;margin:0;letter-spacing:.005em}
+h2{font-size:1.25rem;font-weight:600}
+h3{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+p{margin:0}
+.num,td.n,.mono{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.mut{color:var(--muted)}
+.small{font-size:.85rem}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Masthead */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:1px solid var(--rule)}
+.mast .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:12px}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{font-size:1.35rem;font-weight:700}
+.brand .asof{font:500 .78rem var(--f-data);color:var(--muted);white-space:nowrap}
+.mast .spacer{flex:1}
+.verdict{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--rule-soft)}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .wrap{display:flex;gap:2px;padding-block:0}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;font:600 .9rem var(--f-display);font-stretch:87.5%;letter-spacing:.02em;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--ink)}
+
+main{padding-block:22px 64px}
+.view{display:grid;gap:22px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;align-items:start}
+.grid2>*,.grid3>*{min-width:0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:16px 18px;display:grid;gap:12px;align-content:start;min-width:0}
+.panel>header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+
+/* Chips and pills */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;font:600 .74rem var(--f-body);letter-spacing:.02em;white-space:nowrap;background:var(--sunk);color:var(--muted);border:1px solid var(--rule)}
+.chip.up{background:var(--up-soft);color:var(--up);border-color:transparent}
+.chip.down{background:var(--down-soft);color:var(--down);border-color:transparent}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.info{background:var(--info-soft);color:var(--info);border-color:transparent}
+.chip.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+
+/* Buttons */
+.btn{appearance:none;border:1px solid var(--rule);background:var(--panel);border-radius:5px;padding:7px 12px;font-weight:600;font-size:.88rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07);color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{border-color:transparent;background:transparent}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Verdict banner */
+.banner{border-radius:var(--r);padding:14px 16px;display:grid;gap:6px;border:1px solid var(--rule);background:var(--panel)}
+.banner.low{border-left:4px solid var(--warn)}
+.banner.ok{border-left:4px solid var(--up)}
+.banner .lead{font:600 1.08rem/1.35 var(--f-display);font-stretch:87.5%}
+
+/* Market tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;display:grid;gap:4px;min-width:0}
+.tile .k{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tile .big{font:500 1.3rem var(--f-data);font-variant-numeric:tabular-nums}
+.tile .sub{font-size:.8rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+svg.spark{display:block;width:100%;height:30px}
+svg.spark .ln{fill:none;stroke-width:1.6}
+svg.spark .ar{opacity:.14}
+
+/* Lists */
+.list{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.list li{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:9px 0;border-bottom:1px solid var(--rule-soft);align-items:start}
+.list li:last-child{border-bottom:0}
+.list .t{font-weight:600}
+
+/* Tables */
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r);background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th{font:600 .7rem var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);background:var(--sunk);white-space:nowrap;position:sticky;top:0}
+th.n,td.n{text-align:right}
+td{padding:8px 10px;border-bottom:1px solid var(--rule-soft);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--sunk)}
+td .nm{display:block;font-size:.78rem;color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+td.sp{width:110px;min-width:100px}
+.pos{color:var(--up)} .neg{color:var(--down)}
+
+/* Toolbars */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--panel)}
+.seg button{appearance:none;border:0;background:none;padding:6px 11px;font-weight:600;font-size:.82rem;cursor:pointer;color:var(--muted);border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.field{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+.input,select.input,textarea.input{border:1px solid var(--rule);background:var(--panel);border-radius:5px;padding:7px 10px;min-width:0;width:100%;color:var(--ink)}
+.input.num{font-family:var(--f-data)}
+.pv{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.pv input{width:150px}
+
+/* Sheet (detail) */
+.scrim{position:fixed;inset:0;background:rgb(8 14 13 / .38);z-index:40}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--panel);z-index:41;box-shadow:var(--shadow);border-left:1px solid var(--rule);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet .hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--rule)}
+.sheet .bd{overflow-y:auto;padding:18px 20px 32px;display:grid;gap:18px;align-content:start}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.kv div{background:var(--sunk);border-radius:5px;padding:8px 10px;display:grid;gap:2px}
+.kv span{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kv b{font:500 1rem var(--f-data);font-variant-numeric:tabular-nums}
+svg.ladder{width:100%;height:auto;aspect-ratio:500/160;display:block;flex-shrink:0}
+svg.ladder text{fill:var(--muted);font:11px var(--f-data)}
+.flag{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:5px;background:var(--sunk);font-size:.9rem}
+.flag.crit{background:var(--down-soft);color:var(--down)}
+.flag.warn{background:var(--warn-soft);color:var(--warn)}
+.flag.good{background:var(--up-soft);color:var(--up)}
+.flag.info{background:var(--info-soft);color:var(--info)}
+.flag b{color:inherit}
+
+/* Claude output */
+.answer{background:var(--sunk);border:1px solid var(--rule-soft);border-radius:5px;padding:12px 14px;font-size:.92rem;display:grid;gap:8px;max-height:none}
+.answer h4{font:600 .82rem var(--f-display);font-stretch:87.5%;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:6px 0 0}
+.answer ul,.answer ol{margin:0;padding-left:20px;display:grid;gap:3px}
+.answer p{margin:0}
+.thinking{color:var(--muted);font-style:italic}
+
+/* Options */
+.opt{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px;min-width:0}
+.opt .ttl{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.opt .ttl b{font:600 1.05rem var(--f-display);font-stretch:87.5%}
+.bars{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end;height:64px}
+.bars div{display:grid;gap:3px;justify-items:center;font:10px var(--f-data);color:var(--muted);height:100%;grid-template-rows:1fr auto}
+.bars i{display:block;width:100%;border-radius:2px;align-self:end}
+
+/* Evidence */
+svg.curve{width:100%;height:auto;aspect-ratio:760/240;display:block}
+svg.curve text{fill:var(--muted);font:11px var(--f-data)}
+svg.curve .g{stroke:var(--rule-soft)}
+.heat td.n{font-size:.8rem}
+
+/* Journal */
+.jform{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+.jform .wide{grid-column:1/-1}
+.empty{border:1px dashed var(--rule);border-radius:var(--r);padding:22px;text-align:center;color:var(--muted);display:grid;gap:6px;justify-items:center}
+.note{font-size:.8rem;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 16px;border-radius:5px;font-size:.88rem;z-index:60;box-shadow:var(--shadow)}
+.progress{height:3px;background:var(--rule-soft);border-radius:2px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+footer.foot{font-size:.78rem;color:var(--muted);padding-block:0 40px}
+@media (max-width:640px){
+  .wrap{padding-inline:16px}
+  .brand h1{font-size:1.15rem}
+  .pv input{width:120px}
+  .sheet{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand"><h1>Global Investment Desk</h1><span class="asof" id="asof">loading…</span></div>
+    <div class="spacer"></div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+  <nav class="tabs" aria-label="Sections"><div class="wrap" role="tablist" id="tablist"></div></nav>
+</header>
+
+<main class="wrap" id="main">
+  <section class="view" id="v-today" role="tabpanel"></section>
+  <section class="view" id="v-decisions" role="tabpanel" hidden></section>
+  <section class="view" id="v-income" role="tabpanel" hidden></section>
+  <section class="view" id="v-options" role="tabpanel" hidden></section>
+  <section class="view" id="v-evidence" role="tabpanel" hidden></section>
+  <section class="view" id="v-journal" role="tabpanel" hidden></section>
+</main>
+<footer class="wrap foot" id="foot">Rule-based research from Interactive Brokers weekly closes. Not personalised advice. Re-price live before trading.</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sheet" id="sheet" hidden aria-modal="true" role="dialog" aria-labelledby="sheet-title"></aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+"use strict";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pct = (x, signed = true, dp = 1) => x == null || isNaN(x) ? "—" : (signed && x > 0 ? "+" : "") + (x * 100).toFixed(dp) + "%";
+const num = (x, dp = 2) => x == null || isNaN(x) ? "—" : Number(x).toLocaleString("en-GB", {minimumFractionDigits: dp, maximumFractionDigits: dp});
+const px = x => x == null ? "—" : num(x, x >= 1000 ? 1 : x >= 10 ? 2 : x >= 1 ? 3 : 4);
+const cls = x => x == null ? "" : x > 0 ? "pos" : x < 0 ? "neg" : "";
+const store = {get(k, d) { try { const v = localStorage.getItem("gid." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+               set(k, v) { try { localStorage.setItem("gid." + k, JSON.stringify(v)); } catch {} }};
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 3200); }
+
+const STANCE = {Accumulate: "up", Hold: "acc", Watch: "warn", Avoid: "down"};
+const stanceChip = s => `<span class="chip ${STANCE[s] || ""}">${esc(s)}</span>`;
+const trendChip = t => t ? `<span class="chip ${t === "up" ? "up" : t === "down" ? "down" : ""}">${esc(t)}</span>` : "";
+const IBKR = "Interactive Brokers IBKR";
+
+let D = null;                 // this week's data
+const live = {};              // symbol -> {price, chg, status, at}
+let journal = [];             // entries from db
+const S = {tab: "today", stance: store.get("stance", "Accumulate"), market: store.get("market", "All"), q: "",
+           pv: store.get("pv", null), half: null, sort: store.get("sort", "stance")};
+
+/* ---------- small charts ---------- */
+function spark(arr, color) {
+  if (!arr || arr.length < 2) return "";
+  const w = 120, h = 30, lo = Math.min(...arr), hi = Math.max(...arr), r = (hi - lo) || 1;
+  const pts = arr.map((v, i) => [i * (w - 4) / (arr.length - 1) + 2, h - 3 - (v - lo) / r * (h - 6)]);
+  const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
+  const c = color || (arr[arr.length - 1] >= arr[0] ? "var(--up)" : "var(--down)");
+  const [ex, ey] = pts[pts.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="ar" d="${d}L${w - 2},${h}L2,${h}Z" fill="${c}"/><path class="ln" d="${d}" stroke="${c}"/><circle cx="${ex}" cy="${ey}" r="2.2" fill="${c}"/></svg>`;
+}
+
+/* ---------- money ---------- */
+function usdPer(ccy) {
+  const o = Object.fromEntries((D.others || []).map(x => [x.symbol, x.last]));
+  return {USD: 1, GBP: o["GBP.USD"], EUR: o["EUR.USD"], SGD: o["USD.SGD"] && 1 / o["USD.SGD"], HKD: o["USD.HKD"] && 1 / o["USD.HKD"],
+          CNH: o["USD.CNH"] && 1 / o["USD.CNH"], JPY: o["USD.JPY"] && 1 / o["USD.JPY"], CHF: o["USD.CHF"] && 1 / o["USD.CHF"]}[ccy];
+}
+function tradeCcy(c) {
+  const k = c.contract || {};
+  if (k.currency) return k.currency;
+  if (["SEHKNTL", "SEHKSZSE", "CHINEXT"].includes(k.exchange)) return "CNH";
+  if (k.exchange === "SEHK") return "HKD";
+  return null;
+}
+const BASE = () => D.investor?.base_currency || "USD";
+function defaultPv() {   // the mandate's illustrative principal, converted to the base currency at this week's close
+  const ip = D.investor?.illustrative_principal;
+  if (!ip) return 1000000;
+  const a = usdPer(ip.currency), b = usdPer(BASE());
+  return a && b ? Math.round(ip.amount * a / b) : ip.amount;
+}
+const pv = () => S.pv ?? defaultPv();
+const halfOn = () => S.half ?? (D.evidence?.level === "LOW");
+function sizing(c) {
+  if (!c.size) return null;
+  const w = c.size * (D.posture.risk_budget ?? 1) * (halfOn() ? 0.5 : 1);
+  const value = pv() * w;                                   // in the base currency
+  const price = live[c.symbol]?.price ?? c.last;
+  const ccy = tradeCcy(c), rate = ccy && usdPer(ccy), base = usdPer(BASE());
+  const shares = rate && base ? Math.floor(value * base / (price * rate)) : null;
+  return {w, value, shares, ccy, risk: c.stop_distance != null ? value * c.stop_distance : null, price};
+}
+
+/* ---------- capabilities ---------- */
+const cap = {mcp: null, sample: null, db: null, user: null, downloads: null, canWrite: null};
+async function boot() {
+  try {
+    const r = await fetch("data.json", {cache: "no-store"});
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    D = await r.json();
+  } catch (e) {
+    $("#main").innerHTML = `<div class="empty"><b>This week's data did not load.</b><span>Reload the page. If it keeps failing, the weekly refresh may not have published data.json yet.</span></div>`;
+    $("#asof").textContent = "no data";
+    return;
+  }
+  S.half = store.get("half", null);
+  renderChrome();
+  const start = (location.hash || "").slice(1);
+  show(TABS.some(t => t.id === start) ? start : store.get("tab", "today"));
+  if (window.claude?.use) {
+    claude.use("mcp").then(m => { cap.mcp = m; rerender(); });
+    claude.use("sample").then(s => { cap.sample = s; rerender(); });
+    claude.use("downloads").then(d => { cap.downloads = d; });
+    claude.use("user").then(async u => { cap.user = u; cap.canWrite = u ? await u.can("data.write").catch(() => null) : null; rerender(); });
+    claude.use("db").then(db => { cap.db = db; if (db) subscribeJournal(); else rerender(); });
+  }
+}
+
+/* ---------- live quotes (read-only IBKR) ---------- */
+const MCP_FIX = {
+  server_not_connected: "Add Interactive Brokers in claude.ai Settings → Connectors to see live prices.",
+  needs_reauth: "Reconnect Interactive Brokers in claude.ai Settings → Connectors.",
+  selection_required: "Choose which Interactive Brokers connection this page should use when claude.ai asks.",
+  not_in_manifest: "Live prices are switched off for this page. Turn on Interactive Brokers in this page's Permissions menu.",
+  blocked_by_policy: "Your organisation's policy blocks live prices from Interactive Brokers here.",
+  approval_required: "Live prices need your approval. Press the button again and allow the request.",
+  not_granted: "Live prices are not available in this view.", capability_disabled: "Live prices are not available in this view.",
+};
+const mcpMsg = e => MCP_FIX[e?.code] || (e?.code === "tool_error" ? "Interactive Brokers answered with an error: " + (e.message || "no detail") : "Interactive Brokers did not answer. Try again in a minute.");
+async function quote(c, attempt = 0) {
+  const k = c.contract;
+  if (!cap.mcp || !k?.id) throw {code: "not_granted"};
+  const input = {contract_id: k.id, market_data_names: ["last", "prior_close", "change", "top_status"]};
+  if (!(k.currency === "USD" && k.sectype === "STK")) input.exchange = k.exchange;
+  try {
+    const res = await cap.mcp.callTool(IBKR, "get_price_snapshot", input, {cache: {staleTime: 60000, gcTime: 300000}});
+    const p = res.payload || {};
+    const raw = p.last?.price ?? p["prior-close"]?.priorClose;
+    if (raw == null) throw {code: "tool_error", message: "no price in the reply (market closed and no prior close)"};
+    const q = {price: raw / (k.live_divisor || 1), chg: p.change?.change_pct != null ? p.change.change_pct / 100 : null,
+               status: p["top-status"]?.status || "", at: res.cache?.storedAt || Date.now()};
+    live[c.symbol] = q;
+    return q;
+  } catch (e) {
+    if (e?.retryable && attempt === 0 && !["tool_error"].includes(e.code)) {
+      await new Promise(r => setTimeout(r, Math.min(e.retryAfterMs || 1500, 8000) + Math.random() * 600));
+      return quote(c, 1);
+    }
+    throw e;
+  }
+}
+function flagsFor(c) {
+  const q = live[c.symbol]; if (!q) return [];
+  const p = q.price, out = [];
+  if (c.stop != null && p < c.stop) out.push(["crit", `Below the exit level ${px(c.stop)}. The plan says sell or cut.`]);
+  if (c.entry && c.stance === "Accumulate") {
+    if (p >= c.entry[0] && p <= c.entry[1]) out.push(["good", `Inside the buy zone ${px(c.entry[0])}–${px(c.entry[1])}.`]);
+    else if (p > c.entry[1]) out.push(["warn", `Above the buy zone (${px(c.entry[1])}). Wait for a pullback rather than chase.`]);
+    else if (c.stop == null || p >= c.stop) out.push(["info", `Below the buy zone but above the exit: re-check the trend before adding.`]);
+  }
+  if (c.trigger != null && (c.stance === "Watch" || c.stance === "Avoid") && p > c.trigger) out.push(["info", `Back above the revisit trigger ${px(c.trigger)}. Re-check this week.`]);
+  if (c.vol && c.last) {
+    const z = (p / c.last - 1) / (c.vol / Math.sqrt(52));
+    if (Math.abs(z) >= 2.5) out.push([Math.abs(z) >= 4 ? "crit" : "warn", `Moved ${pct(p / c.last - 1)} since the weekly close: ${Math.abs(z).toFixed(1)} weekly standard deviations.`]);
+  }
+  return out;
+}
+const statusChip = q => q ? `<span class="chip ${/REALTIME/.test(q.status) && !/FROZEN/.test(q.status) ? "up" : "warn"}" title="IBKR market data status">${esc((q.status || "quote").replace(/_/g, " ").toLowerCase())}</span>` : "";
+
+let checking = false;
+async function liveCheck(list, onDone) {
+  if (checking) return; checking = true;
+  const bar = $("#lc-bar"), msg = $("#lc-msg");
+  let ok = 0, fail = null;
+  for (let i = 0; i < list.length; i++) {
+    if (msg) msg.textContent = `Pricing ${list[i].symbol} (${i + 1} of ${list.length})…`;
+    try { await quote(list[i]); ok++; }
+    catch (e) {
+      fail = e;
+      if (!["server_unavailable", "tool_error", "upstream_error", "rate_limited"].includes(e?.code)) break; // fix needs the viewer
+    }
+    if (bar) bar.style.width = ((i + 1) / list.length * 100) + "%";
+    if (i < list.length - 1) await new Promise(r => setTimeout(r, 2200)); // stay under IBKR's ~30 requests a minute
+  }
+  checking = false;
+  if (msg) msg.textContent = fail && !ok ? mcpMsg(fail) : `${ok} of ${list.length} priced` + (fail ? `; some failed: ${mcpMsg(fail)}` : ".");
+  onDone && onDone();
+  rerender();
+}
+
+/* ---------- Claude ---------- */
+function md(text) {
+  const lines = esc(text).split(/\n/); let html = "", list = null;
+  const close = () => { if (list) { html += `</${list}>`; list = null; } };
+  for (const raw of lines) {
+    const l = raw.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    let m;
+    if ((m = l.match(/^#{1,4}\s+(.*)/))) { close(); html += `<h4>${m[1]}</h4>`; }
+    else if ((m = l.match(/^\s*[-*•]\s+(.*)/))) { if (list !== "ul") { close(); html += "<ul>"; list = "ul"; } html += `<li>${m[1]}</li>`; }
+    else if ((m = l.match(/^\s*\d+[.)]\s+(.*)/))) { if (list !== "ol") { close(); html += "<ol>"; list = "ol"; } html += `<li>${m[1]}</li>`; }
+    else if (l.trim()) { close(); html += `<p>${l}</p>`; }
+  }
+  close(); return html;
+}
+const SAMPLE_FIX = {not_granted: "Asking Claude is switched off for this page.", rate_limited: "Too many questions at once. Wait a moment and try again.",
+  prompt_too_large: "The question plus this week's data is too long. Ask something narrower.", refused: "Claude declined this one.",
+  session_expired: "Your session expired. Reload the page.", sampling_disabled: "Asking Claude is turned off for your account.", cancelled: "Stopped."};
+async function ask(prompt, out, btn) {
+  if (!cap.sample) return;
+  const ctl = new AbortController();
+  out.hidden = false; out.innerHTML = `<p class="thinking">Thinking… this can take up to a minute.</p>`;
+  const stop = document.createElement("button"); stop.className = "btn ghost small"; stop.textContent = "Stop";
+  stop.onclick = () => ctl.abort(); out.append(stop);
+  if (btn) btn.disabled = true;
+  try {
+    const {text} = await cap.sample(prompt, {modelTier: "default", signal: ctl.signal, onText: ({text}) => { out.innerHTML = md(text); out.append(stop); }});
+    out.innerHTML = md(text);
+  } catch (e) {
+    out.innerHTML = (e.text ? md(e.text) : "") + `<p class="mut">${esc(SAMPLE_FIX[e.code] || "Claude could not answer just now. Try again.")}</p>`;
+  } finally { if (btn) btn.disabled = false; }
+}
+function context(extra) {
+  const ev = D.evidence || {};
+  return JSON.stringify({
+    week_to: D.as_of, risk_budget: D.posture.risk_budget, risk_note: D.posture.risk_note,
+    tilts: D.posture.tilts.map(t => t.action), macro_readings: D.regime.map(r => `${r.topic}: ${r.reading} (${r.evidence})`),
+    rule_confidence: ev.level, rule_evidence: ev.note,
+    markets: D.markets.map(m => ({market: m.market, proxy: m.proxy, ret_1w: m.ret_1w, ret_3m: m.ret_3m, trend: m.trend, breadth_up: m.pct_uptrend})),
+    accumulate: D.calls.filter(c => c.stance === "Accumulate").map(c => ({symbol: c.symbol, name: c.name, sector: c.sector, last: c.last, buy_zone: c.entry, exit: c.stop, max_weight: c.size})),
+    ...extra});
+}
+function challengePrompt(c) {
+  const q = live[c.symbol];
+  return `You are the most sceptical member of an investment committee, reviewing one proposed position for a private investor who works to CFO-grade standards. Use ONLY the data below. Where something you need is missing (valuation, earnings dates, news), say it is missing instead of assuming. British English, short bullets, no preamble, no disclaimers.
+
+Answer in exactly these sections:
+## Core assumptions
+(3 bullets: what must be true for this position to work)
+## Blind spots
+(3 bullets)
+## 5 fatal flaws
+(numbered, most damaging first, each tied to a number in the data)
+## Pre-mortem: it failed six months from now
+(10 numbered reasons, most likely first)
+## Questions an investor would ask
+(8 numbered questions)
+## Next step
+(one concrete action only, with a price level where relevant)
+
+DATA:
+${context({position: {...c, spark: undefined, contract: undefined, weekly_closes_last_year: c.spark, live_price: q?.price ?? null, live_status: q?.status ?? null}})}`;
+}
+
+/* ---------- chrome ---------- */
+const TABS = [{id: "today", t: "Today"}, {id: "decisions", t: "Decisions"}, {id: "income", t: "SG income"},
+              {id: "options", t: "Options sleeve"}, {id: "evidence", t: "Rule evidence"}, {id: "journal", t: "Journal"}];
+function renderChrome() {
+  $("#asof").textContent = "week to " + D.as_of;
+  const ev = D.evidence;
+  $("#verdict").innerHTML = `<span class="chip ${D.posture.stressed ? "down" : "acc"}"><span class="dot"></span>Risk budget ${Math.round(D.posture.risk_budget * 100)}%</span>`
+    + (ev ? `<span class="chip ${ev.level === "LOW" ? "warn" : ev.level === "HIGH" ? "up" : "info"}">Rule confidence ${esc(ev.level)}</span>` : "");
+  $("#tablist").innerHTML = TABS.map(t => `<button class="tab" role="tab" id="t-${t.id}" aria-controls="v-${t.id}" aria-selected="false">${t.t}</button>`).join("");
+  TABS.forEach(t => $("#t-" + t.id).onclick = () => show(t.id));
+}
+function show(id) {
+  S.tab = id; store.set("tab", id);
+  TABS.forEach(t => { $("#t-" + t.id).setAttribute("aria-selected", t.id === id); $("#v-" + t.id).hidden = t.id !== id; });
+  try { history.replaceState(null, "", "#" + id); } catch {}
+  rerender();
+}
+function rerender() { if (!D) return; ({today: rToday, decisions: rDecisions, income: rIncome, options: rOptions, evidence: rEvidence, journal: rJournal})[S.tab](); }
+
+/* ---------- Today ---------- */
+function rToday() {
+  const ev = D.evidence, acc = D.calls.filter(c => c.stance === "Accumulate");
+  const watchSet = liveSet();
+  const priced = watchSet.filter(c => live[c.symbol]);
+  const flags = priced.flatMap(c => flagsFor(c).map(f => [f[0], c, f[1]])).sort((a, b) => ({crit: 0, warn: 1, info: 2, good: 3})[a[0]] - ({crit: 0, warn: 1, info: 2, good: 3})[b[0]]);
+  $("#v-today").innerHTML = `
+    ${ev ? `<div class="banner ${ev.level === "LOW" ? "low" : "ok"}"><p class="lead">${ev.level === "LOW" ? "Treat this week's calls as risk-control levels, not forecasts." : "The rules have earned normal sizing on the evidence."}</p><p class="mut small">${esc(ev.note)}</p></div>` : ""}
+    <div class="tiles">${D.markets.map(m => `<div class="tile"><div class="k"><h3>${esc(m.market)}</h3>${trendChip(m.trend)}</div>
+      <div class="big">${pct(m.ret_3m)}</div><div class="sub"><span>3 months · ${esc(m.proxy)}</span><span class="${cls(m.ret_1w)}">1w ${pct(m.ret_1w)}</span></div>
+      ${spark(m.spark)}<div class="sub"><span>${Math.round(m.pct_uptrend * 100)}% of names in up-trends</span></div></div>`).join("")}</div>
+    <div class="grid2">
+      <div class="panel"><header><h2>Live check</h2><span class="mut small">${watchSet.length} positions and candidates</span></header>
+        <p class="small mut">Prices every Accumulate and Hold name, plus anything in your journal, from Interactive Brokers and checks each against its exit level, buy zone and normal weekly range. Read-only: nothing is traded.</p>
+        ${cap.mcp ? `<div class="row"><button class="btn primary" id="lc-go"${checking ? " disabled" : ""}>Run live check</button><span class="small mut" id="lc-msg">${priced.length ? `${priced.length} priced` : "About a minute for the full list."}</span></div><div class="progress"><i id="lc-bar"></i></div>`
+          : `<p class="small mut">Live prices appear when this page runs inside Claude with the Interactive Brokers connector.</p>`}
+        ${priced.length ? (flags.length ? `<div style="display:grid;gap:8px">${flags.map(([k, c, t]) => `<div class="flag ${k}"><b class="mono">${esc(c.symbol)}</b><span>${esc(t)}</span></div>`).join("")}</div>`
+          : `<div class="flag good">No exceptions: every priced name is inside its plan.</div>`) : ""}
+      </div>
+      <div class="panel"><header><h2>Actions this week</h2><span class="mut small">${acc.length} on Accumulate</span></header>
+        <ul class="list">${acc.map(c => { const s = sizing(c); return `<li><span class="t mono">${esc(c.symbol)}</span><span><span class="row" style="justify-content:space-between"><span>${esc(c.name)}</span><span class="mono small">${s ? pct(s.w, false) + " max" : ""}</span></span><span class="small mut">Buy ${px(c.entry?.[0])}–${px(c.entry?.[1])} · exit below ${px(c.stop)} · ${esc(c.sector)}</span></span></li>`; }).join("")}</ul>
+        <button class="btn" id="go-dec">Open all decisions</button>
+      </div>
+    </div>
+    ${D.portfolio ? `<div class="panel"><header><h2>Portfolio check</h2><span class="mut small">What the per-position rule cannot see</span></header>
+      <div class="kv"><div><span>Gross at max size</span><b>${pct(D.portfolio.gross, false)}</b></div><div><span>Lost if every exit hits</span><b class="neg">${pct(D.portfolio.risk_to_exits, false)}</b></div>
+        <div><span>Portfolio volatility</span><b>${pct(D.portfolio.vol, false)}</b></div><div><span>If independent</span><b>${pct(D.portfolio.vol_if_independent, false)}</b></div></div>
+      ${D.portfolio.clusters.length ? `<div style="display:grid;gap:8px">${D.portfolio.clusters.sort((a, b) => b.risk_before - a.risk_before).map(g => `<div class="flag warn"><b class="mono">${g.members.map(esc).join(" · ")}</b><span>Move together: ${pct(g.risk_before, false)} combined risk at the exits. Treat as one bet.</span></div>`).join("")}</div>` : ""}
+      <p class="note">From the last 52 weekly returns. Capping these clusters was tested on 19 years and lowered the Sharpe ratio, so sizes are unchanged; use this to choose between overlapping names.</p></div>` : ""}
+    ${D.stress ? stressPanel(D.stress) : ""}
+    <div class="grid2">
+      <div class="panel"><header><h2>Macro readings</h2>${D.changes?.length ? `<span class="chip info">${D.changes.length} changed</span>` : `<span class="mut small">no flips since last week</span>`}</header>
+        <ul class="list">${D.regime.map(r => `<li><span class="t">${esc(r.topic)}</span><span><b>${esc(r.reading)}</b><br><span class="small mut">${esc(r.evidence)}</span></span></li>`).join("")}</ul></div>
+      <div class="panel"><header><h2>Portfolio tilts</h2></header>
+        <ul class="list">${D.posture.tilts.map(t => `<li><span class="dot" style="color:var(--accent);margin-top:8px"></span><span><b>${esc(t.action)}.</b> <span class="mut small">${esc(t.because)}.</span></span></li>`).join("")}</ul></div>
+    </div>
+    <div class="panel"><header><h2>Ask the desk</h2><span class="mut small">Answers from this week's data only</span></header>
+      ${cap.sample ? `<div class="row" style="align-items:stretch"><input class="input" id="ask-q" placeholder="e.g. Which Accumulate names are most exposed if oil falls 15%?" style="flex:1;min-width:220px"><button class="btn primary" id="ask-go">Ask</button></div><div class="answer" id="ask-out" hidden></div>`
+        : `<p class="small mut">Asking Claude is available when this page is opened in Claude.</p>`}
+    </div>`;
+  $("#go-dec").onclick = () => show("decisions");
+  const go = $("#lc-go"); if (go) go.onclick = () => liveCheck(liveSet());
+  const ag = $("#ask-go"); if (ag) { const run = () => { const q = $("#ask-q").value.trim(); if (!q) return;
+    ask(`Answer the investor's question using ONLY this week's data below. Be specific: name instruments, levels and percentages. If the data cannot answer it, say what is missing. Under 220 words, British English, bullets where useful.\n\nQUESTION: ${q}\n\nDATA:\n${context({sectors: D.sectors, fx: D.fx, options_top: (D.options?.ideas || []).slice(0, 5).map(i => ({symbol: i.symbol, structure: i.structure, expiry: i.expiry, cost: i.debit_per_contract, prob_profit: i.prob_profit}))})}`, $("#ask-out"), ag); };
+    ag.onclick = run; $("#ask-q").onkeydown = e => { if (e.key === "Enter") run(); }; }
+}
+function liveSet() {
+  const js = new Set(journal.map(j => j.symbol));
+  return D.calls.filter(c => c.stance === "Accumulate" || c.stance === "Hold" || js.has(c.symbol));
+}
+
+/* ---------- Decisions ---------- */
+function rDecisions() {
+  const markets = ["All", ...new Set(D.calls.map(c => c.market))];
+  const stances = ["All", "Accumulate", "Hold", "Watch", "Avoid"];
+  const count = s => s === "All" ? D.calls.length : D.calls.filter(c => c.stance === s).length;
+  let rows = D.calls.filter(c => (S.stance === "All" || c.stance === S.stance) && (S.market === "All" || c.market === S.market)
+    && (!S.q || (c.symbol + " " + c.name + " " + c.sector).toLowerCase().includes(S.q.toLowerCase())));
+  const order = {Accumulate: 0, Hold: 1, Watch: 2, Avoid: 3};
+  const sorters = {stance: (a, b) => order[a.stance] - order[b.stance] || (b.momentum ?? -9) - (a.momentum ?? -9),
+    momentum: (a, b) => (b.momentum ?? -9) - (a.momentum ?? -9), ret_3m: (a, b) => (b.ret_3m ?? -9) - (a.ret_3m ?? -9), symbol: (a, b) => a.symbol.localeCompare(b.symbol)};
+  rows.sort(sorters[S.sort] || sorters.stance);
+  $("#v-decisions").innerHTML = `
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Stance">${stances.map(s => `<button data-st="${s}" aria-pressed="${S.stance === s}">${s} <span class="mono">${count(s)}</span></button>`).join("")}</div>
+      <select class="input" id="f-mkt" style="width:auto">${markets.map(m => `<option${m === S.market ? " selected" : ""}>${esc(m)}</option>`).join("")}</select>
+      <select class="input" id="f-sort" style="width:auto" aria-label="Sort">${[["stance", "Sort: stance"], ["momentum", "Sort: momentum"], ["ret_3m", "Sort: 3-month return"], ["symbol", "Sort: ticker"]].map(([v, t]) => `<option value="${v}"${v === S.sort ? " selected" : ""}>${t}</option>`).join("")}</select>
+      <input class="input" id="f-q" placeholder="Search ticker, name, sector" value="${esc(S.q)}" style="width:220px;max-width:100%">
+      <div class="spacer" style="flex:1"></div>
+      ${pvControl()}
+    </div>
+    <div class="tw"><table><thead><tr><th>Instrument</th><th>Market</th><th>Call</th><th class="n">Last</th><th class="n">3m</th><th class="n">1y</th><th>Trend</th><th class="n">Buy zone</th><th class="n">Exit / trigger</th><th class="n">Max weight</th><th class="n">Position</th><th>52 weeks</th></tr></thead>
+    <tbody>${rows.map(c => { const s = sizing(c), q = live[c.symbol], fl = flagsFor(c);
+      return `<tr class="click" data-sym="${esc(c.symbol)}" tabindex="0"><td><b class="mono">${esc(c.symbol)}</b>${fl.length ? ` <span class="dot" style="color:var(--${fl[0][0] === "crit" ? "down" : fl[0][0] === "warn" ? "warn" : fl[0][0] === "good" ? "up" : "info"})" title="${esc(fl[0][1])}"></span>` : ""}<span class="nm">${esc(c.name)}</span></td>
+      <td>${esc(c.market)}</td><td>${stanceChip(c.stance)}</td>
+      <td class="n">${px(q?.price ?? c.last)}${q ? `<span class="nm ${cls(q.chg)}">live ${pct(q.chg)}</span>` : ""}</td>
+      <td class="n ${cls(c.ret_3m)}">${pct(c.ret_3m)}</td><td class="n ${cls(c.ret_1y)}">${pct(c.ret_1y)}</td><td>${trendChip(c.trend)}</td>
+      <td class="n">${c.entry ? px(c.entry[0]) + "–" + px(c.entry[1]) : "—"}</td>
+      <td class="n">${c.stop != null ? px(c.stop) : c.trigger != null ? `<span class="mut">↑ ${px(c.trigger)}</span>` : "—"}</td>
+      <td class="n">${s ? pct(s.w, false) : "—"}</td><td class="n">${s ? num(s.value, 0) : "—"}</td><td class="sp">${spark(c.spark)}</td></tr>`; }).join("") || `<tr><td colspan="12" class="mut">No instruments match these filters.</td></tr>`}</tbody></table></div>
+    <p class="note">Max weight is the rule's cap from risk per position (0.5% of the portfolio to the exit level, allowing a 2% gap through it)${halfOn() ? ", halved while rule confidence is LOW" : ""}. Position is in your base currency (${esc(BASE())}). "↑ trigger" is the price that would reopen a Watch or Avoid name. Click a row for levels, live price, sizing and a challenge.</p>`;
+  document.querySelectorAll("[data-st]").forEach(b => b.onclick = () => { S.stance = b.dataset.st; store.set("stance", S.stance); rDecisions(); });
+  $("#f-mkt").onchange = e => { S.market = e.target.value; store.set("market", S.market); rDecisions(); };
+  $("#f-sort").onchange = e => { S.sort = e.target.value; store.set("sort", S.sort); rDecisions(); };
+  $("#f-q").oninput = e => { S.q = e.target.value; clearTimeout(rDecisions.t); rDecisions.t = setTimeout(() => { rDecisions(); const i = $("#f-q"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }, 220); };
+  bindPv();
+  document.querySelectorAll("tr[data-sym]").forEach(tr => { tr.onclick = () => openCall(tr.dataset.sym); tr.onkeydown = e => { if (e.key === "Enter") openCall(tr.dataset.sym); }; });
+}
+function pvControl() {
+  return `<label class="pv" for="pv">Portfolio (${esc(BASE())}) <input class="input num" id="pv" inputmode="numeric" value="${num(pv(), 0)}"></label>
+    <label class="pv" title="Rule confidence is ${esc(D.evidence?.level || "n/a")}"><input type="checkbox" id="half"${halfOn() ? " checked" : ""}> Half size</label>`
+    + (S.pv == null ? `<span class="chip">illustrative: ${esc(D.investor?.illustrative_principal ? num(D.investor.illustrative_principal.amount, 0) + " " + D.investor.illustrative_principal.currency : "example")}</span>` : "");
+}
+function bindPv() {
+  const i = $("#pv"); if (i) i.onchange = () => { const v = Number(i.value.replace(/[^0-9.]/g, "")); if (v > 0) { S.pv = v; store.set("pv", v); } rerender(); };
+  const h = $("#half"); if (h) h.onchange = () => { S.half = h.checked; store.set("half", h.checked); rerender(); };
+}
+
+/* ---------- detail sheet ---------- */
+function ladder(c) {
+  const q = live[c.symbol];
+  const pts = [["Exit", c.stop, "var(--down)"], ["Buy low", c.entry?.[0], "var(--up)"], ["Buy high", c.entry?.[1], "var(--up)"],
+               ["Trigger", c.trigger, "var(--info)"], ["Weekly close", c.last, "var(--ink)"], ["Live", q?.price, "var(--accent)"]].filter(p => p[1] != null);
+  const lo = Math.min(...pts.map(p => p[1]), ...c.spark) * 0.985, hi = Math.max(...pts.map(p => p[1]), ...c.spark) * 1.015;
+  const W = 500, H = 150, x0 = 8, x1 = 330;
+  const y = v => 10 + (hi - v) / (hi - lo) * (H - 20);
+  const path = c.spark.map((v, i) => (i ? "L" : "M") + (x0 + i * (x1 - x0) / (c.spark.length - 1)).toFixed(1) + "," + y(v).toFixed(1)).join("");
+  const zone = c.entry ? `<rect x="${x0}" width="${x1 - x0}" y="${y(c.entry[1])}" height="${Math.max(1, y(c.entry[0]) - y(c.entry[1]))}" fill="var(--up)" opacity=".1"/>` : "";
+  // spread labels so they never overlap
+  const lab = pts.map(p => ({p, yy: y(p[1])})).sort((a, b) => a.yy - b.yy);
+  for (let i = 1; i < lab.length; i++) if (lab[i].yy - lab[i - 1].yy < 13) lab[i].yy = lab[i - 1].yy + 13;
+  return `<svg class="ladder" viewBox="0 0 ${W} ${H + 10}" role="img" aria-label="Price over 52 weeks against the plan's levels">${zone}
+    <path d="${path}" fill="none" stroke="var(--muted)" stroke-width="1.5"/>
+    ${pts.map(p => `<line x1="${x0}" x2="${x1 + 6}" y1="${y(p[1])}" y2="${y(p[1])}" stroke="${p[2]}" stroke-width="${p[0] === "Live" ? 2 : 1}" stroke-dasharray="${p[0] === "Weekly close" || p[0] === "Live" ? "" : "4 3"}"/>`).join("")}
+    ${lab.map(({p, yy}) => `<text x="${x1 + 12}" y="${yy + 4}" fill="${p[2]}" style="fill:${p[2]}">${p[0]} ${px(p[1])}</text>`).join("")}</svg>`;
+}
+function openCall(sym) {
+  const c = D.calls.find(x => x.symbol === sym); if (!c) return;
+  const sh = $("#sheet"), s = sizing(c), q = live[c.symbol], fl = flagsFor(c);
+  sh.innerHTML = `<div class="hd"><div style="display:grid;gap:4px;min-width:0"><div class="row"><h2 id="sheet-title" class="mono">${esc(c.symbol)}</h2>${stanceChip(c.stance)}${trendChip(c.trend)}${statusChip(q)}</div>
+      <span class="mut small">${esc(c.name)} · ${esc(c.sector)} · ${esc(c.market)}${tradeCcy(c) ? " · " + tradeCcy(c) : ""}</span></div>
+      <button class="btn ghost" id="sh-x" aria-label="Close">Close</button></div>
+    <div class="bd">
+      <p>${esc(c.rule)}</p>
+      ${fl.map(f => `<div class="flag ${f[0]}">${esc(f[1])}</div>`).join("")}
+      <div class="kv"><div><span>Weekly close</span><b>${px(c.last)}</b></div><div><span>Live</span><b>${q ? px(q.price) : "—"}</b></div>
+        <div><span>Buy zone</span><b>${c.entry ? px(c.entry[0]) + "–" + px(c.entry[1]) : "—"}</b></div><div><span>${c.stop != null ? "Exit below" : "Revisit above"}</span><b>${px(c.stop ?? c.trigger)}</b></div>
+        <div><span>3 months</span><b class="${cls(c.ret_3m)}">${pct(c.ret_3m)}</b></div><div><span>1 year</span><b class="${cls(c.ret_1y)}">${pct(c.ret_1y)}</b></div>
+        <div><span>Momentum</span><b>${num(c.momentum, 2)}</b></div><div><span>Volatility</span><b>${pct(c.vol, false, 0)}</b></div></div>
+      ${c.spark?.length ? ladder(c) : ""}
+      <div class="row">${cap.mcp ? `<button class="btn" id="sh-live">Get live price</button>` : ""}<span class="small mut" id="sh-live-msg">${q ? "Priced " + new Date(q.at).toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit"}) : ""}</span></div>
+      ${s ? `<div class="panel" style="background:var(--sunk)"><header><h3>Position size</h3><span class="small mut">Portfolio ${num(pv(), 0)} ${esc(BASE())}${S.pv == null ? " (illustrative)" : ""}${halfOn() ? " · half size" : ""} · change on the Decisions tab</span></header>
+        <div class="kv"><div><span>Weight</span><b>${pct(s.w, false)}</b></div><div><span>Value (${esc(BASE())})</span><b>${num(s.value, 0)}</b></div>
+        <div><span>Shares</span><b>${s.shares != null ? num(s.shares, 0) : "—"}</b></div><div><span>Loss at exit</span><b class="neg">${s.risk != null ? num(s.risk, 0) : "—"}</b></div></div>
+        <p class="note">Shares at ${px(s.price)} ${esc(s.ccy || "")}${s.ccy && s.ccy !== BASE() ? ", converted from " + esc(BASE()) + " at this week's FX close" : ""}. Loss at exit assumes the exit fills at the level; gaps can make it worse.</p></div>` : ""}
+      ${c.income ? `<div class="panel" style="background:var(--sunk)"><header><h3>Income</h3>${stanceChip(c.income.stance)}</header>
+        <div class="kv"><div><span>Trailing yield</span><b>${pct(c.income.yield, false, 2)}</b></div><div><span>Yield at 6%</span><b>${px(c.income.price_for_6pct)}</b></div>
+        <div><span>Yield at 7%</span><b>${px(c.income.price_for_7pct)}</b></div><div><span>Yield at 8%</span><b>${px(c.income.price_for_8pct)}</b></div></div><p class="note">${esc(c.income.rule)}</p></div>` : ""}
+      <div class="panel"><header><h3>Challenge this position</h3><span class="mut small">Strict decision mode</span></header>
+        ${cap.sample ? `<p class="small mut">Assumptions, blind spots, five fatal flaws, a pre-mortem, investor questions and one next step, from this week's data only.</p><div class="row"><button class="btn primary" id="sh-ch">Challenge ${esc(c.symbol)}</button></div><div class="answer" id="sh-ch-out" hidden></div>`
+          : `<p class="small mut">Available when this page is opened in Claude.</p>`}</div>
+      <div class="row"><button class="btn" id="sh-log">Log a decision on ${esc(c.symbol)}</button></div>
+    </div>`;
+  $("#scrim").hidden = false; sh.hidden = false; $("#sh-x").focus();
+  $("#sh-x").onclick = closeSheet;
+  const lb = $("#sh-live"); if (lb) lb.onclick = async () => { lb.disabled = true; $("#sh-live-msg").textContent = "Asking Interactive Brokers…";
+    try { await quote(c); openCall(sym); rerenderBehind(); } catch (e) { $("#sh-live-msg").textContent = mcpMsg(e); lb.disabled = false; } };
+  const ch = $("#sh-ch"); if (ch) ch.onclick = () => ask(challengePrompt(c), $("#sh-ch-out"), ch);
+  $("#sh-log").onclick = () => { closeSheet(); S.prefill = c.symbol; S.editing = null; show("journal"); };
+}
+function rerenderBehind() { const keep = S.tab; ({today: rToday, decisions: rDecisions, income: rIncome, journal: rJournal})[keep]?.(); }
+function closeSheet() { $("#sheet").hidden = true; $("#scrim").hidden = true; }
+$("#scrim").onclick = closeSheet;
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#sheet").hidden) closeSheet(); });
+
+/* ---------- SG income ---------- */
+function rIncome() {
+  const sy = c => c.income.yield_sustainable ?? c.income.yield;
+  const rows = D.calls.filter(c => c.income).sort((a, b) => sy(b) - sy(a));
+  const inBand = rows.filter(c => sy(c) >= 0.06 && sy(c) <= 0.08);
+  $("#v-income").innerHTML = `
+    <div class="banner ok"><p class="lead">${inBand.length} Singapore names yield 6–8% on a sustainable basis.</p>
+      <p class="mut small">Sustainable yield uses the lower of last-12-month cash and the four-year average, so a one-off special or a payment shifted between years does not flatter it. A live price recomputes both. The plan buys in thirds: now, at the 7% price, and after the price trend repairs.</p></div>
+    <div class="row">${cap.mcp ? `<button class="btn" id="inc-live">Price these live</button><span class="small mut" id="lc-msg"></span>` : ""}</div>
+    <div class="progress"><i id="lc-bar"></i></div>
+    <div class="tw"><table><thead><tr><th>Name</th><th>Income call</th><th>Price call</th><th class="n">Price</th><th class="n">Yield (12m)</th><th class="n">Sustainable</th><th>Payout history</th><th class="n">Add at 7%</th><th class="n">6% / 8% price</th><th class="n">Yield if paid 20% less</th><th>Basis</th></tr></thead>
+    <tbody>${rows.map(c => { const q = live[c.symbol], p = q?.price ?? c.last, y = c.income.yield * c.last / p, ys = (c.income.yield_sustainable ?? c.income.yield) * c.last / p;
+      return `<tr class="click" data-sym="${esc(c.symbol)}" tabindex="0"><td><b class="mono">${esc(c.symbol)}</b><span class="nm">${esc(c.name)}</span></td><td>${stanceChip(c.income.stance)}</td><td>${stanceChip(c.stance)}</td>
+      <td class="n">${px(p)}${q ? `<span class="nm">live</span>` : ""}</td><td class="n">${pct(y, false, 2)}</td>
+      <td class="n"><b>${pct(ys, false, 2)}</b>${ys >= 0.06 && ys <= 0.08 ? ` <span class="chip up">in band</span>` : ""}</td>
+      <td class="small"><span class="chip ${/steady/.test(c.income.history_flag || "") ? "up" : c.income.history_flag ? "warn" : ""}">${esc((c.income.history_flag || "n/a").split(":")[0])}</span></td>
+      <td class="n">${px(c.income.price_for_7pct)}</td><td class="n">${px(c.income.price_for_6pct)} / ${px(c.income.price_for_8pct)}</td>
+      <td class="n">${pct(c.income.yield_after_cut?.["20%"], false, 2)}</td><td class="small mut">${esc(c.income.basis || "")}</td></tr>`; }).join("")}</tbody></table></div>
+    <p class="note">One year of distributions only: a single special dividend can inflate the yield. Check the payout history before buying.</p>`;
+  const b = $("#inc-live"); if (b) b.onclick = () => liveCheck(rows);
+  document.querySelectorAll("#v-income tr[data-sym]").forEach(tr => { tr.onclick = () => openCall(tr.dataset.sym); tr.onkeydown = e => { if (e.key === "Enter") openCall(tr.dataset.sym); }; });
+}
+
+/* ---------- Options ---------- */
+function rOptions() {
+  const o = D.options;
+  if (!o) { $("#v-options").innerHTML = `<div class="empty">No option chains were collected this week.</div>`; return; }
+  const pol = o.policy, budget = pv() * pol.per_trade, budgetUsd = budget * (usdPer(BASE()) || 1);
+  const maxBar = Math.max(...o.ideas.flatMap(i => Object.values(i.scenarios || {}).map(Math.abs)), 1);
+  $("#v-options").innerHTML = `
+    <div class="banner low"><p class="lead">Speculative sleeve: at most ${pct(pol.sleeve_cap, false, 0)} of the portfolio, ${pct(pol.per_trade, false, 0)} per trade, defined risk only.</p>
+      <p class="mut small">Take profit at +${Math.round(pol.take_profit * 100)}%, cut at −${Math.round(pol.stop_loss * 100)}%, and close after ${pol.time_stop_days} days if nothing has happened. Prices are last week's mids: re-price before trading.</p></div>
+    <div class="toolbar">${pvControl()}<span class="note">Per-trade budget ${num(budget, 0)} ${esc(BASE())} (${num(budgetUsd, 0)} USD)</span></div>
+    <div class="grid3">${o.ideas.map(i => { const n = Math.floor(budgetUsd / i.debit_per_contract);
+      return `<article class="opt"><div class="ttl"><b>${esc(i.symbol)} ${esc(i.structure)}</b><span class="chip ${i.direction === "bull" ? "up" : "down"}">${esc(i.direction)}</span></div>
+        <div class="mono small">${i.legs.map(l => `${l.qty > 0 ? "Buy" : "Sell"} ${l.strike}${l.right}`).join(" / ")} · ${esc(i.expiry)} (${i.days}d)</div>
+        <div class="kv"><div><span>Cost / contract (USD)</span><b>${num(i.debit_per_contract, 0)}</b></div><div><span>Contracts at ${pct(pol.per_trade, false, 0)}</span><b>${n}</b></div>
+          <div><span>Breakeven move</span><b>${pct(i.breakeven_move)}</b></div><div><span>Prob. of profit</span><b>${Math.round(i.prob_profit * 100)}%</b></div>
+          <div><span>Reward : risk</span><b>${i.reward_risk == null ? "open" : num(i.reward_risk, 1) + " : 1"}</b></div><div><span>Return at 1σ</span><b class="${cls(i.return_at_1sd)}">${pct(i.return_at_1sd, true, 0)}</b></div></div>
+        <div class="bars" aria-label="Return on premium if the underlying moves">${Object.entries(i.scenarios || {}).map(([k, v]) => `<div><i style="height:${Math.max(3, Math.abs(v) / maxBar * 100)}%;background:var(--${v >= 0 ? "up" : "down"})" title="${esc(k)}: ${pct(v, true, 0)}"></i><span>${esc(k)}</span></div>`).join("")}</div>
+        ${i.earnings && ["spans", "unverified"].includes(i.earnings.status) ? `<div class="flag warn small">Earnings: ${esc(i.earnings.text)}</div>` : ""}
+        <p class="note">Bars: return on the premium at expiry if ${esc(i.symbol)} moves by the amount shown. The stock's own call is ${esc(i.stance)}.</p></article>`; }).join("")}</div>
+    ${o.chain_issues ? `<div class="panel"><header><h2>Chain check</h2><span class="chip ${o.chain_issues.length ? "warn" : ""}">${o.chain_issues.length}</span></header>
+      ${o.chain_issues.length ? `<ul class="list">${o.chain_issues.map(q => `<li><span class="t mono">${esc(q.symbol)}</span><span class="mono small">${esc(q.expiry)} ${esc(q.strike)}${esc(q.right)}</span><span class="small mut">${esc(q.issue)}</span></li>`).join("")}</ul>` : `<p class="small mut">No quote problems in the saved chains.</p>`}
+      <p class="note">Ideas using a flagged contract are screened out. Each idea's payoff is also recomputed exactly and must match.</p></div>` : ""}`;
+  bindPv();
+}
+
+function stressPanel(st) {
+  const verdict = r => !r.complete ? `<span class="mut">No verdict: ${r.missing.map(esc).join(", ")} had no history (${pct(r.missing_weight, false)})</span>`
+    : r.breach_full ? `<b class="neg">Breaches at full size</b>` : `Within tolerance`;
+  const sg = st.sg_income, sgRows = sg ? sg.rows.filter(r => r.payout_cut != null) : [];
+  return `<div class="panel"><header><h2>Stress test in ${esc(st.base_currency)}</h2><span class="mut small">This week's book through past crises, against your ${pct(st.tolerance, false, 0)} limit</span></header>
+    <div class="tw"><table><thead><tr><th>Episode</th><th class="n">Full size</th><th class="n">Half size</th><th>Verdict</th><th>Market fund used for</th></tr></thead><tbody>
+    ${st.episodes.map(r => `<tr><td><b>${esc(r.episode)}</b><br><span class="small mut mono">${esc(r.start.slice(0, 7))} to ${esc(r.end.slice(0, 7))}</span></td><td class="n ${cls(r.full)}">${pct(r.full)}</td><td class="n ${cls(r.half)}">${pct(r.half)}</td><td class="small">${verdict(r)}</td><td class="small mut">${r.proxied.map(esc).join(", ") || "none"}</td></tr>`).join("")}</tbody></table></div>
+    ${sgRows.length ? `<h3 style="margin-top:14px">Singapore income sleeve</h3><div class="tw"><table><thead><tr><th>Episode</th><th class="n">ES3 price</th><th class="n">SGD in ${esc(st.base_currency)}</th><th class="n">Payout cut</th><th class="n">Sleeve capital</th><th class="n">Sleeve income</th></tr></thead><tbody>
+      ${sgRows.map(r => `<tr><td>${esc(r.episode)}</td><td class="n">${pct(r.price_change)}</td><td class="n">${pct(r.fx_change)}</td><td class="n">${pct(r.payout_cut, false, 0)}</td><td class="n ${cls(r.capital_change)}">${pct(r.capital_change)}</td><td class="n ${cls(r.income_change)}">${pct(r.income_change)}</td></tr>`).join("")}</tbody></table></div>
+      <p class="note">${sg.names} SG names, equal weight, sustainable yield ${pct(sg.basket_yield, false, 2)} (${sg.in_band} inside 6–8%). Payout cuts are assumptions.</p>` : ""}
+    <p class="note">Gross ${pct(st.gross_full, false)} at max size. ${esc(st.limits)}</p></div>`;
+}
+
+/* ---------- Evidence ---------- */
+function rEvidence() {
+  const e = D.evidence;
+  if (!e) { $("#v-evidence").innerHTML = `<div class="empty">No backtest this week.</div>`; return; }
+  const c = e.curve, W = 760, H = 240, all = [...c.strategy, ...c.benchmark], lo = Math.min(...all), hi = Math.max(...all);
+  const X = i => 46 + i * (W - 60) / (c.dates.length - 1), Y = v => 12 + (hi - v) / (hi - lo) * (H - 44);
+  const path = a => a.map((v, i) => (i ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1)).join("");
+  const ticks = [lo, 1, (lo + hi) / 2, hi].filter((v, i, a) => v >= lo && v <= hi && a.indexOf(v) === i).sort((a, b) => a - b);
+  const years = c.dates.map((d, i) => [d.slice(0, 4), i]).filter(([y], i, a) => i === 0 || y !== a[i - 1][0]).filter(([y]) => +y % 3 === 2);
+  const variants = e.variants || [], bench = variants.find(v => v.variant.startsWith("Benchmark")), rules = variants.filter(v => v !== bench);
+  const short = v => v.variant.split(" (")[0].split(":")[0];
+  const yrs = bench ? Object.keys(bench.years).sort() : [];
+  const heat = v => v == null ? "" : `background:color-mix(in srgb, var(--${v >= 0 ? "up" : "down"}) ${Math.min(55, Math.abs(v) * 160).toFixed(0)}%, transparent)`;
+  $("#v-evidence").innerHTML = `
+    <div class="banner ${e.level === "LOW" ? "low" : "ok"}"><p class="lead">Rule confidence ${esc(e.level)}: ${e.level === "LOW" ? "following the calls has not beaten holding everything equally." : "the rules have beaten holding everything equally."}</p>
+      <p class="mut small">${e.instruments} instruments, ${num(e.observations, 0)} weekly observations, ${esc(e.first_date)} to ${esc(e.last_date)}. Walk-forward: each week's call uses only data available that week.</p></div>
+    <div class="tiles">
+      <div class="tile"><h3>Rule return a year</h3><div class="big">${pct(e.strategy.cagr)}</div><div class="sub">Equal weight ${pct(e.benchmark.cagr)}</div></div>
+      <div class="tile"><h3>Sharpe ratio</h3><div class="big">${num(e.strategy.sharpe, 2)}</div><div class="sub">Equal weight ${num(e.benchmark.sharpe, 2)}</div></div>
+      <div class="tile"><h3>Worst fall</h3><div class="big neg">${pct(e.strategy.max_drawdown)}</div><div class="sub">Equal weight ${pct(e.benchmark.max_drawdown)}</div></div>
+      <div class="tile"><h3>Names switched on</h3><div class="big">${pct(e.avg_invested, false, 0)}</div><div class="sub">Average share; fully invested in them, cash at 0% only when none</div></div></div>
+    ${e.desk ? `<div class="panel"><header><h2>The Desk as you would run it</h2><span class="small mut">Sizes, exits, T-bill cash, 10 bp a trade</span></header>
+      <div class="tw"><table><thead><tr><th>Version</th><th class="n">A year</th><th class="n">Sharpe</th><th class="n">Worst fall</th><th class="n">Exposure</th><th>Beats same exposure, both halves</th></tr></thead><tbody>
+      ${[["Full size, trade at the signal close", e.desk], ["Full size, trade a week later", e.desk_next_week], ["Half size (the rule while confidence is LOW)", e.desk_half_size]].filter(x => x[1]).map(([n, d]) => `<tr><td>${n}</td><td class="n">${pct(d.desk.cagr)}</td><td class="n">${num(d.desk.sharpe, 2)}</td><td class="n ${D.investor?.drawdown_tolerance && -d.desk.max_drawdown > D.investor.drawdown_tolerance ? "neg" : ""}">${pct(d.desk.max_drawdown)}</td><td class="n">${pct(d.avg_exposure, false, 0)}</td><td>${d.beats_matched_both_halves ? `<span class="chip up">yes</span>` : `<span class="chip down">no</span>`}</td></tr>`).join("")}
+      <tr><td>Same exposure spread over everything</td><td class="n">${pct(e.desk.matched.cagr)}</td><td class="n">${num(e.desk.matched.sharpe, 2)}</td><td class="n">${pct(e.desk.matched.max_drawdown)}</td><td class="n">${pct(e.desk.avg_exposure, false, 0)}</td><td>—</td></tr>
+      </tbody></table></div>
+      <p class="note">${D.investor?.drawdown_tolerance ? `Your stated tolerance is about a ${Math.round(D.investor.drawdown_tolerance * 100)}% whole-portfolio decline; worst falls beyond it are marked. ` : ""}Exits at the 40-week average less 3% are what cut the falls; picking names added nothing over the same exposure.${e.desk.exit_overshoot ? ` Exits closed a mean ${pct(e.desk.exit_overshoot.mean, false)} beyond the level (${e.desk.exit_overshoot.exits} exits), which sizing now allows for.` : ""}</p></div>` : ""}
+    <div class="panel"><header><h2>Growth of 1 unit</h2><span class="small mut"><span style="color:var(--accent)">━</span> current rule &nbsp; <span style="color:var(--muted)">┅</span> equal weight</span></header>
+      <svg class="curve" viewBox="0 0 ${W} ${H}" role="img" aria-label="Growth of one unit: current rule against equal weight">
+        ${ticks.map(v => `<line class="g" x1="46" x2="${W - 10}" y1="${Y(v)}" y2="${Y(v)}"/><text x="4" y="${Y(v) + 4}">${v.toFixed(2)}</text>`).join("")}
+        ${years.map(([y, i]) => `<text x="${X(i) - 14}" y="${H - 8}">${y}</text>`).join("")}
+        <path d="${path(c.benchmark)}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="${path(c.strategy)}" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
+    <div class="panel"><header><h2>Alternative rules</h2><span class="small mut">Adopt only if: better Sharpe in both halves and all three thirds, active t ≥ 2</span></header>
+      <div class="tw"><table><thead><tr><th>Rule</th><th class="n">A year</th><th class="n">Sharpe</th><th class="n">Worst fall</th><th class="n">Invested</th><th class="n">Names held</th><th class="n">Thirds won</th><th class="n">Active t</th><th>Adopt</th></tr></thead>
+      <tbody>${variants.map(v => `<tr><td><b>${esc(short(v))}</b><span class="nm">${esc(v.variant.includes("(") ? v.variant.split(" (")[1].replace(")", "") : v.variant.split(": ")[1] || "")}</span></td>
+        <td class="n ${cls(v.cagr)}">${pct(v.cagr)}</td><td class="n">${num(v.sharpe, 2)}</td><td class="n neg">${pct(v.max_drawdown)}</td><td class="n">${pct(v.invested, false, 0)}</td>
+        <td class="n">${v.median_names_held == null ? "—" : num(v.median_names_held, 0)}</td><td class="n">${v.thirds_won == null ? "—" : v.thirds_won + " of 3"}</td>
+        <td class="n">${v.active_t == null ? "—" : num(v.active_t, 2)}</td><td>${v.passes_adoption_test == null ? "—" : v.passes_adoption_test ? `<span class="chip up">yes</span>` : `<span class="chip down">no</span>`}</td></tr>`).join("")}</tbody></table></div></div>
+    ${yrs.length ? `<div class="panel"><header><h2>Year by year</h2><span class="small mut">Shading scales with the size of the gain or loss</span></header>
+      <div class="tw heat"><table><thead><tr><th>Year</th><th class="n">Equal weight</th>${rules.map(v => `<th class="n">${esc(short(v))}</th>`).join("")}</tr></thead>
+      <tbody>${yrs.map(y => `<tr><td class="mono">${y}</td><td class="n" style="${heat(bench.years[y])}">${pct(bench.years[y])}</td>${rules.map(v => `<td class="n" style="${heat(v.years?.[y])}">${pct(v.years?.[y])}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>` : ""}
+    ${e.data_fixes?.length ? `<p class="note">${e.data_fixes.map(f => f.reason ? `Excluded ${esc(f.symbol)} ${esc(f.date)}: ${esc(f.reason)}` : `Excluded bad print: ${esc(f.symbol)} ${esc(f.date)} closed ${Number(f.close).toPrecision(4)} between ${Number(f.previous).toPrecision(4)} and ${Number(f.next).toPrecision(4)}.`).join(" ")}</p>` : ""}
+    <p class="note">Limits: today's instrument list (survivorship), price returns in local currency, weekly closes, no taxes or dividends, no macro overlay; the Desk simulation charges 10 bp a trade.</p>`;
+}
+
+/* ---------- Journal (shared db) ---------- */
+let jUnsub = null, jState = "loading";
+function subscribeJournal() {
+  if (jUnsub || !cap.db) return;
+  try {
+    jUnsub = cap.db.collection("journal").orderBy("created", "desc").limit(300).onSnapshot(snap => {
+      journal = snap.docs.map(d => ({id: d.id, ...d.data()})); jState = "ready"; if (S.tab === "journal" || S.tab === "today") rerender();
+    }, err => { jState = err.code === "revoked" ? "off" : "error"; jUnsub = null; if (S.tab === "journal") rJournal(); });
+  } catch { jState = "error"; }
+}
+const ACTIONS = ["Buy", "Add", "Hold", "Trim", "Sell", "Skip"];
+function hist(j) {  // earlier versions, newest first; written on each revision and never edited
+  const h = Object.entries(j.history || {}).sort((a, b) => b[0].localeCompare(a[0]));
+  if (!h.length) return "";
+  return `<details class="small"><summary class="mut">Version ${esc(j.version || h.length + 1)} · ${h.length} earlier</summary><ul class="list">${h.map(([, v]) =>
+    `<li><span class="mono">v${esc(v.version)}</span><span>${esc(v.action)} at ${px(v.price)} on ${esc(v.date)}${v.status === "Closed" ? " · closed" : ""}<br>${esc(v.reason || "")}${v.invalidation ? `<br><span class="mut">Wrong if: ${esc(v.invalidation)}</span>` : ""}</span></li>`).join("")}</ul></details>`;
+}
+function rJournal() {
+  const today = new Date().toISOString().slice(0, 10);
+  const canWrite = cap.db && cap.canWrite !== false;
+  const ed = S.editing ? journal.find(j => j.id === S.editing) : null;
+  if (S.editing && !ed) S.editing = null;
+  const pre = ed ? D.calls.find(c => c.symbol === ed.symbol) : S.prefill ? D.calls.find(c => c.symbol === S.prefill) : null;
+  const all = [...D.calls].sort((a, b) => a.symbol.localeCompare(b.symbol));
+  const due = journal.filter(j => j.review_date && j.review_date <= today && j.status !== "Closed");
+  $("#v-journal").innerHTML = `
+    <div class="grid2">
+      <div class="panel"><header><h2>${ed ? `Revise ${esc(ed.symbol)} entry` : "Log a decision"}</h2><span class="small mut">${ed ? "The previous version is kept in its history" : "Saved for you and the weekly review"}</span></header>
+        ${!cap.db ? `<p class="small mut">The journal saves when this page is opened in Claude while signed in.</p>` : !canWrite ? `<p class="small mut">You can read this journal but not add to it.</p>` : `
+        <form class="jform" id="jf">
+          <label class="field">Instrument<select class="input" id="j-sym"${ed ? " disabled" : ""}>${all.map(c => `<option value="${esc(c.symbol)}"${pre?.symbol === c.symbol ? " selected" : ""}>${esc(c.symbol)} · ${esc(c.name)}</option>`).join("")}</select></label>
+          <label class="field">Action<select class="input" id="j-act">${ACTIONS.map(a => `<option${ed ? (ed.action === a ? " selected" : "") : pre && pre.stance === "Accumulate" && a === "Buy" ? " selected" : ""}>${a}</option>`).join("")}</select></label>
+          <label class="field">Price<input class="input num" id="j-px" inputmode="decimal" required value="${ed ? ed.price : pre ? (live[pre.symbol]?.price ?? pre.last) : ""}"></label>
+          <label class="field">Weight of portfolio (%)<input class="input num" id="j-w" inputmode="decimal" placeholder="e.g. 1.5" value="${ed ? (ed.weight != null ? +(ed.weight * 100).toFixed(2) : "") : pre && sizing(pre) ? (sizing(pre).w * 100).toFixed(2) : ""}"></label>
+          <label class="field">Date<input class="input" type="date" id="j-date" value="${ed ? esc(ed.date) : today}"></label>
+          <label class="field">Review on<input class="input" type="date" id="j-rev" value="${ed ? esc(ed.review_date || "") : new Date(Date.now() + 91 * 864e5).toISOString().slice(0, 10)}"></label>
+          <label class="field">Status<select class="input" id="j-st">${["Open", "Closed"].map(x => `<option${(ed?.status || "Open") === x ? " selected" : ""}>${x}</option>`).join("")}</select></label>
+          <label class="field wide">Thesis (why)<textarea class="input" id="j-why" rows="2" required placeholder="e.g. Oil up-trend intact and energy leading the market.">${ed ? esc(ed.reason || "") : ""}</textarea></label>
+          <label class="field wide">Invalidation (what would prove it wrong, decided now)<textarea class="input" id="j-inv" rows="2" required placeholder="e.g. A weekly close below the exit level, or Brent losing its 40-week average.">${ed ? esc(ed.invalidation || "") : ""}</textarea></label>
+          <div class="row wide"><button class="btn primary" type="submit" id="j-save">${ed ? "Save revision" : "Save to journal"}</button>${ed ? `<button class="btn" type="button" id="j-cancel">Cancel</button>` : ""}<span class="small mut" id="j-msg">${ed ? `Version ${(ed.version || 1) + 1}. The original call and exit level stay as logged.` : "The call, exit level and week are saved with it."}</span></div>
+        </form>`}
+      </div>
+      <div class="panel"><header><h2>Review due</h2><span class="chip ${due.length ? "warn" : ""}">${due.length}</span></header>
+        ${due.length ? `<ul class="list">${due.filter(j => j.status !== "Closed").map(j => `<li><span class="t mono">${esc(j.symbol)}</span><span>${esc(j.action)} at ${px(j.price)} on ${esc(j.date)}<br><span class="small mut">Was ${esc(j.stance_at_entry || "")}; review set for ${esc(j.review_date)}</span></span></li>`).join("")}</ul>`
+          : `<p class="small mut">Nothing due. Entries come up here on their review date, and the weekly review scores them.</p>`}
+      </div>
+    </div>
+    <div class="panel"><header><h2>Decision journal</h2><span class="small mut">${journal.length} ${journal.length === 1 ? "entry" : "entries"}</span>${journal.length && cap.downloads ? `<button class="btn" id="j-csv">Export CSV</button>` : ""}</header>
+      ${jState === "loading" && cap.db ? `<p class="small mut">Loading entries…</p>` : jState === "error" ? `<p class="small mut">The journal could not load. Reload the page to try again.</p>` : !journal.length
+        ? `<div class="empty"><b>No decisions logged yet.</b><span>Use the form above, or "Log a decision" from any instrument. Each entry records the call and exit level at the time, so the weekly review can score your decisions against the rules.</span></div>`
+        : `<div class="tw"><table><thead><tr><th>Date</th><th>Instrument</th><th>Action</th><th class="n">Price</th><th class="n">Now</th><th class="n">Since</th><th class="n">Weight</th><th>Call then</th><th>Thesis and invalidation</th><th>Review</th><th></th></tr></thead><tbody>
+          ${journal.map(j => { const c = D.calls.find(x => x.symbol === j.symbol), now = live[j.symbol]?.price ?? c?.last, ch = now && j.price ? now / j.price - 1 : null;
+            const good = ch == null ? null : ["Sell", "Trim", "Skip"].includes(j.action) ? -ch : ch;
+            return `<tr><td class="mono small">${esc(j.date)}</td><td><b class="mono">${esc(j.symbol)}</b></td><td>${esc(j.action)}</td><td class="n">${px(j.price)}</td><td class="n">${px(now)}</td>
+            <td class="n ${cls(good)}">${pct(ch)}</td><td class="n">${j.weight != null ? pct(j.weight, false, 2) : "—"}</td><td>${j.stance_at_entry ? stanceChip(j.stance_at_entry) : ""}</td>
+            <td class="small" style="min-width:240px">${esc(j.reason)}${j.invalidation ? `<br><span class="mut">Wrong if: ${esc(j.invalidation)}</span>` : ""}${hist(j)}</td>
+            <td class="mono small ${j.review_date && j.review_date <= today && j.status !== "Closed" ? "neg" : ""}">${j.status === "Closed" ? "Closed" : esc(j.review_date || "")}</td>
+            <td>${canWrite ? `<button class="btn ghost small" data-edit="${esc(j.id)}">Revise</button> <button class="btn ghost small" data-del="${esc(j.id)}">Delete</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>
+          <p class="note">"Since" is the move from your price to the latest price (live if priced, else this week's close), signed so that positive means the decision is working: a sale gains when the price falls.</p>`}
+    </div>`;
+  S.prefill = null;
+  const f = $("#jf"); if (f) f.onsubmit = async ev => {
+    ev.preventDefault();
+    const sym = $("#j-sym").value, c = D.calls.find(x => x.symbol === sym), price = Number($("#j-px").value), w = $("#j-w").value.trim();
+    if (!(price > 0)) { $("#j-msg").textContent = "Enter the price you dealt at (a positive number)."; return; }
+    const why = $("#j-why").value.trim(); if (!why) { $("#j-msg").textContent = "Add the reason: it is what the review checks."; return; }
+    const inv = $("#j-inv").value.trim(); if (!inv) { $("#j-msg").textContent = "Add what would prove it wrong: decide it before the market does."; return; }
+    if (ed) {
+      const at = new Date().toISOString(), keys = ["action", "price", "weight", "date", "review_date", "status", "reason", "invalidation"];
+      const prev = Object.fromEntries(keys.map(k => [k, ed[k] ?? null]));
+      const next = {action: $("#j-act").value, price, weight: w ? Number(w) / 100 : null, date: $("#j-date").value,
+        review_date: $("#j-rev").value || null, status: $("#j-st").value, reason: why.slice(0, 1500), invalidation: inv.slice(0, 1000)};
+      if (keys.every(k => String(prev[k] ?? "") === String(next[k] ?? ""))) { $("#j-msg").textContent = "Nothing changed."; return; }
+      $("#j-save").disabled = true; $("#j-msg").textContent = "Saving…";
+      try {
+        await cap.db.doc("journal/" + ed.id).update({...next, updated: at, version: (ed.version || 1) + 1, history: {[at.replace(/[.:]/g, "-")]: {...prev, version: ed.version || 1}}});
+        S.editing = null; toast("Revision saved"); rJournal();
+      } catch (e) { $("#j-save").disabled = false; $("#j-msg").textContent = e.code === "invalid_argument" ? "Not saved: you cannot edit this entry." : "Not saved: the store did not answer. Try again."; }
+      return;
+    }
+    const doc = {created: new Date().toISOString(), date: $("#j-date").value, symbol: sym, action: $("#j-act").value, price,
+      weight: w ? Number(w) / 100 : null, reason: why.slice(0, 1500), invalidation: inv.slice(0, 1000), status: $("#j-st").value, version: 1, review_date: $("#j-rev").value || null,
+      stance_at_entry: c?.stance || null, exit_at_entry: c?.stop ?? null, buy_zone_at_entry: c?.entry || null, week: D.as_of};
+    $("#j-save").disabled = true; $("#j-msg").textContent = "Saving…";
+    try { await cap.db.collection("journal").add(doc); toast("Saved to journal"); }
+    catch (e) {
+      $("#j-save").disabled = false;
+      $("#j-msg").textContent = e.code === "invalid_argument" ? "You do not have permission to add to this journal." : e.code === "quota_exceeded" ? "The journal is full. Delete old entries first." : "Not saved: the store did not answer. Try again.";
+      if (e.code === "invalid_argument") cap.canWrite = false;
+    }
+  };
+  const cancel = $("#j-cancel"); if (cancel) cancel.onclick = () => { S.editing = null; rJournal(); };
+  document.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => { S.editing = b.dataset.edit; rJournal(); $("#jf")?.scrollIntoView({behavior: "smooth", block: "start"}); });
+  document.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+    if (b.dataset.armed !== "1") { b.dataset.armed = "1"; b.textContent = "Confirm delete"; b.classList.add("primary"); setTimeout(() => { if (b.isConnected) { b.dataset.armed = ""; b.textContent = "Delete"; b.classList.remove("primary"); } }, 4000); return; }
+    b.disabled = true;
+    try { await cap.db.doc("journal/" + b.dataset.del).delete(); toast("Deleted"); } catch { b.disabled = false; toast("Not deleted. Try again."); }
+  });
+  const csv = $("#j-csv"); if (csv) csv.onclick = async () => {
+    const cols = ["date", "symbol", "action", "price", "weight", "stance_at_entry", "exit_at_entry", "review_date", "status", "reason", "invalidation", "version", "updated", "week"];
+    const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const text = [cols.join(","), ...journal.map(j => cols.map(k => q(j[k])).join(","))].join("\n");
+    try { await cap.downloads.save({filename: `decision-journal-${today}.csv`, data: new Blob([text], {type: "text/csv"})}); }
+    catch (e) { if (e.code !== "declined") toast("Export is not available here."); }
+  };
+}
+
+window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (D && id !== S.tab && TABS.some(t => t.id === id)) show(id); });
+boot();
+</script>

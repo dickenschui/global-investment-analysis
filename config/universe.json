@@ -1,0 +1,909 @@
+{
+  "schema_version": 1,
+  "mandate": {
+    "markets": [
+      "HK",
+      "China",
+      "SG",
+      "UK",
+      "US"
+    ],
+    "asset_classes": [
+      "equities",
+      "sectors",
+      "gold",
+      "commodities",
+      "futures (via ETF proxies)",
+      "FX"
+    ],
+    "horizon": "6-12 months research; daily monitoring",
+    "sg_income_target": [
+      0.06,
+      0.08
+    ]
+  },
+  "instruments": [
+    {
+      "group": "us_equity",
+      "symbol": "SPY",
+      "name": "S&P 500 ETF",
+      "market": "US",
+      "kind": "index_proxy",
+      "sector": "Broad market",
+      "yahoo": "SPY"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "QQQ",
+      "name": "Nasdaq-100 ETF",
+      "market": "US",
+      "kind": "index_proxy",
+      "sector": "Technology tilt",
+      "yahoo": "QQQ"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "SOXX",
+      "name": "Semiconductor ETF",
+      "market": "US",
+      "kind": "index_proxy",
+      "sector": "Semiconductors",
+      "yahoo": "SOXX"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "IGV",
+      "name": "Software ETF",
+      "market": "US",
+      "kind": "index_proxy",
+      "sector": "Software",
+      "yahoo": "IGV"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "NVDA",
+      "name": "Nvidia",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Semiconductors",
+      "yahoo": "NVDA"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "MSFT",
+      "name": "Microsoft",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Software",
+      "yahoo": "MSFT"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "AVGO",
+      "name": "Broadcom",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Semiconductors",
+      "yahoo": "AVGO"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "ANET",
+      "name": "Arista Networks",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Networking",
+      "yahoo": "ANET"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "NOW",
+      "name": "ServiceNow",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Software",
+      "yahoo": "NOW"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "GOOGL",
+      "name": "Alphabet",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Communication services",
+      "yahoo": "GOOGL"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "META",
+      "name": "Meta Platforms",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Communication services",
+      "yahoo": "META"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "AMZN",
+      "name": "Amazon",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Consumer / cloud",
+      "yahoo": "AMZN"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Hardware",
+      "yahoo": "AAPL"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "CRWD",
+      "name": "CrowdStrike",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Software",
+      "yahoo": "CRWD"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "PANW",
+      "name": "Palo Alto Networks",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Software",
+      "yahoo": "PANW"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "ORCL",
+      "name": "Oracle",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Software",
+      "yahoo": "ORCL"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "JPM",
+      "name": "JPMorgan",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "JPM"
+    },
+    {
+      "group": "us_equity",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "market": "US",
+      "kind": "stock",
+      "sector": "Energy",
+      "yahoo": "XOM"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLK",
+      "name": "Technology Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Technology",
+      "yahoo": "XLK"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLF",
+      "name": "Financial Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Financials",
+      "yahoo": "XLF"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLE",
+      "name": "Energy Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Energy",
+      "yahoo": "XLE"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLV",
+      "name": "Health Care Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Healthcare",
+      "yahoo": "XLV"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLI",
+      "name": "Industrial Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Industrials",
+      "yahoo": "XLI"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLY",
+      "name": "Consumer Discretionary Select ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Consumer discretionary",
+      "yahoo": "XLY"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLP",
+      "name": "Consumer Staples Select ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Consumer staples",
+      "yahoo": "XLP"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLU",
+      "name": "Utilities Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Utilities",
+      "yahoo": "XLU"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLB",
+      "name": "Materials Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Materials",
+      "yahoo": "XLB"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLRE",
+      "name": "Real Estate Select Sector ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Property",
+      "yahoo": "XLRE"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "XLC",
+      "name": "Communication Services Select ETF",
+      "market": "US",
+      "kind": "sector_proxy",
+      "sector": "Communication services",
+      "yahoo": "XLC"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "GLD",
+      "name": "SPDR Gold Shares",
+      "market": "Cross-asset",
+      "kind": "commodity_proxy",
+      "sector": "Gold",
+      "yahoo": "GLD"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "SLV",
+      "name": "iShares Silver Trust",
+      "market": "Cross-asset",
+      "kind": "commodity_proxy",
+      "sector": "Silver",
+      "yahoo": "SLV"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "CPER",
+      "name": "US Copper Index Fund",
+      "market": "Cross-asset",
+      "kind": "commodity_proxy",
+      "sector": "Copper",
+      "yahoo": "CPER"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "USO",
+      "name": "US Oil Fund",
+      "market": "Cross-asset",
+      "kind": "commodity_proxy",
+      "sector": "Crude oil",
+      "yahoo": "USO"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "UNG",
+      "name": "US Natural Gas Fund",
+      "market": "Cross-asset",
+      "kind": "commodity_proxy",
+      "sector": "Natural gas",
+      "yahoo": "UNG"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "DBA",
+      "name": "Invesco DB Agriculture Fund",
+      "market": "Cross-asset",
+      "kind": "commodity_proxy",
+      "sector": "Agriculture",
+      "yahoo": "DBA"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "TLT",
+      "name": "20+Y Treasury ETF",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "Long rates / duration",
+      "yahoo": "TLT"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "IEF",
+      "name": "7-10Y Treasury ETF",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "Intermediate rates",
+      "yahoo": "IEF"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "UUP",
+      "name": "US Dollar Index Bullish Fund",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "US dollar",
+      "yahoo": "UUP"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "VIX",
+      "name": "CBOE Volatility Index",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "Risk sentiment",
+      "yahoo": "^VIX"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "GBP.USD",
+      "name": "GBP/USD",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "GBPUSD=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "EUR.USD",
+      "name": "EUR/USD",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "EURUSD=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "EUR.GBP",
+      "name": "EUR/GBP",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "EURGBP=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "USD.JPY",
+      "name": "USD/JPY",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "JPY=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "USD.SGD",
+      "name": "USD/SGD",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "SGD=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "USD.HKD",
+      "name": "USD/HKD",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "HKD=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "USD.CNH",
+      "name": "USD/CNH",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "CNH=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "AUD.USD",
+      "name": "AUD/USD",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "AUDUSD=X"
+    },
+    {
+      "group": "us_sector_macro",
+      "symbol": "USD.CHF",
+      "name": "USD/CHF",
+      "market": "Cross-asset",
+      "kind": "fx",
+      "sector": "FX",
+      "yahoo": "CHF=X"
+    },
+    {
+      "group": "uk",
+      "symbol": "ISF",
+      "name": "iShares Core FTSE 100 UCITS ETF",
+      "market": "UK",
+      "kind": "index_proxy",
+      "sector": "Broad market",
+      "yahoo": "ISF.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "REL",
+      "name": "RELX",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Information services",
+      "yahoo": "REL.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "LSEG",
+      "name": "London Stock Exchange Group",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Market infrastructure",
+      "yahoo": "LSEG.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "BA.",
+      "name": "BAE Systems",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Defence",
+      "yahoo": "BA.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "RR.",
+      "name": "Rolls-Royce",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Aerospace",
+      "yahoo": "RR.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "BARC",
+      "name": "Barclays",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "BARC.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "HSBA",
+      "name": "HSBC",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "HSBA.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "LLOY",
+      "name": "Lloyds Banking Group",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "LLOY.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "AZN",
+      "name": "AstraZeneca",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Healthcare",
+      "yahoo": "AZN.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "GSK",
+      "name": "GSK",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Healthcare",
+      "yahoo": "GSK.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "SHEL",
+      "name": "Shell",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Energy",
+      "yahoo": "SHEL.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "RIO",
+      "name": "Rio Tinto",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Materials",
+      "yahoo": "RIO.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "NG.",
+      "name": "National Grid",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Utilities",
+      "yahoo": "NG.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "SSE",
+      "name": "SSE",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Utilities",
+      "yahoo": "SSE.L"
+    },
+    {
+      "group": "uk",
+      "symbol": "ULVR",
+      "name": "Unilever",
+      "market": "UK",
+      "kind": "stock",
+      "sector": "Consumer staples",
+      "yahoo": "ULVR.L"
+    },
+    {
+      "group": "sg",
+      "symbol": "ES3",
+      "name": "SPDR Straits Times Index ETF",
+      "market": "SG",
+      "kind": "index_proxy",
+      "sector": "Broad market",
+      "yahoo": "ES3.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "D05",
+      "name": "DBS",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "D05.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "O39",
+      "name": "OCBC",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "O39.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "U11",
+      "name": "UOB",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "U11.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "Z74",
+      "name": "Singtel",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Telecom",
+      "yahoo": "Z74.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "CJLU",
+      "name": "NetLink NBN Trust",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Business trust",
+      "yahoo": "CJLU.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "A17U",
+      "name": "CapitaLand Ascendas REIT",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Industrial REIT",
+      "yahoo": "A17U.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "J69U",
+      "name": "Frasers Centrepoint Trust",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Retail REIT",
+      "yahoo": "J69U.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "ME8U",
+      "name": "Mapletree Industrial Trust",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Industrial REIT",
+      "yahoo": "ME8U.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "M44U",
+      "name": "Mapletree Logistics Trust",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Logistics REIT",
+      "yahoo": "M44U.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "N2IU",
+      "name": "Mapletree Pan Asia Commercial Trust",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Commercial REIT",
+      "yahoo": "N2IU.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "C38U",
+      "name": "CapitaLand Integrated Commercial Trust",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Commercial REIT",
+      "yahoo": "C38U.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "C2PU",
+      "name": "Parkway Life REIT",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Healthcare REIT",
+      "yahoo": "C2PU.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "AJBU",
+      "name": "Keppel DC REIT",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Data-centre REIT",
+      "yahoo": "AJBU.SI"
+    },
+    {
+      "group": "sg",
+      "symbol": "S63",
+      "name": "ST Engineering",
+      "market": "SG",
+      "kind": "stock",
+      "sector": "Industrials",
+      "yahoo": "S63.SI"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "2800",
+      "name": "Tracker Fund of Hong Kong (HSI)",
+      "market": "HK",
+      "kind": "index_proxy",
+      "sector": "Broad market",
+      "yahoo": "2800.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "700",
+      "name": "Tencent",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Technology",
+      "yahoo": "0700.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "9988",
+      "name": "Alibaba",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Consumer platforms",
+      "yahoo": "9988.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "3690",
+      "name": "Meituan",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Consumer platforms",
+      "yahoo": "3690.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "1299",
+      "name": "AIA",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Insurance",
+      "yahoo": "1299.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "5",
+      "name": "HSBC (HK)",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "0005.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "941",
+      "name": "China Mobile",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Telecom",
+      "yahoo": "0941.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "857",
+      "name": "PetroChina H",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Energy",
+      "yahoo": "0857.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "388",
+      "name": "HKEX",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Market infrastructure",
+      "yahoo": "0388.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "823",
+      "name": "Link REIT",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Property",
+      "yahoo": "0823.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "1211",
+      "name": "BYD H",
+      "market": "HK",
+      "kind": "stock",
+      "sector": "Autos",
+      "yahoo": "1211.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "3188",
+      "name": "ChinaAMC CSI 300 Index ETF",
+      "market": "China",
+      "kind": "index_proxy",
+      "sector": "Broad A-share market",
+      "yahoo": "3188.HK"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "600519",
+      "name": "Kweichow Moutai",
+      "market": "China",
+      "kind": "stock",
+      "sector": "Consumer staples",
+      "yahoo": "600519.SS"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "601318",
+      "name": "Ping An A",
+      "market": "China",
+      "kind": "stock",
+      "sector": "Insurance",
+      "yahoo": "601318.SS"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "600036",
+      "name": "China Merchants Bank A",
+      "market": "China",
+      "kind": "stock",
+      "sector": "Banks",
+      "yahoo": "600036.SS"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "300750",
+      "name": "CATL",
+      "market": "China",
+      "kind": "stock",
+      "sector": "Battery / industrial",
+      "yahoo": "300750.SZ"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "000333",
+      "name": "Midea",
+      "market": "China",
+      "kind": "stock",
+      "sector": "Industrials",
+      "yahoo": "000333.SZ"
+    },
+    {
+      "group": "hk_cn",
+      "symbol": "600900",
+      "name": "China Yangtze Power",
+      "market": "China",
+      "kind": "stock",
+      "sector": "Utilities",
+      "yahoo": "600900.SS"
+    },
+    {
+      "group": "credit",
+      "symbol": "HYG",
+      "name": "iShares iBoxx High Yield Corporate Bond ETF",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "High-yield credit",
+      "yahoo": "HYG"
+    },
+    {
+      "group": "credit",
+      "symbol": "LQD",
+      "name": "iShares iBoxx Investment Grade Corporate Bond ETF",
+      "market": "Cross-asset",
+      "kind": "macro_proxy",
+      "sector": "Investment-grade credit",
+      "yahoo": "LQD"
+    }
+  ]
+}

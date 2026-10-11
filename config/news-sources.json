@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "purpose": "Official central-bank and statistics feeds triaged by news.py for the hourly check. Keyword matches flag a headline for review; they do not verify the release, its magnitude or any link to a price move.",
+  "verification_note": "verified=false: the URL is documented but has not yet been fetched and parsed from this project's runner. The first GitHub Actions run records failures; set verified=true only after a clean parse.",
+  "sources": [
+    {
+      "id": "fed_press",
+      "name": "Federal Reserve Board press releases (all)",
+      "market": "US",
+      "authority": "primary",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "provenance": "Reference app config/hourly-monitor.json rss_sources",
+      "verified": false
+    },
+    {
+      "id": "bls_releases",
+      "name": "US Bureau of Labor Statistics latest releases",
+      "market": "US",
+      "authority": "primary",
+      "url": "https://www.bls.gov/feed/bls_latest.rss",
+      "provenance": "Reference app config/hourly-monitor.json rss_sources",
+      "verified": false
+    },
+    {
+      "id": "bea_releases",
+      "name": "US Bureau of Economic Analysis releases",
+      "market": "US",
+      "authority": "primary",
+      "url": "https://apps.bea.gov/rss/rss.xml",
+      "provenance": "Reference app config/hourly-monitor.json rss_sources",
+      "verified": false
+    },
+    {
+      "id": "boe_news",
+      "name": "Bank of England news",
+      "market": "UK",
+      "authority": "primary",
+      "url": "https://www.bankofengland.co.uk/rss/news",
+      "provenance": "Reference app config/hourly-monitor.json rss_sources",
+      "verified": false
+    },
+    {
+      "id": "hkma_press",
+      "name": "Hong Kong Monetary Authority press releases",
+      "market": "HK",
+      "authority": "primary",
+      "url": "https://www.hkma.gov.hk/eng/other-information/rss/rss_press-release.xml",
+      "provenance": "Reference app config/hourly-monitor.json rss_sources",
+      "verified": false
+    },
+    {
+      "id": "ecb_press",
+      "name": "European Central Bank press releases, speeches and interviews",
+      "market": "EU",
+      "authority": "primary",
+      "url": "https://www.ecb.europa.eu/rss/press.html",
+      "provenance": "ECB RSS feed list (https://www.ecb.europa.eu/home/html/rss.en.html); RSS 2.0 despite the .html path. Not in the reference app.",
+      "verified": false
+    }
+  ],
+  "not_included": [
+    {
+      "id": "mas_media_releases",
+      "reason": "No documented MAS RSS URL was found in the reference app; the reference only links https://www.mas.gov.sg/ and /monetary-policy as pages. Add once the URL is confirmed on mas.gov.sg."
+    }
+  ],
+  "keywords_by_topic": {
+    "monetary_policy": {
+      "primary": ["unscheduled", "emergency", "intermeeting"],
+      "secondary": ["monetary policy", "FOMC", "interest rate", "Bank Rate", "rate cut", "rate hike", "policy rate", "Monetary Policy Committee", "Monetary Policy Statement", "discount rate"]
+    },
+    "financial_stability": {
+      "primary": ["bank failure", "capital controls", "trading halt", "bankruptcy", "default on"],
+      "secondary": ["financial stability", "liquidity facility", "swap line", "stress test"]
+    },
+    "currency_peg": {
+      "primary": ["Convertibility Undertaking"],
+      "secondary": ["Linked Exchange Rate", "exchange rate policy", "foreign exchange intervention"]
+    },
+    "inflation": {
+      "primary": [],
+      "secondary": ["consumer price", "producer price", "inflation", "CPI", "PCE"]
+    },
+    "labour": {
+      "primary": [],
+      "secondary": ["employment", "payroll", "unemployment", "jobless"]
+    },
+    "growth": {
+      "primary": [],
+      "secondary": ["gross domestic product", "GDP", "personal income", "trade balance"]
+    },
+    "trade_policy": {
+      "primary": [],
+      "secondary": ["sanction", "tariff", "export control"]
+    },
+    "corporate": {
+      "primary": ["dividend cut", "cuts dividend", "suspends dividend", "cancels dividend", "profit warning"],
+      "secondary": ["earnings warning", "guidance", "earnings results", "earnings release"]
+    }
+  }
+}

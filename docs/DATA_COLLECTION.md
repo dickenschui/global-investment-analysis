@@ -1,0 +1,57 @@
+# Data collection brief (read-only market data)
+
+Repo: /home/user/global-investment-analysis. Universe: config/universe.json. You handle ONLY instruments whose "group" equals <group>.
+
+Tools: load Interactive Brokers MCP tools via ToolSearch with query
+"select:mcp__Interactive_Brokers_IBKR__search_contracts,mcp__Interactive_Brokers_IBKR__get_price_history,mcp__Interactive_Brokers_IBKR__get_price_snapshot".
+READ-ONLY: never call order, alert, watchlist or account tools.
+
+For each instrument:
+1. search_contracts to resolve the contract. Pick the PRIMARY listing that matches the config (US -> NASDAQ/NYSE/ARCA; UK -> LSE, currency GBP; SG -> SGX; HK -> SEHK; China A-shares -> SEHKNTL/SEHKSZSE (Stock Connect) or SSE/SZSE; FX -> security_type CASH, exchange IDEALPRO, e.g. symbol "GBP" with currency USD; VIX -> IND on CBOE). If nothing credible matches, record status "unavailable" with a note. Never substitute a different company.
+2. get_price_history: period "ONE_YEAR", step "ONE_WEEK", outside_rth false, correct security_type, exchange = the contract's native exchange for non-US (omit for US stocks/ETFs). For groups "uk" and "sg" set include_corporate_actions true.
+3. get_price_snapshot with market_data_names ["last","prior_close","change","dividend_yield","historical_vol","misc_statistics","top_status"] (pass native exchange for non-US).
+
+Output: ONE file data/snapshots/<YYYY-MM-DD>/<group>.json, written by a Python script you create in the scratchpad (not in the repo), with this schema:
+{"group": str, "source": "Interactive Brokers via MCP", "retrieved_at_utc": ISO time,
+ "instruments": [{
+   "symbol": config symbol, "status": "ok" | "partial" | "unavailable", "note": str,
+   "contract_id": int|null, "exchange": str|null, "currency": str|null, "security_type": str|null, "ibkr_description": str|null,
+   "snapshot": {"last": num|null, "prior_close": num|null, "change_pct": num|null, "dividend_yield_pct": num|null,
+                "historical_vol_30d": num|null, "high_52w": num|null, "low_52w": num|null, "data_status": str|null},
+   "weekly": {"time": [ISO strings exactly as returned], "close": [numbers exactly as returned]},
+   "dividends": [{"ex_date": str, "amount": num, "currency": str|null, "type": str|null, "raw": str}]   # uk/sg only, verbatim from corporate actions; [] if none returned
+ }]}
+
+Rules (audit-grade):
+- Copy numbers EXACTLY as the tool returned them. Do not round, estimate, interpolate, or compute anything. Missing -> null.
+- Keep time and close arrays the same length and in returned order.
+- After writing, run a check script: valid JSON, every config symbol of your group present exactly once, len(time)==len(close) for each, closes all > 0.
+- Final message: a short table of symbol / status / contract_id / exchange / currency / n_weekly_bars, plus any notes. Do not git commit.
+
+## Rates and volatility curve (weekly, main session)
+
+Refresh `data/history/weekly_long/rates.json` each week so the monitor's curve readings stay current
+(the monitor skips them and says "refresh rates.json" when the file ends more than 10 days before the snapshot).
+Call `get_price_history` with security_type IND, exchange CBOE, step ONE_WEEK, step_count 1000, outside_rth false for:
+
+| Symbol | contract_id | Series | Scale |
+|---|---|---|---|
+| IRX | 416748 | 13-week T-bill yield | ten times the yield in percent |
+| FVX | 416730 | 5-year Treasury yield | ten times the yield in percent |
+| TNX | 416921 | 10-year Treasury yield | ten times the yield in percent |
+| TYX | 416933 | 30-year Treasury yield | ten times the yield in percent |
+| VIX3M | 47511905 | 3-month S&P 500 volatility | points |
+
+Copy `time` and `close` verbatim (record schema as in the existing file). Use closes only: the high and low
+fields carry bad prints. `curve.load_rates` rejects a yield above 25%, which catches a lost ×10 scale.
+
+## Seal and check the week's data (main session, after everything above)
+
+1. `global-research manifest data/snapshots/<date>` once every file, including `options.json`, is written.
+   A file added later counts as "extra" and the loader then refuses the folder. After refreshing `rates.json`,
+   re-run `global-research manifest data/history/weekly_long`.
+2. `global-research quality --snapshot data/snapshots/<date> --previous data/snapshots/<last week> --out reports/<date>/quality`.
+   A non-zero exit means a changed file or an identity problem (wrong venue, currency, type or contract id): fix it before
+   running the monitor. Paste `quality.md` into the week's Improvement Log entry (questions 1 and 6).
+3. Before the monitor, bring in the latest official macro snapshot from the default branch
+   (`git fetch origin main && git checkout origin/main -- data/macro`), where the daily workflow commits it.

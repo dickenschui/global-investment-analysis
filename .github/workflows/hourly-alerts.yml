@@ -1,0 +1,164 @@
+name: Hourly alerts
+
+# Builds a Yahoo pulse against the latest committed reports/<date>/, evaluates alerts,
+# optionally emails new ones, and keeps alert state on the alert-state branch (never main).
+on:
+  schedule:
+    - cron: '7 1-21 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      test_delivery:
+        description: Send a test message to every configured channel (email, Telegram) and stop
+        type: boolean
+        default: false
+  push:  # also check the live quote and news path whenever the alert code changes, on any branch
+    paths:
+      - global_investment_research/alerts.py
+      - global_investment_research/alert_state.py
+      - global_investment_research/pulse_yahoo.py
+      - global_investment_research/news.py
+      - global_investment_research/mailer.py
+      - config/news-sources.json
+      - .github/workflows/hourly-alerts.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hourly-alerts
+  cancel-in-progress: false
+
+env:
+  STATE_BRANCH: alert-state
+  # State files carried between runs on the alert-state branch.
+  STATE_FILES: data/state/alert_state.json data/state/mail_ledger.json
+
+jobs:
+  alerts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install package with Yahoo support
+        run: python -m pip install -e '.[test,yahoo]'
+      - name: Find latest reports directory
+        id: reports
+        run: |
+          latest=$(ls -d reports/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] 2>/dev/null | sort | tail -n 1 || true)
+          if [ -z "$latest" ]; then
+            echo "No reports/<date>/ directory committed on this branch; nothing to monitor." >> "$GITHUB_STEP_SUMMARY"
+            echo "dir=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Using $latest"
+            echo "dir=$latest" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Restore alert state from the alert-state branch
+        if: steps.reports.outputs.dir != ''
+        env:
+          REPORTS: ${{ steps.reports.outputs.dir }}
+        run: |
+          if git ls-remote --exit-code --heads origin "$STATE_BRANCH" >/dev/null; then
+            git fetch --no-tags origin "$STATE_BRANCH"
+            for f in $STATE_FILES; do
+              if git cat-file -e "FETCH_HEAD:$f" 2>/dev/null; then
+                mkdir -p "$(dirname "$f")"
+                git show "FETCH_HEAD:$f" > "$f"
+                echo "Restored $f"
+              fi
+            done
+            if git cat-file -e "FETCH_HEAD:$REPORTS/alerts" 2>/dev/null; then
+              git checkout FETCH_HEAD -- "$REPORTS/alerts"
+              git reset -q -- "$REPORTS/alerts"
+              echo "Restored $REPORTS/alerts"
+            fi
+          else
+            echo "No $STATE_BRANCH branch yet; starting with empty state."
+          fi
+      - name: Test delivery channels
+        if: inputs.test_delivery
+        env:
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_APP_PASSWORD: ${{ secrets.MAIL_APP_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import os
+          from global_investment_research import mailer, notify
+          text = "Test from the Hourly alerts workflow: this channel is set up."
+          try:
+              r = mailer.send_if_configured("Investment Desk: delivery test", f"<p>{text}</p>", text)
+              print("Email:", r.get("reason") or r["status"])
+          except Exception as exc:
+              print("Email failed:", exc)
+          if os.environ.get("TELEGRAM_BOT_TOKEN") and os.environ.get("TELEGRAM_CHAT_ID"):
+              try:
+                  notify.send_telegram(text)
+                  print("Telegram: sent")
+              except Exception as exc:
+                  print("Telegram failed:", type(exc).__name__)
+          else:
+              print("Telegram skipped: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID secrets not set")
+          PY
+      - name: Build Yahoo pulse
+        if: steps.reports.outputs.dir != '' && !inputs.test_delivery
+        run: global-research pulse --yahoo --reports "${{ steps.reports.outputs.dir }}" --out pulse.json
+      - name: Evaluate alerts and send new ones
+        if: steps.reports.outputs.dir != '' && !inputs.test_delivery
+        env:
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_APP_PASSWORD: ${{ secrets.MAIL_APP_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -z "$MAIL_USERNAME" ] || [ -z "$MAIL_APP_PASSWORD" ]; then
+            echo "email skipped: MAIL_USERNAME/MAIL_APP_PASSWORD secrets not set"
+          fi
+          tg=""
+          if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then tg="--telegram"; else echo "Telegram skipped: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID secrets not set"; fi
+          global-research alerts --pulse pulse.json --reports "${{ steps.reports.outputs.dir }}" --state-dir data/state --news --email $tg
+      - name: Commit alert state to the alert-state branch
+        if: always() && steps.reports.outputs.dir != ''
+        env:
+          REPORTS: ${{ steps.reports.outputs.dir }}
+        run: |
+          set -e
+          case "$STATE_BRANCH" in main|master) echo "Refusing to push state to $STATE_BRANCH" >&2; exit 1;; esac
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          wt="$RUNNER_TEMP/alert-state"
+          if git ls-remote --exit-code --heads origin "$STATE_BRANCH" >/dev/null; then
+            git fetch --no-tags origin "$STATE_BRANCH"
+            git worktree add -B "$STATE_BRANCH" "$wt" FETCH_HEAD
+          else
+            echo "Creating $STATE_BRANCH from $(git rev-parse --abbrev-ref HEAD)"
+            git worktree add -B "$STATE_BRANCH" "$wt" HEAD
+          fi
+          for f in $STATE_FILES; do
+            if [ -f "$f" ]; then mkdir -p "$wt/$(dirname "$f")"; cp "$f" "$wt/$f"; fi
+          done
+          if [ -d "$REPORTS/alerts" ]; then
+            mkdir -p "$wt/$REPORTS"
+            rm -rf "$wt/$REPORTS/alerts"
+            cp -R "$REPORTS/alerts" "$wt/$REPORTS/alerts"
+          fi
+          cd "$wt"
+          for p in $STATE_FILES "$REPORTS/alerts"; do
+            if [ -e "$p" ]; then git add -A -- "$p"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "No alert state changes"
+            exit 0
+          fi
+          git commit -m "Alert state $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push origin "HEAD:refs/heads/$STATE_BRANCH"
