@@ -71,3 +71,9 @@ taiwan-stock-analysis/
 ---
 
 Made with ❤️ using [Claude](https://claude.ai) + Cowork mode
+
+---
+
+## 🌏 Global Investment Research（全球投資研究）
+
+除台股分析外，本 repo 新增 `global_investment_research` 套件：覆蓋 HK、中國、SG、UK、US 股市，以及板塊、黃金、商品、利率與外匯，提供每日／每週監測、宏觀關聯分析、組合配置與新加坡高息股篩選。詳見 [GLOBAL_RESEARCH.md](GLOBAL_RESEARCH.md)。

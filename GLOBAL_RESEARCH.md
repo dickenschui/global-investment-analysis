@@ -1,0 +1,51 @@
+# Global Investment Research
+
+Python package `global_investment_research` (CLI: `global-research`) for monitoring and researching
+HK, China, SG, UK and US equities alongside sectors, gold, commodities, rates and FX.
+
+It sits next to the original Taiwan three-dimension analysis skill (`SKILL.md`, `scripts/`), which is unchanged.
+
+## What it does
+
+| Area | Module | Output |
+|---|---|---|
+| Daily/weekly monitor: market proxies, breadth, US sector rotation, cross-asset trends | `monitor.py` | `monitor.html`, `monitor.json` |
+| Macro backdrop: rule-based readings (volatility, dollar, rates, gold, oil, cyclicals vs defensives, copper vs gold, Asia vs US), each with its evidence | `monitor.regime_readings` | in `monitor.html` |
+| Pattern study: market-vs-macro-factor correlations, labelled *stable* only if both halves of the sample agree | `analytics.split_correlation` | in `monitor.html` |
+| Learning across runs: each run appends to `history.jsonl`; the next report lists readings that flipped | `monitor.append_history`, `regime_changes` | "What changed" section |
+| Macro event linkage: market reaction in the bar after each event you log in `config/macro-events.csv` | `monitor.event_reactions` | in `monitor.html` |
+| US tech watchlist, UK equities + FX, Singapore 6–8% income screen | `reports.py`, `income.py` | `us-tech.html`, `uk-fx.html`, `sg-income.html` |
+| Minimum-variance allocation, Ledoit-Wolf covariance, fitted on training data only, evaluated after allocation | `portfolio.py` | JSON |
+| Company fundamentals: margins, FCF, cash conversion, ROE on average equity, accounting-equation check, P/E withheld on currency mismatch | `company.py` | library |
+
+## Data sources
+
+Universe: `config/universe.json` (96 instruments). Loaders all return the same shape, so analytics do not depend on the source.
+
+1. **IBKR snapshot** (`--snapshot DIR`): JSON files collected through the Interactive Brokers connector, following
+   `docs/DATA_COLLECTION.md`. This is the source that works inside the Claude cloud environment.
+2. **CSV** (`--csv DIR`): one `<symbol>.csv` per instrument with `date,close`.
+3. **Yahoo** (`--yahoo`): needs `pip install -e .[yahoo]` and network access to Yahoo Finance.
+
+Futures are tracked through exchange-traded proxies (GLD, SLV, CPER, USO, UNG, DBA) to avoid contract-roll gaps.
+
+## Commands
+
+```bash
+python -m venv .venv && .venv/bin/pip install -e .[test]
+.venv/bin/global-research monitor --snapshot data/snapshots/2026-10-11 --out reports/2026-10-11 --state-dir data/state
+.venv/bin/global-research portfolio --snapshot data/snapshots/2026-10-11 --symbols SPY TLT GLD --max-weight 0.6
+.venv/bin/global-research demo --out /tmp/demo     # synthetic data, offline
+.venv/bin/python -m pytest -q
+```
+
+## Method and limits
+
+- Returns are price returns in each instrument's quote currency; dividends are excluded except in the income screen.
+- Trend = price vs 10- and 40-week moving averages (the weekly equivalent of 50/200-day).
+- Momentum score = average of 3-month and 1-year return ÷ annualised volatility.
+- Correlation is not causation, and one year of weekly data (~52 points) is a small sample. The stability test guards against
+  over-reading chance patterns; it is not proof of a durable relationship.
+- Fundamentals were not refreshed in the 2026-10-11 run: the Financial Datasets connector had no credit and filings sites are
+  blocked from the cloud environment. Theses carried over from the 9 Oct Codex session are shown as "to verify".
+- Research output only; not investment advice.
