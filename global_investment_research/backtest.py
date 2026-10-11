@@ -94,7 +94,23 @@ def strategy(df: pd.DataFrame) -> dict:
                       "benchmark": [float(v) for v in (1 + bench).cumprod()]}}
 
 
+def drop_bad_prints(prices: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
+    """Blank isolated one-week prints that are below 20% or above 5x BOTH neighbours (a unit
+    error at the source, e.g. RIO 0.35 between 36.84 and 39.16). Raw files stay as returned."""
+    out, fixes = prices.copy(), []
+    for sym in prices.columns:
+        s = prices[sym].dropna()
+        prev, nxt = s.shift(1), s.shift(-1)
+        bad = (s < 0.2 * prev.combine(nxt, min)) | (s > 5 * prev.combine(nxt, max))
+        for d in s.index[bad.fillna(False)]:
+            fixes.append({"symbol": sym, "date": d.date().isoformat(), "close": float(s[d]),
+                          "previous": float(prev[d]), "next": float(nxt[d])})
+            out.loc[d, sym] = np.nan
+    return out, fixes
+
+
 def run(prices: pd.DataFrame) -> dict:
+    prices, fixes = drop_bad_prints(prices)
     df = stance_panel(prices)
     if df.empty:
         raise ValueError("not enough history to backtest")
@@ -124,18 +140,23 @@ def run(prices: pd.DataFrame) -> dict:
                         "significant": t_acc_avoid is not None and abs(t_acc_avoid) >= 2,
                         "strategy_beats_benchmark_risk_adjusted": (strat["strategy"]["sharpe"] or 0) > (strat["benchmark"]["sharpe"] or 0),
                         "drawdown_reduced": strat["strategy"]["max_drawdown"] > strat["benchmark"]["max_drawdown"]},
-            "strategy": strat, "variants": compare_variants(prices)}
+            "strategy": strat, "variants": compare_variants(prices), "data_fixes": fixes}
 
 
 # --- Rule variants -------------------------------------------------------------------
 # Each variant maps (last, ma10, ma40) -> True (hold / buy) or False (cash). They are compared
-# on the same history; a variant only counts as better if it wins in BOTH halves.
+# on the same history. A variant is only adopted as the live rule if it passes ADOPTION_TEST:
+# a better Sharpe ratio than equal weight in both halves AND in all three thirds, and an active
+# return (rule minus benchmark, weekly) with a t-statistic of at least ADOPTION_T.
 VARIANTS = {
     "Current: trend up (price > 10w > 40w)": lambda p, s, l: p > s > l,
     "Pullback in up-trend (40w up, price below 10w)": lambda p, s, l: p > l and p < s,
     "Long-trend filter (price > 40w)": lambda p, s, l: p > l,
     "Contrarian (price below 40w)": lambda p, s, l: p < l,
 }
+
+
+ADOPTION_T = 2.0
 
 
 def calendar_years(r: pd.Series) -> dict:
@@ -174,6 +195,11 @@ def compare_variants(prices: pd.DataFrame) -> list[dict]:
         halves = {}
         for label, mask in (("first", bench.index < mid), ("second", bench.index >= mid)):
             halves[label] = {"sharpe": sharpe(held[mask]), "bench_sharpe": sharpe(bench[mask])}
+        thirds = [(sharpe(held.iloc[k]), sharpe(bench.iloc[k])) for k in np.array_split(np.arange(len(bench)), 3)]
+        thirds_won = sum(1 for a, b in thirds if a is not None and b is not None and a > b)
+        act = (held - bench).dropna()
+        active_t = float(act.mean() / act.std(ddof=1) * math.sqrt(len(act))) if act.std(ddof=1) > 0 else None
+        names = d[d.on].groupby("date").size().reindex(bench.index).fillna(0)
         ts = d.groupby(["symbol", "on"])["fwd13"].mean().unstack()
         wins = int(((ts.get(True) - ts.get(False)) > 0).sum()) if True in ts and False in ts else None
         yrs = len(held) / 52
@@ -185,11 +211,20 @@ def compare_variants(prices: pd.DataFrame) -> list[dict]:
                     "instruments_where_signal_helped": wins, "instruments": int(ts.shape[0]), "years": calendar_years(held),
                     "beats_benchmark_both_halves": bool(halves["first"]["sharpe"] and halves["second"]["sharpe"]
                                                         and halves["first"]["sharpe"] > halves["first"]["bench_sharpe"]
-                                                        and halves["second"]["sharpe"] > halves["second"]["bench_sharpe"])})
+                                                        and halves["second"]["sharpe"] > halves["second"]["bench_sharpe"]),
+                    "sharpe_thirds": [a for a, _ in thirds], "bench_sharpe_thirds": [b for _, b in thirds],
+                    "thirds_won": thirds_won, "active_t": active_t, "median_names_held": float(names.median()),
+                    "weeks_all_cash": int((names == 0).sum())})
+        x = out[-1]
+        x["passes_adoption_test"] = bool(x["beats_benchmark_both_halves"] and thirds_won == 3
+                                         and active_t is not None and active_t >= ADOPTION_T)
     b_yrs = len(bench) / 52
     out.append({"variant": "Benchmark: equal weight, always invested", "cagr": float((1 + bench).prod() ** (1 / b_yrs) - 1),
                 "sharpe": float(bench.mean() / bench.std(ddof=1) * math.sqrt(52)),
                 "max_drawdown": float(((1 + bench).cumprod() / (1 + bench).cumprod().cummax() - 1).min()), "invested": 1.0,
                 "sharpe_first_half": None, "sharpe_second_half": None, "instruments_where_signal_helped": None,
-                "instruments": None, "beats_benchmark_both_halves": None, "years": calendar_years(bench)})
+                "instruments": None, "beats_benchmark_both_halves": None, "years": calendar_years(bench),
+                "sharpe_thirds": [sharpe(bench.iloc[k]) for k in np.array_split(np.arange(len(bench)), 3)],
+                "thirds_won": None, "active_t": None, "median_names_held": None, "weeks_all_cash": 0,
+                "passes_adoption_test": None})
     return out

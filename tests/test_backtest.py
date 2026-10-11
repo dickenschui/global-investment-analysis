@@ -49,3 +49,28 @@ def test_evidence_page_renders():
     from global_investment_research.evidence import evidence_page
     html = evidence_page(B.run(make_prices()))
     assert "<title>Rule Evidence</title>" in html and "svg" in html and "Survivorship" in html
+
+
+def test_isolated_bad_print_is_dropped_not_smoothed():
+    px = make_prices()
+    good = px["UP"].iloc[100]
+    px.iloc[100, px.columns.get_loc("UP")] = good / 100  # pence/pound style unit error
+    clean, fixes = B.drop_bad_prints(px)
+    assert len(fixes) == 1 and fixes[0]["symbol"] == "UP"
+    assert np.isnan(clean["UP"].iloc[100])           # removed, never replaced with an estimate
+    assert clean["UP"].drop(px.index[100]).equals(px["UP"].drop(px.index[100]))
+    assert B.drop_bad_prints(make_prices())[1] == []  # genuine data untouched
+
+
+def test_adoption_test_fields_and_confidence_requires_beating_benchmark():
+    from global_investment_research.evidence import confidence_level
+    res = B.run(make_prices())
+    for x in res["variants"][:-1]:
+        assert x["thirds_won"] in (0, 1, 2, 3) and len(x["sharpe_thirds"]) == 3
+        assert x["passes_adoption_test"] == bool(x["beats_benchmark_both_halves"] and x["thirds_won"] == 3
+                                                 and x["active_t"] is not None and x["active_t"] >= B.ADOPTION_T)
+    good_ranking = dict(res, verdict=dict(res["verdict"], supported_both_halves=True, significant=True,
+                                          strategy_beats_benchmark_risk_adjusted=False))
+    assert confidence_level(good_ranking) == "LOW"   # ranking alone is not enough if following it loses to equal weight
+    assert confidence_level(dict(good_ranking, verdict=dict(good_ranking["verdict"],
+                                                            strategy_beats_benchmark_risk_adjusted=True))) == "HIGH"

@@ -16,6 +16,7 @@ It sits next to the original Taiwan three-dimension analysis skill (`SKILL.md`, 
 | Macro event linkage: market reaction in the bar after each event you log in `config/macro-events.csv` | `monitor.event_reactions` | in `monitor.html` |
 | US tech watchlist, UK equities + FX, Singapore 6–8% income screen | `reports.py`, `income.py` | `us-tech.html`, `uk-fx.html`, `sg-income.html` |
 | Minimum-variance allocation, Ledoit-Wolf covariance, fitted on training data only, evaluated after allocation | `portfolio.py` | JSON |
+| Rule evidence: walk-forward test of the Accumulate/Avoid rules and alternatives on 19 years of IBKR weekly closes (`data/history/weekly_long`, 36 instruments); a new rule is adopted only if it beats equal weight in both halves, all three thirds and with active t ≥ 2 | `backtest.py`, `evidence.py` | `backtest.json`, `evidence.html`, confidence note on Desk/Brief |
 | Company fundamentals: margins, FCF, cash conversion, ROE on average equity, accounting-equation check, P/E withheld on currency mismatch | `company.py` | library |
 
 ## Data sources
@@ -35,6 +36,7 @@ Futures are tracked through exchange-traded proxies (GLD, SLV, CPER, USO, UNG, D
 python -m venv .venv && .venv/bin/pip install -e .[test]
 .venv/bin/global-research monitor --snapshot data/snapshots/2026-10-11 --out reports/2026-10-11 --state-dir data/state
 .venv/bin/global-research portfolio --snapshot data/snapshots/2026-10-11 --symbols SPY TLT GLD --max-weight 0.6
+.venv/bin/global-research backtest --history data/history/weekly_long --start 2007-01-01 --out reports/2026-10-11  # before monitor
 .venv/bin/global-research demo --out /tmp/demo     # synthetic data, offline
 .venv/bin/python -m pytest -q
 ```

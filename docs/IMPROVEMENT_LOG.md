@@ -18,7 +18,7 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 | Breadth beyond the monitored names | **Partial** | 9–15 names per market is a thin breadth sample | Add equal-weight ETFs (RSP) and advance/decline via IBKR | Medium |
 | News and sentiment | **Missing** | Explains exceptions in hourly alerts | Bigdata.com search/sentiment (needs credit) | Medium |
 | Positioning: short interest, futures positioning (COT), put/call ratios | **Missing** | Crowding risk | IBKR option volumes; CFTC (blocked) | Low |
-| Longer price history (5 years) | **Added 2026-10-11** for 36 instruments | Backtest of the decision rules | IBKR FIVE_YEARS weekly bars; extend to the full universe | Medium |
+| Longer price history | **Added 2026-10-11**: 19 years (2007 on) for 36 instruments; TLT only from 2016 and SHEL from 2016 under current IBKR contracts | Backtest of the decision rules through 2008, 2011, 2018, 2020 and 2022 | IBKR `step_count` weekly bars (1,000 per call); extend to the full universe | Medium |
 | Total return (dividends in) | **Missing** for equities | Understates income names | IBKR corporate actions for all stocks | Medium |
 | Live and delayed quotes | **Delayed / frozen at weekends** | Option prices must be re-checked live | IBKR market-data subscription | Note only |
 
@@ -47,3 +47,12 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 - **Action taken:** rule confidence is shown as LOW on the Desk, Brief and digests: use exit levels for risk control, keep a diversified core, and size new positions at half the Max size.
 - **Open question for the owner:** switch the Accumulate rule to a pullback or contrarian entry? That is not done automatically, because four years of mostly rising markets favour mean reversion and could reverse.
 - **Next improvement:** extend the history to ten years so it covers a trending bear market (2008-style or 2022), then re-test.
+
+### 2026-10-11 (19-year re-test)
+- **Shipped:** 19-year weekly history for the same 36 instruments (IBKR, `data/history/weekly_long`). Every one of the 261 overlapping weeks per instrument matches the 5-year file exactly. Test window starts January 2007 (before that only 6–8 instruments have data); results run 2008-01-04 to 2026-10-09. One bad print removed in the test only (RIO 2007-06-08 at 0.35 between 36.84 and 39.16); raw file kept as returned.
+- **Current rule:** fails. Following the calls returned 5.8% a year against 8.7% for equal weight (Sharpe 0.47 vs 0.63), lost in both halves and two of three thirds; active-return t −0.92. It did cut the worst fall (−36% vs −46.5%), which is why exit levels stay as risk control.
+- **Alternatives:** contrarian, the 5-year favourite, fails over 19 years (0 of 3 thirds, worst fall −48%), which confirms why it was not adopted last time. The pullback rule (12.1% a year, Sharpe 0.78) passes the halves test but loses 2014–2020, holds a median of 4 names, sits entirely in cash for 109 weeks and has active t 0.98. The long-trend filter "passes" the first half by 0.003 of Sharpe and has active t −0.17.
+- **Rule tightened (not loosened):** a rule is adopted only if it beats equal weight on Sharpe in both halves AND all three thirds AND has active t ≥ 2 (`backtest.ADOPTION_T`). MEDIUM confidence now also requires the rule portfolio to beat equal weight risk-adjusted; good cross-sectional ranking alone (+0.2% vs −0.1% per 13 weeks) is not enough. No rule passes, so the live rule is unchanged and confidence stays LOW.
+- **Gap fixed:** the weekly routine never re-ran the backtest, so the confidence note would have disappeared from next week's pack. The routine now runs `backtest` before `monitor`.
+- **Next improvement:** the rules use price trend only and none beats equal weight. The highest-value next input is fundamentals or valuation (Financial Datasets credit), tested on the same walk-forward basis, plus a cash yield so time in cash is not scored at 0%.
+

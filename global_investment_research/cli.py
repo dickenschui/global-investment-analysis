@@ -104,7 +104,7 @@ DELIVERABLES = [
     ("decision-desk.html", "Decision Desk", "Every instrument's decision with buy zone, exit level and position size."),
     ("decision-book.xlsx", "Decision Book (Excel)", "Editable limits drive sizes and limit prices; includes the decision log."),
     ("options.html", "Speculative Options Sleeve", "Defined-risk call/put ideas from real chains, capped at 5% of portfolio."),
-    ("evidence.html", "Rule Evidence", "Five-year walk-forward test of the decision rules."),
+    ("evidence.html", "Rule Evidence", "19-year walk-forward test of the decision rules (2008 to date)."),
     ("handbook.html", "Investment Handbook", "The routine, rules, risk limits and review loop."),
     ("monitor.html", "Global Markets Monitor", "Markets, macro readings, factor links, sectors, all instruments."),
     ("us-tech.html", "US Tech Watchlist", "Large-cap tech ranked by risk-adjusted momentum."),
@@ -146,8 +146,9 @@ def main(argv=None) -> int:
     d = sub.add_parser("demo")
     d.add_argument("--out", required=True)
     bt = sub.add_parser("backtest", help="walk-forward test of the decision rules on long weekly history")
-    bt.add_argument("--history", required=True, help="directory of 5-year weekly JSON files")
+    bt.add_argument("--history", required=True, help="directory of long weekly history JSON files")
     bt.add_argument("--out", required=True)
+    bt.add_argument("--start", help="ignore history before this date (YYYY-MM-DD), e.g. when only a few instruments exist")
     wl = sub.add_parser("watchlist", help="symbols the hourly pulse must quote, from this week's reports")
     wl.add_argument("--reports", required=True)
     al = sub.add_parser("alerts", help="evaluate a live pulse against this week's levels; print new exceptions")
@@ -164,6 +165,8 @@ def main(argv=None) -> int:
 
     if args.cmd == "backtest":
         prices, _ = data.load_ibkr_snapshot(args.history, universe)
+        if args.start:
+            prices = prices[prices.index >= pd.Timestamp(args.start)]
         res = backtest.run(prices)
         out = Path(args.out)
         out.mkdir(parents=True, exist_ok=True)

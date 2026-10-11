@@ -1,7 +1,7 @@
 <b>Weekly investment brief · week to 2026-10-09</b>
 Deploy 100% of the normal risk budget (Volatility calm).
 
-⚠️ Rule confidence: LOW. On 36 instruments from 2022-10-14 to 2026-10-09, Accumulate calls returned -0.6% versus the average instrument over the next 13 weeks and Avoid calls +1.6%. Following the calls returned 9.9% a year against 18.0% for holding everything equally. Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
+⚠️ Rule confidence: LOW. On 36 instruments from 2008-01-04 to 2026-10-09, Accumulate calls returned +0.2% versus the average instrument over the next 13 weeks and Avoid calls -0.1%. Following the calls returned 5.8% a year against 8.7% for holding everything equally (worst fall -36% vs -46%). Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
 
 <b>Markets (1w / 3m)</b>
 • US: +1.2% / +3.1% (up)

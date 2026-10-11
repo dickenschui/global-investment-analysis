@@ -35,16 +35,22 @@ def evidence_page(res: dict, standalone=True) -> str:
     v, st = res["verdict"], res["strategy"]
     bs = res["by_stance"]
     acc13, avo13 = bs["Accumulate"]["xs13"]["mean"], bs["Avoid"]["xs13"]["mean"]
-    if v["supported_both_halves"] and v["significant"]:
+    level = confidence_level(res)
+    if level == "HIGH":
         headline = "The trend rules add value on this history, and the result holds in both halves."
-    elif v["supported_both_halves"]:
-        headline = "The rules point the right way in both halves, but the edge is not statistically strong."
+    elif level == "MEDIUM":
+        headline = "The rules point the right way and beat equal weight, but the edge is not statistically strong."
     else:
-        headline = "The rules are not consistently supported on this history: treat the calls as weak evidence."
+        headline = ("Following the current rules has not beaten simply holding everything equally on this history: "
+                    "treat the calls as weak evidence.")
+    adopted = [x["variant"] for x in res.get("variants", []) if x.get("passes_adoption_test")]
+    alt_line = (f"Alternative rule passing the adoption test: {', '.join(adopted)}." if adopted else
+                "No alternative rule passes the adoption test, so the live rule is unchanged.")
     t = res["t_accumulate_vs_avoid_13w"]
     body = (f'<div class="verdict"><p class="lead" style="font:600 1.1rem/1.4 var(--f-display);margin:0 0 6px">{H.esc(headline)}</p>'
             f'<p class="mut" style="margin:0">Over 13 weeks, Accumulate names beat the average instrument by {H.pct(acc13)} and Avoid names by '
-            f'{H.pct(avo13)}. Accumulate minus Avoid t-statistic: {"n/a" if t is None else f"{t:.2f}"} (non-overlapping samples; ≥2 is conventionally meaningful).</p></div>')
+            f'{H.pct(avo13)}. Accumulate minus Avoid t-statistic: {"n/a" if t is None else f"{t:.2f}"} (non-overlapping samples; ≥2 is conventionally meaningful). '
+            f'{H.esc(alt_line)}</p></div>')
     body += H.section("Rule strategy vs equal weight", H.tiles([
         ("Strategy CAGR", H.pct(st["strategy"]["cagr"]), f"Benchmark {H.pct(st['benchmark']['cagr'])}"),
         ("Sharpe ratio", H.num(st["strategy"]["sharpe"]), f"Benchmark {H.num(st['benchmark']['sharpe'])}"),
@@ -66,17 +72,24 @@ def evidence_page(res: dict, standalone=True) -> str:
         f"Mean forward price return after each weekly call. '13w vs average' removes the market move. Halves split at {res['split_date']}.")
     if res.get("variants"):
         vr = []
+        yn = lambda b: "—" if b is None else H.chip("yes", "up") if b else H.chip("no", "down")  # noqa: E731
         for x in res["variants"]:
-            both = x["beats_benchmark_both_halves"]
-            vr.append([H.esc(x["variant"]), H.pct(x["cagr"]), H.num(x["sharpe"]), H.pct(x["max_drawdown"]),
-                       H.pct(x["invested"], signed=False), H.num(x["sharpe_first_half"]), H.num(x["sharpe_second_half"]),
-                       "—" if x["instruments_where_signal_helped"] is None else f"{x['instruments_where_signal_helped']} of {x['instruments']}",
-                       "—" if both is None else H.chip("yes", "up") if both else H.chip("no", "down")])
+            short, _, rest = x["variant"].partition(" (")
+            short = short.split(":")[0]
+            detail = rest.rstrip(")") if rest else x["variant"].partition(": ")[2]
+            vr.append([f'<b>{H.esc(short)}</b><br><span class="mut" style="font-size:.85em">{H.esc(detail)}</span>', H.pct(x["cagr"]), H.num(x["sharpe"]), H.pct(x["max_drawdown"]),
+                       H.pct(x["invested"], signed=False),
+                       "—" if x.get("median_names_held") is None else f"{x['median_names_held']:.0f}",
+                       yn(x["beats_benchmark_both_halves"]),
+                       "—" if x.get("thirds_won") is None else f"{x['thirds_won']} of 3",
+                       "—" if x.get("active_t") is None else f"{x['active_t']:.2f}",
+                       yn(x.get("passes_adoption_test"))])
         body += H.section("Alternative rules on the same history", H.table(
-            ["Rule", "CAGR", "Sharpe", "Max drawdown", "Time invested", "Sharpe 1st half", "Sharpe 2nd half",
-             "Signal helped", "Beats benchmark in both halves"], vr, numeric={1, 2, 3, 4, 5, 6}),
-            "A rule only earns adoption if it beats always-invested equal weight on a risk-adjusted basis in both halves. "
-            "'Signal helped' counts instruments whose 13-week return was higher when the rule was on than when it was off.")
+            ["Rule", "CAGR", "Sharpe", "Max fall", "Invested", "Names held", "Both halves",
+             "Thirds", "Active t", "Adopt"], vr, numeric={1, 2, 3, 4, 5, 7, 8}),
+            "Adoption test: a better Sharpe ratio than always-invested equal weight in both halves and in all three thirds, "
+            "and an active return (rule minus benchmark) with a t-statistic of at least 2. Winning one split by a hair, "
+            "or by holding a handful of names, is not enough.")
     yrs = [x for x in res.get("variants", []) if x.get("years")]
     if yrs:
         bench = next(x for x in yrs if x["variant"].startswith("Benchmark"))
@@ -102,7 +115,8 @@ def evidence_page(res: dict, standalone=True) -> str:
         "Instruments join the test when their history starts (for example XLC in 2018); each week the rule and the "
         "benchmark use the same set of instruments.",
         f"{len(res['instruments'])} instruments, {res['observations']:,} weekly observations from {res['first_date']}: still a small sample for a market regime test.",
-    ]))
+    ] + [f"Bad print excluded: {f['symbol']} {f['date']} closed {f['close']:g} between {f['previous']:g} and {f['next']:g} "
+         "(a unit error at the source; the raw file is kept as returned)." for f in res.get("data_fixes", [])]))
     span = round((pd.Timestamp(res["last_date"]) - pd.Timestamp(res["first_date"])).days / 365.25)
     page = H.page("Rule Evidence", f"Backtest {res['first_date']} to {res['last_date']}",
                   f"Walk-forward test of the Decision Desk rules on {span} years of weekly prices, using only data available at each date.",
@@ -110,15 +124,26 @@ def evidence_page(res: dict, standalone=True) -> str:
     return page.replace(f"<style>{H.CSS}</style>", f"<style>{H.CSS}{CSS}</style>", 1)
 
 
+def confidence_level(res: dict) -> str:
+    """HIGH needs calls that rank well in both halves, significantly, AND a rule portfolio that beats equal weight
+    risk-adjusted; MEDIUM drops the significance requirement; anything else is LOW."""
+    v = res["verdict"]
+    beats = v.get("strategy_beats_benchmark_risk_adjusted", False)
+    if v["supported_both_halves"] and v["significant"] and beats:
+        return "HIGH"
+    return "MEDIUM" if v["supported_both_halves"] and beats else "LOW"
+
+
 def confidence_note(res: dict) -> str:
     """One-paragraph rule-confidence statement for the Desk and Brief, from the latest backtest."""
-    v, st = res["verdict"], res["strategy"]
+    st = res["strategy"]
     bs = res["by_stance"]
-    level = "HIGH" if v["supported_both_halves"] and v["significant"] else "MEDIUM" if v["supported_both_halves"] else "LOW"
+    level = confidence_level(res)
     return (f"Rule confidence: {level}. On {len(res['instruments'])} instruments from {res['first_date']} to {res['last_date']}, "
             f"Accumulate calls returned {bs['Accumulate']['xs13']['mean']*100:+.1f}% versus the average instrument over the next "
             f"13 weeks and Avoid calls {bs['Avoid']['xs13']['mean']*100:+.1f}%. Following the calls returned "
-            f"{st['strategy']['cagr']*100:.1f}% a year against {st['benchmark']['cagr']*100:.1f}% for holding everything equally. "
+            f"{st['strategy']['cagr']*100:.1f}% a year against {st['benchmark']['cagr']*100:.1f}% for holding everything equally"
+            f" (worst fall {st['strategy']['max_drawdown']*100:.0f}% vs {st['benchmark']['max_drawdown']*100:.0f}%). "
             + ("Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new "
                "positions at half the Max size until a rule passes the test." if level == "LOW" else
                "Use the calls with normal sizing, and keep the checklist."))
