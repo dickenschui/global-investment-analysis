@@ -76,3 +76,18 @@ def test_desk_page_end_to_end(tmp_path):
     assert "<title>Decision Desk</title>" in html and 'id="pv"' in html
     dec = D.build_decisions(build_monitor(*synthetic(load_universe())), synthetic(load_universe())[1])
     assert {c["stance"] for c in dec["calls"]} <= set(D.STANCE_ORDER)
+    for f in ("brief.html", "index.html"):
+        assert "<title>" in (tmp_path / f).read_text()
+
+
+def test_workbook_formulas_reference_policy(tmp_path):
+    pytest.importorskip("openpyxl")
+    from openpyxl import load_workbook
+    from global_investment_research.workbook import build_workbook
+    px, meta = synthetic(load_universe())
+    dec = D.build_decisions(build_monitor(px, meta), meta)
+    wb = load_workbook(build_workbook(dec, tmp_path / "b.xlsx"))
+    ds = wb["Decisions"]
+    assert ds["O2"].value.startswith("=IF(AND(F2=\"Accumulate\"") and "Policy!$B$4" in ds["O2"].value
+    assert ds["P2"].value == "=IF(O2=\"\",\"\",O2*Policy!$B$3*Policy!$B$2)"
+    assert wb["Policy"]["B2"].fill.fgColor.rgb.endswith("FFFF00")  # user input highlighted
