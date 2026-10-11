@@ -62,6 +62,19 @@ def evidence_page(res: dict, standalone=True) -> str:
         ["Call", "Observations", "Next 4w", "Next 13w", "Next 26w", "13w vs average", "Beat average", "1st half", "2nd half"],
         rows, numeric=set(range(1, 9))),
         f"Mean forward price return after each weekly call. '13w vs average' removes the market move. Halves split at {res['split_date']}.")
+    if res.get("variants"):
+        vr = []
+        for x in res["variants"]:
+            both = x["beats_benchmark_both_halves"]
+            vr.append([H.esc(x["variant"]), H.pct(x["cagr"]), H.num(x["sharpe"]), H.pct(x["max_drawdown"]),
+                       H.pct(x["invested"], signed=False), H.num(x["sharpe_first_half"]), H.num(x["sharpe_second_half"]),
+                       "—" if x["instruments_where_signal_helped"] is None else f"{x['instruments_where_signal_helped']} of {x['instruments']}",
+                       "—" if both is None else H.chip("yes", "up") if both else H.chip("no", "down")])
+        body += H.section("Alternative rules on the same history", H.table(
+            ["Rule", "CAGR", "Sharpe", "Max drawdown", "Time invested", "Sharpe 1st half", "Sharpe 2nd half",
+             "Signal helped", "Beats benchmark in both halves"], vr, numeric={1, 2, 3, 4, 5, 6}),
+            "A rule only earns adoption if it beats always-invested equal weight on a risk-adjusted basis in both halves. "
+            "'Signal helped' counts instruments whose 13-week return was higher when the rule was on than when it was off.")
     body += H.section("How to use this", H.notes([
         "Supported rules earn more trust. If a stance fails in either half, size it down and lean harder on the checklist.",
         "The weekly run re-tests these rules and logs any deterioration in the Improvement Log.",

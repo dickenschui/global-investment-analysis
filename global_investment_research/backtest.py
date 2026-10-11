@@ -124,4 +124,67 @@ def run(prices: pd.DataFrame) -> dict:
                         "significant": t_acc_avoid is not None and abs(t_acc_avoid) >= 2,
                         "strategy_beats_benchmark_risk_adjusted": (strat["strategy"]["sharpe"] or 0) > (strat["benchmark"]["sharpe"] or 0),
                         "drawdown_reduced": strat["strategy"]["max_drawdown"] > strat["benchmark"]["max_drawdown"]},
-            "strategy": strat}
+            "strategy": strat, "variants": compare_variants(prices)}
+
+
+# --- Rule variants -------------------------------------------------------------------
+# Each variant maps (last, ma10, ma40) -> True (hold / buy) or False (cash). They are compared
+# on the same history; a variant only counts as better if it wins in BOTH halves.
+VARIANTS = {
+    "Current: trend up (price > 10w > 40w)": lambda p, s, l: p > s > l,
+    "Pullback in up-trend (40w up, price below 10w)": lambda p, s, l: p > l and p < s,
+    "Long-trend filter (price > 40w)": lambda p, s, l: p > l,
+    "Contrarian (price below 40w)": lambda p, s, l: p < l,
+}
+
+
+def compare_variants(prices: pd.DataFrame) -> list[dict]:
+    rows = []
+    for sym in prices.columns:
+        s = prices[sym].dropna()
+        if len(s) < WARMUP + 2:
+            continue
+        ma10, ma40 = s.rolling(10).mean(), s.rolling(40).mean()
+        nxt = s.shift(-1) / s - 1
+        f13 = s.shift(-13) / s - 1
+        for i in range(WARMUP, len(s)):
+            rows.append({"date": s.index[i], "symbol": sym, "p": s.iloc[i], "s": ma10.iloc[i], "l": ma40.iloc[i],
+                         "next1": nxt.iloc[i], "fwd13": f13.iloc[i]})
+    df = pd.DataFrame(rows)
+    dates = sorted(df["date"].unique())
+    mid = dates[len(dates) // 2]
+    bench = df.dropna(subset=["next1"]).groupby("date")["next1"].mean()
+    out = []
+    for name, rule in VARIANTS.items():
+        on = df.apply(lambda r: bool(rule(r.p, r.s, r.l)), axis=1)
+        d = df.assign(on=on)
+        held = d[d.on].dropna(subset=["next1"]).groupby("date")["next1"].mean().reindex(bench.index).fillna(0.0)
+
+        def sharpe(r):
+            return float(r.mean() / r.std(ddof=1) * math.sqrt(52)) if r.std(ddof=1) > 0 else None
+
+        def mdd(r):
+            w = (1 + r).cumprod()
+            return float((w / w.cummax() - 1).min())
+        halves = {}
+        for label, mask in (("first", bench.index < mid), ("second", bench.index >= mid)):
+            halves[label] = {"sharpe": sharpe(held[mask]), "bench_sharpe": sharpe(bench[mask])}
+        ts = d.groupby(["symbol", "on"])["fwd13"].mean().unstack()
+        wins = int(((ts.get(True) - ts.get(False)) > 0).sum()) if True in ts and False in ts else None
+        yrs = len(held) / 52
+        out.append({"variant": name, "cagr": float((1 + held).prod() ** (1 / yrs) - 1), "sharpe": sharpe(held),
+                    "max_drawdown": mdd(held), "invested": float(d.groupby("date")["on"].mean().mean()),
+                    "sharpe_first_half": halves["first"]["sharpe"], "sharpe_second_half": halves["second"]["sharpe"],
+                    "bench_sharpe_first_half": halves["first"]["bench_sharpe"],
+                    "bench_sharpe_second_half": halves["second"]["bench_sharpe"],
+                    "instruments_where_signal_helped": wins, "instruments": int(ts.shape[0]),
+                    "beats_benchmark_both_halves": bool(halves["first"]["sharpe"] and halves["second"]["sharpe"]
+                                                        and halves["first"]["sharpe"] > halves["first"]["bench_sharpe"]
+                                                        and halves["second"]["sharpe"] > halves["second"]["bench_sharpe"])})
+    b_yrs = len(bench) / 52
+    out.append({"variant": "Benchmark: equal weight, always invested", "cagr": float((1 + bench).prod() ** (1 / b_yrs) - 1),
+                "sharpe": float(bench.mean() / bench.std(ddof=1) * math.sqrt(52)),
+                "max_drawdown": float(((1 + bench).cumprod() / (1 + bench).cumprod().cummax() - 1).min()), "invested": 1.0,
+                "sharpe_first_half": None, "sharpe_second_half": None, "instruments_where_signal_helped": None,
+                "instruments": None, "beats_benchmark_both_halves": None})
+    return out
