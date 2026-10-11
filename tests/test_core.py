@@ -129,6 +129,35 @@ def test_snapshot_loader_validates(tmp_path):
         load_ibkr_snapshot(tmp_path, uni)
 
 
+def test_snapshot_keeps_uncollected_instruments_as_missing(tmp_path):
+    uni = {"instruments": [{"symbol": s, "name": s, "market": "US", "kind": "stock", "sector": "x", "group": "g"}
+                           for s in ("AAA", "BBB")]}
+    one = {"source": "test", "instruments": [{"symbol": "AAA", "status": "ok", "currency": "USD",
+           "weekly": {"time": [f"2026-0{m}-0{d}T00:00:00Z" for m, d in [(9, 4), (9, 5)]], "close": [1, 2]}}]}
+    (tmp_path / "g.json").write_text(json.dumps(one))
+    _, meta = load_ibkr_snapshot(tmp_path, uni)
+    assert meta["BBB"]["status"] == "missing"
+
+
+def test_event_reaction_uses_bar_after_event(tmp_path):
+    idx = pd.date_range("2026-09-04", periods=4, freq="W-FRI")  # Sep 4, 11, 18, 25
+    px = pd.DataFrame({"SPY": [100.0, 110.0, 121.0, 100.0]}, index=idx)
+    ev = tmp_path / "ev.csv"
+    ev.write_text("date,event,category\n2026-09-09,Rate decision,central bank\n")  # Wednesday
+    out = monitor.event_reactions(px, ev)
+    # Containing week ends Sep 11 (includes pre-event days); reaction = Sep 11 -> Sep 18.
+    assert out[0]["bar_end"] == "2026-09-18"
+    assert out[0]["reactions"]["US"] == pytest.approx(0.10)
+
+
+def test_portfolio_rejects_unknown_currency(tmp_path):
+    for s in ("SPY", "ISF"):
+        pd.DataFrame({"date": pd.date_range("2026-01-02", periods=30, freq="W-FRI"),
+                      "close": np.linspace(100, 110, 30)}).to_csv(tmp_path / f"{s}.csv", index=False)
+    with pytest.raises(SystemExit, match="currency unknown"):
+        main(["portfolio", "--csv", str(tmp_path), "--symbols", "SPY", "ISF"])
+
+
 def test_monitor_history_and_regime_changes(tmp_path):
     uni = load_universe()
     px, meta = synthetic(uni)

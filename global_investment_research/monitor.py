@@ -89,7 +89,11 @@ def macro_links(prices: pd.DataFrame) -> list[dict]:
 
 
 def event_reactions(prices: pd.DataFrame, events_csv: str | Path | None) -> list[dict]:
-    """Return of each market proxy over the first bar ending on/after each event date."""
+    """Return of each market proxy over the first full bar after each event.
+
+    The bar containing the event also holds pre-event days, so the reaction is measured
+    from the first close on/after the event date to the following close.
+    """
     if not events_csv or not Path(events_csv).exists():
         return []
     events = pd.read_csv(events_csv, parse_dates=["date"])
@@ -99,9 +103,9 @@ def event_reactions(prices: pd.DataFrame, events_csv: str | Path | None) -> list
     out = []
     for _, ev in events.iterrows():
         after = rets.index[rets.index >= ev["date"]]
-        if after.empty:
+        if len(after) < 2:
             continue
-        bar = after[0]
+        bar = after[1]
         reactions = {m: (None if p not in rets or pd.isna(rets.at[bar, p]) else float(rets.at[bar, p]))
                      for m, p in MARKET_PROXIES.items()}
         out.append({"date": ev["date"].date().isoformat(), "event": ev["event"], "category": ev.get("category", ""),
@@ -118,7 +122,7 @@ def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None) -> dict:
     metrics = {s: an.instrument_metrics(prices[s], bpy) for s in prices.columns if prices[s].notna().sum() >= 2}
     stale_cutoff = prices.index.max() - pd.Timedelta(days=10)
     stale = [s for s in metrics if pd.Timestamp(metrics[s]["last_date"]) < stale_cutoff]
-    missing = sorted(s for s in meta if s not in metrics)
+    missing = sorted(s for s in meta if s not in metrics)  # meta always covers the full universe
     sectors = sorted(
         ({"symbol": s, "sector": meta[s]["sector"], "ret_1m": m["ret_1m"], "ret_3m": m["ret_3m"],
           "ret_1y": m["ret_1y"], "trend": m["trend"]["state"]}

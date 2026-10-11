@@ -34,7 +34,7 @@ def load(args, universe):
         return data.load_ibkr_snapshot(args.snapshot, universe)
     if args.csv:
         prices = data.load_csv_prices(args.csv)
-        meta = {i["symbol"]: {**i, "source": "CSV", "status": "ok", "snapshot": {}, "dividends": []}
+        meta = {i["symbol"]: {**i, "source": "CSV", "status": "ok", "currency": None, "snapshot": {}, "dividends": []}
                 for i in universe["instruments"]}
         return prices, meta
     if args.yahoo:
@@ -114,7 +114,10 @@ def main(argv=None) -> int:
     missing = [s for s in args.symbols if s not in prices]
     if missing:
         raise SystemExit(f"no prices for {missing}")
-    ccy = {s: meta[s].get("currency") or "USD" for s in args.symbols}
+    ccy = {s: meta[s].get("currency") for s in args.symbols}
+    unknown = [s for s, c in ccy.items() if not c]
+    if unknown:
+        raise SystemExit(f"quote currency unknown for {unknown}; use a source that records currency (e.g. --snapshot)")
     if len(set(ccy.values())) > 1:
         raise SystemExit(f"mixed currencies {ccy}: convert with portfolio.to_base_currency before allocating")
     from .analytics import infer_bars_per_year

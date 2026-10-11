@@ -59,6 +59,12 @@ def load_ibkr_snapshot(directory: str | Path, universe: dict) -> tuple[pd.DataFr
                 if (s.dropna() <= 0).any():
                     raise ValueError(f"{sym}: non-positive close")
                 series[sym] = s[~s.index.duplicated(keep="last")]
+    # Keep every configured instrument visible, so an absent group file or an omitted
+    # row is reported as missing rather than silently shrinking the universe.
+    for sym, inst in by_symbol.items():
+        meta.setdefault(sym, {**inst, "source": "not collected", "status": "missing",
+                              "note": "no row in any snapshot file", "currency": None,
+                              "snapshot": {}, "dividends": []})
     prices = pd.DataFrame(series).sort_index()
     return prices, meta
 
@@ -82,12 +88,19 @@ def fetch_yahoo(universe: dict, period: str = "1y", interval: str = "1d") -> tup
         raise RuntimeError("yfinance is not installed; use an IBKR snapshot or CSV prices") from exc
     series, meta = {}, {}
     for inst in universe["instruments"]:
-        hist = yf.Ticker(inst["yahoo"]).history(period=period, interval=interval, auto_adjust=False)
+        ticker = yf.Ticker(inst["yahoo"])
+        hist = ticker.history(period=period, interval=interval, auto_adjust=False)
         if hist.empty:
-            meta[inst["symbol"]] = {**inst, "status": "unavailable", "source": "Yahoo Finance"}
+            meta[inst["symbol"]] = {**inst, "status": "unavailable", "source": "Yahoo Finance", "currency": None,
+                                    "snapshot": {}, "dividends": []}
             continue
         close = hist["Close"]
         close.index = close.index.tz_localize(None).normalize()
         series[inst["symbol"]] = close
-        meta[inst["symbol"]] = {**inst, "status": "ok", "source": "Yahoo Finance", "snapshot": {}, "dividends": []}
+        divs = ticker.dividends
+        dividends = [{"ex_date": d.tz_localize(None).date().isoformat(), "amount": float(a), "currency": None,
+                      "type": "Yahoo dividend"} for d, a in divs.items()] if divs is not None else []
+        currency = (ticker.history_metadata or {}).get("currency")
+        meta[inst["symbol"]] = {**inst, "status": "ok", "source": "Yahoo Finance", "currency": currency,
+                                "snapshot": {}, "dividends": dividends}
     return pd.DataFrame(series).sort_index(), meta
