@@ -1,0 +1,150 @@
+{
+ "group": "international",
+ "source": "Interactive Brokers via MCP",
+ "retrieved_at_utc": "2026-10-11T14:50:39Z",
+ "instruments": [
+  {
+   "symbol": "ISF",
+   "contract_id": 13444223,
+   "exchange": "LSEETF",
+   "currency": "GBP",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "SHEL",
+   "contract_id": 542125742,
+   "exchange": "LSE",
+   "currency": "GBP",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "HSBA",
+   "contract_id": 909083,
+   "exchange": "LSE",
+   "currency": "GBP",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "RIO",
+   "contract_id": 2852762,
+   "exchange": "LSE",
+   "currency": "GBP",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "ES3",
+   "contract_id": 92214874,
+   "exchange": "SGX",
+   "currency": "SGD",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "D05",
+   "contract_id": 15785538,
+   "exchange": "SGX",
+   "currency": "SGD",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "A17U",
+   "contract_id": 47527231,
+   "exchange": "SGX",
+   "currency": "SGD",
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "2800",
+   "contract_id": 6244735,
+   "exchange": "SEHK",
+   "currency": null,
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "700",
+   "contract_id": 152791428,
+   "exchange": "SEHK",
+   "currency": null,
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "3188",
+   "contract_id": 116433724,
+   "exchange": "SEHK",
+   "currency": null,
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  },
+  {
+   "symbol": "1299",
+   "contract_id": 80423421,
+   "exchange": "SEHK",
+   "currency": null,
+   "security_type": "STK",
+   "status": "unavailable",
+   "note": "no long-history result captured",
+   "weekly": {
+    "time": [],
+    "close": []
+   }
+  }
+ ]
+}

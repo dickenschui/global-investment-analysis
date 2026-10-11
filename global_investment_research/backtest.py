@@ -138,6 +138,11 @@ VARIANTS = {
 }
 
 
+def calendar_years(r: pd.Series) -> dict:
+    """Compounded return per calendar year (keyed by year string)."""
+    return {str(y): float((1 + g).prod() - 1) for y, g in r.groupby(r.index.year)}
+
+
 def compare_variants(prices: pd.DataFrame) -> list[dict]:
     rows = []
     for sym in prices.columns:
@@ -177,7 +182,7 @@ def compare_variants(prices: pd.DataFrame) -> list[dict]:
                     "sharpe_first_half": halves["first"]["sharpe"], "sharpe_second_half": halves["second"]["sharpe"],
                     "bench_sharpe_first_half": halves["first"]["bench_sharpe"],
                     "bench_sharpe_second_half": halves["second"]["bench_sharpe"],
-                    "instruments_where_signal_helped": wins, "instruments": int(ts.shape[0]),
+                    "instruments_where_signal_helped": wins, "instruments": int(ts.shape[0]), "years": calendar_years(held),
                     "beats_benchmark_both_halves": bool(halves["first"]["sharpe"] and halves["second"]["sharpe"]
                                                         and halves["first"]["sharpe"] > halves["first"]["bench_sharpe"]
                                                         and halves["second"]["sharpe"] > halves["second"]["bench_sharpe"])})
@@ -186,5 +191,5 @@ def compare_variants(prices: pd.DataFrame) -> list[dict]:
                 "sharpe": float(bench.mean() / bench.std(ddof=1) * math.sqrt(52)),
                 "max_drawdown": float(((1 + bench).cumprod() / (1 + bench).cumprod().cummax() - 1).min()), "invested": 1.0,
                 "sharpe_first_half": None, "sharpe_second_half": None, "instruments_where_signal_helped": None,
-                "instruments": None, "beats_benchmark_both_halves": None})
+                "instruments": None, "beats_benchmark_both_halves": None, "years": calendar_years(bench)})
     return out

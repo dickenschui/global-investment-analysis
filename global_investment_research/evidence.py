@@ -1,5 +1,7 @@
-"""Rule Evidence page: does the Decision Desk's rule set work on 5 years of history?"""
+"""Rule Evidence page: does the Decision Desk's rule set work on long weekly history?"""
 from __future__ import annotations
+
+import pandas as pd
 
 from . import html as H
 
@@ -75,6 +77,20 @@ def evidence_page(res: dict, standalone=True) -> str:
              "Signal helped", "Beats benchmark in both halves"], vr, numeric={1, 2, 3, 4, 5, 6}),
             "A rule only earns adoption if it beats always-invested equal weight on a risk-adjusted basis in both halves. "
             "'Signal helped' counts instruments whose 13-week return was higher when the rule was on than when it was off.")
+    yrs = [x for x in res.get("variants", []) if x.get("years")]
+    if yrs:
+        bench = next(x for x in yrs if x["variant"].startswith("Benchmark"))
+        cols = [bench] + [x for x in yrs if x is not bench]
+        label = lambda x: x["variant"].split(" (")[0].split(":")[0]  # noqa: E731
+        yr_rows = []
+        for y in sorted(bench["years"]):
+            b = bench["years"][y]
+            yr_rows.append([f"<b>{y}</b>" + (" " + H.chip("falling market", "down") if b <= -0.10 else "")]
+                           + [H.pct(x["years"].get(y)) for x in cols])
+        body += H.section("Year by year", H.table(["Year"] + [H.esc(label(x)) for x in cols], yr_rows,
+                                                   numeric=set(range(1, len(cols) + 1))),
+                          "Compounded return of each rule in each calendar year. Years where the equal-weight benchmark lost 10% or "
+                          "more are marked: a trend rule earns its keep there, by stepping aside. Partial first and last years.")
     body += H.section("How to use this", H.notes([
         "Supported rules earn more trust. If a stance fails in either half, size it down and lean harder on the checklist.",
         "The weekly run re-tests these rules and logs any deterioration in the Improvement Log.",
@@ -83,10 +99,13 @@ def evidence_page(res: dict, standalone=True) -> str:
         "Survivorship: today's instrument list is used for the whole period; past losers that left the list are missing.",
         "Price returns in local currency, weekly closes, no trading costs, taxes or dividends.",
         "The macro stress overlay (VIX risk budget) is not applied historically.",
+        "Instruments join the test when their history starts (for example XLC in 2018); each week the rule and the "
+        "benchmark use the same set of instruments.",
         f"{len(res['instruments'])} instruments, {res['observations']:,} weekly observations from {res['first_date']}: still a small sample for a market regime test.",
     ]))
+    span = round((pd.Timestamp(res["last_date"]) - pd.Timestamp(res["first_date"])).days / 365.25)
     page = H.page("Rule Evidence", f"Backtest {res['first_date']} to {res['last_date']}",
-                  "Walk-forward test of the Decision Desk rules on five years of weekly prices, using only data available at each date.",
+                  f"Walk-forward test of the Decision Desk rules on {span} years of weekly prices, using only data available at each date.",
                   body, "Interactive Brokers weekly closes. Research evidence, not a promise of future results.", standalone)
     return page.replace(f"<style>{H.CSS}</style>", f"<style>{H.CSS}{CSS}</style>", 1)
 
