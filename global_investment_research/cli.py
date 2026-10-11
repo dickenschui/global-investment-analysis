@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import alerts, backtest, brief, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
+from . import alerts, app_data, backtest, brief, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -158,10 +158,22 @@ def main(argv=None) -> int:
     al.add_argument("--telegram", action="store_true", help="also send new WARN/URGENT exceptions to Telegram")
     nt = sub.add_parser("notify", help="send the week's telegram.txt via the Telegram Bot API")
     nt.add_argument("--reports", required=True, help="reports/<date> directory produced by monitor")
+    ad = sub.add_parser("app-data", help="write the Investment Desk app's data file from a week's reports")
+    ad.add_argument("--reports", required=True, help="reports/<date> directory (after backtest and monitor)")
+    ad.add_argument("--snapshot", required=True, help="data/snapshots/<date> directory (for IBKR contract ids)")
+    ad.add_argument("--state-dir", default=None)
+    ad.add_argument("--out", required=True)
     hb = sub.add_parser("handbook", help="write docs/HANDBOOK.md from the policy source")
     hb.add_argument("--out", default="docs/HANDBOOK.md")
     args = p.parse_args(argv)
     universe = data.load_universe(args.universe)
+
+    if args.cmd == "app-data":
+        res = app_data.build(args.reports, args.snapshot, universe, args.state_dir)
+        Path(args.out).write_text(json.dumps(_clean(res), separators=(",", ":"), default=_json_default))
+        print(f"App data {res['as_of']}: {len(res['calls'])} decisions, {len(res['others'])} other instruments, "
+              f"{Path(args.out).stat().st_size / 1024:.0f} KB -> {args.out}")
+        return 0
 
     if args.cmd == "backtest":
         prices, _ = data.load_ibkr_snapshot(args.history, universe)

@@ -37,5 +37,5 @@ Deploy 100% of the normal risk budget (Volatility calm).
 • AAPL Bull call spread: Buy 335C / Sell 370C 2026-12-18, $1,265/contract, PoP 38%
 • ORCL Bear put spread: Buy 140P / Sell 125P 2026-12-18, $655/contract, PoP 44%
 
-<a href="https://claude.ai/artifact/4VjjnbhJUG3a7Bh78RWvLf">Pack (start here)</a> · <a href="https://claude.ai/artifact/Fz1Pc2fafD3y3yA6HKm5jp">Weekly Brief</a> · <a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a> · <a href="https://claude.ai/artifact/556rrpW6C2Zb8Sjya6Z789">Options Sleeve</a> · <a href="https://claude.ai/artifact/2FxetPUFQZ5hfF7LyyiehH">Rule Evidence</a> · <a href="https://claude.ai/artifact/BdVG4ieQAZrjassRaoXWTi">Handbook</a>
+<a href="https://claude.ai/artifact/G7LaSQYJscDLYKNAFNu4Fn">Investment Desk app</a> · <a href="https://claude.ai/artifact/4VjjnbhJUG3a7Bh78RWvLf">Pack (start here)</a> · <a href="https://claude.ai/artifact/Fz1Pc2fafD3y3yA6HKm5jp">Weekly Brief</a> · <a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a> · <a href="https://claude.ai/artifact/556rrpW6C2Zb8Sjya6Z789">Options Sleeve</a> · <a href="https://claude.ai/artifact/2FxetPUFQZ5hfF7LyyiehH">Rule Evidence</a> · <a href="https://claude.ai/artifact/BdVG4ieQAZrjassRaoXWTi">Handbook</a>
 <i>Rule-based research, not personalised advice. Re-price before trading.</i>

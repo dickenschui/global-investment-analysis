@@ -17,6 +17,7 @@ It sits next to the original Taiwan three-dimension analysis skill (`SKILL.md`, 
 | US tech watchlist, UK equities + FX, Singapore 6–8% income screen | `reports.py`, `income.py` | `us-tech.html`, `uk-fx.html`, `sg-income.html` |
 | Minimum-variance allocation, Ledoit-Wolf covariance, fitted on training data only, evaluated after allocation | `portfolio.py` | JSON |
 | Rule evidence: walk-forward test of the Accumulate/Avoid rules and alternatives on 19 years of IBKR weekly closes (`data/history/weekly_long`, 36 instruments); a new rule is adopted only if it beats equal weight in both halves, all three thirds and with active t ≥ 2 | `backtest.py`, `evidence.py` | `backtest.json`, `evidence.html`, confidence note on Desk/Brief |
+| Investment Desk app: one page with the week's calls, live read-only IBKR checks against exit levels and buy zones, position sizing, SG income, options sleeve, rule evidence, "challenge this trade" and a shared decision journal | `app/index.html`, `app_data.py`, `docs/APP_UPDATE.md` | https://claude.ai/artifact/G7LaSQYJscDLYKNAFNu4Fn |
 | Company fundamentals: margins, FCF, cash conversion, ROE on average equity, accounting-equation check, P/E withheld on currency mismatch | `company.py` | library |
 
 ## Data sources

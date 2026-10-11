@@ -13,6 +13,7 @@ import urllib.parse
 import urllib.request
 
 LINKS = {
+    "Investment Desk app": "https://claude.ai/artifact/G7LaSQYJscDLYKNAFNu4Fn",
     "Pack (start here)": "https://claude.ai/artifact/4VjjnbhJUG3a7Bh78RWvLf",
     "Weekly Brief": "https://claude.ai/artifact/Fz1Pc2fafD3y3yA6HKm5jp",
     "Decision Desk": "https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW",
