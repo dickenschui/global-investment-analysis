@@ -53,3 +53,34 @@ def test_ideas_follow_desk_and_size_to_budget():
                    p, opt=out)
     ws = load_workbook(p)["Options"]
     assert ws["O2"].value == "=INT(Policy!$B$2*Policy!$B$11/H2)"
+
+
+def test_digest_email_and_telegram():
+    import json as _j
+    from global_investment_research import notify
+    from global_investment_research import decisions as D
+    from global_investment_research.cli import synthetic
+    from global_investment_research.data import load_universe
+    from global_investment_research.monitor import build_monitor
+    px, meta = synthetic(load_universe())
+    mon = build_monitor(px, meta)
+    dec = D.build_decisions(mon, meta)
+    d = notify.digest(dec, mon, None, [{"topic": "Rates", "from": "a", "to": "b"}])
+    tg, em = notify.telegram_text(d), notify.email_html(d)
+    assert "Rates: a → b" in tg and len(tg) < 4096  # Telegram message limit
+    assert "<table" in em and "Weekly Investment Brief" in em
+
+    class Resp:
+        def __init__(self, ok): self.ok = ok
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return _j.dumps({"ok": self.ok, "description": "bad"}).encode()
+
+    sent = {}
+    def opener(req, timeout):
+        sent["url"], sent["data"] = req.full_url, req.data
+        return Resp(True)
+    notify.send_telegram("hi", "TOKEN", "123", opener=opener)
+    assert sent["url"].endswith("/botTOKEN/sendMessage") and b"chat_id=123" in sent["data"]
+    with pytest.raises(RuntimeError):
+        notify.send_telegram("hi", "TOKEN", "123", opener=lambda r, timeout: Resp(False))

@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import brief, data, decisions, desk, handbook, monitor, options, options_desk, portfolio, reports
+from . import alerts, brief, data, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -90,6 +90,9 @@ def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str |
     except ImportError:
         print("openpyxl not installed: skipped decision-book.xlsx (pip install -e .[excel])")
     (out / "index.html").write_text(index_page(mon["as_of"], out), encoding="utf-8")
+    dg = notify.digest(dec, mon, opt, changes)
+    (out / "email.html").write_text(notify.email_html(dg), encoding="utf-8")
+    (out / "telegram.txt").write_text(notify.telegram_text(dg), encoding="utf-8")
     return mon
 
 
@@ -138,11 +141,49 @@ def main(argv=None) -> int:
     sub.choices["review"].add_argument("--log", default="config/decision-log.csv")
     d = sub.add_parser("demo")
     d.add_argument("--out", required=True)
+    wl = sub.add_parser("watchlist", help="symbols the hourly pulse must quote, from this week's reports")
+    wl.add_argument("--reports", required=True)
+    al = sub.add_parser("alerts", help="evaluate a live pulse against this week's levels; print new exceptions")
+    al.add_argument("--pulse", required=True)
+    al.add_argument("--reports", required=True)
+    al.add_argument("--state-dir", default="data/state")
+    al.add_argument("--telegram", action="store_true", help="also send new WARN/URGENT exceptions to Telegram")
+    nt = sub.add_parser("notify", help="send the week's telegram.txt via the Telegram Bot API")
+    nt.add_argument("--reports", required=True, help="reports/<date> directory produced by monitor")
     hb = sub.add_parser("handbook", help="write docs/HANDBOOK.md from the policy source")
     hb.add_argument("--out", default="docs/HANDBOOK.md")
     args = p.parse_args(argv)
     universe = data.load_universe(args.universe)
 
+    if args.cmd in ("watchlist", "alerts"):
+        rep = Path(args.reports)
+        dec = json.loads((rep / "decisions.json").read_text())
+        mon = json.loads((rep / "monitor.json").read_text())
+        opt = json.loads((rep / "options.json").read_text()) if (rep / "options.json").exists() else None
+        if args.cmd == "watchlist":
+            kinds = {i["symbol"]: i["kind"] for i in universe["instruments"]}
+            print(json.dumps(alerts.watch_list(dec, opt, kinds)))
+            return 0
+        pulse = json.loads(Path(args.pulse).read_text())
+        found = alerts.evaluate(pulse, dec, mon, opt)
+        fresh = alerts.new_since_last(found, args.state_dir, pulse["retrieved_at_utc"][:10])
+        quoted = {x["symbol"] for x in pulse["quotes"] if x.get("last")}
+        kinds = {i["symbol"]: i["kind"] for i in universe["instruments"]}
+        stale = sorted(set(alerts.watch_list(dec, opt, kinds)) - quoted)
+        text = alerts.alert_text(fresh, pulse["retrieved_at_utc"], stale)
+        out = rep / "alerts"
+        out.mkdir(exist_ok=True)
+        stamp = pulse["retrieved_at_utc"].replace(":", "").replace("-", "")[:13]
+        (out / f"alerts-{stamp}.json").write_text(json.dumps({"all": found, "new": fresh, "missing_quotes": stale}, indent=1))
+        print(text if fresh else f"No new exceptions ({len(found)} already reported today).")
+        if args.telegram and any(a["severity"] in ("URGENT", "WARN") for a in fresh):
+            notify.send_telegram(text)
+        return 0
+    if args.cmd == "notify":
+        text = (Path(args.reports) / "telegram.txt").read_text(encoding="utf-8")
+        notify.send_telegram(text)
+        print("Telegram message sent.")
+        return 0
     if args.cmd == "handbook":
         Path(args.out).write_text(handbook.to_markdown() + "\n", encoding="utf-8")
         print(f"Handbook written to {args.out}")
