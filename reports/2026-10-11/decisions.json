@@ -2519,5 +2519,183 @@
    }
   ],
   "gross_before": 0.741643010767724
+ },
+ "stress": {
+  "base_currency": "GBP",
+  "tolerance": 0.2,
+  "gross_full": 0.741643010767724,
+  "episodes": [
+   {
+    "episode": "Global financial crisis",
+    "start": "2007-10-12",
+    "end": "2009-03-06",
+    "why": "S&P 500 closing high (9-11 Oct 2007) to the bear-market low week (6-9 Mar 2009): the full credit crisis peak to trough. Tests equity beta and banks; GBP fell about 30% against USD, which cushions a GBP investor's foreign holdings.",
+    "full": -0.17591746732884525,
+    "half": -0.08795873366442263,
+    "complete": false,
+    "breach_full": null,
+    "breach_half": null,
+    "proxied": [
+     "ANET",
+     "CRWD",
+     "GOOGL",
+     "META",
+     "NOW",
+     "PANW",
+     "SHEL",
+     "SOXX"
+    ],
+    "missing": [
+     "600036",
+     "600900",
+     "CPER"
+    ],
+    "missing_weight": 0.12985211992861356
+   },
+   {
+    "episode": "Euro crisis",
+    "start": "2011-04-29",
+    "end": "2011-10-03",
+    "why": "S&P 500 high of 29 Apr 2011 to the 3 Oct 2011 low: euro-area sovereign stress plus the US downgrade in August. 3 Oct 2011 is a Monday, so the weekly close used is Friday 30 Sep 2011.",
+    "full": -0.043632001782841566,
+    "half": -0.021816000891420783,
+    "complete": false,
+    "breach_full": null,
+    "breach_half": null,
+    "proxied": [
+     "ANET",
+     "CRWD",
+     "GOOGL",
+     "META",
+     "NOW",
+     "PANW",
+     "SHEL"
+    ],
+    "missing": [
+     "600036",
+     "600900",
+     "CPER"
+    ],
+    "missing_weight": 0.12985211992861356
+   },
+   {
+    "episode": "China/oil",
+    "start": "2015-05-22",
+    "end": "2016-02-12",
+    "why": "S&P 500 high (21 May 2015) to the 11 Feb 2016 low: China A-share crash, the August 2015 renminbi devaluation and oil near USD 26. Tests HK/China, energy and Singapore income.",
+    "full": -0.047781443745631355,
+    "half": -0.023890721872815678,
+    "complete": true,
+    "breach_full": false,
+    "breach_half": false,
+    "proxied": [
+     "CRWD",
+     "GOOGL",
+     "META",
+     "SHEL"
+    ],
+    "missing": [],
+    "missing_weight": 0.0
+   },
+   {
+    "episode": "Covid crash",
+    "start": "2020-02-14",
+    "end": "2020-03-20",
+    "why": "Week of the 19 Feb 2020 high to the last weekly close before the 23 Mar 2020 low: the fastest crash in the history. Weekly data cannot see the Monday low itself.",
+    "full": -0.14033244149072135,
+    "half": -0.07016622074536068,
+    "complete": true,
+    "breach_full": false,
+    "breach_half": false,
+    "proxied": [
+     "META"
+    ],
+    "missing": [],
+    "missing_weight": 0.0
+   },
+   {
+    "episode": "2022 rates shock",
+    "start": "2022-01-07",
+    "end": "2022-10-14",
+    "why": "Week after the 3 Jan 2022 high to the week of the 12 Oct 2022 low: inflation and rate rises took shares and bonds down together and de-rated growth/tech. GBP hit a record low in September 2022.",
+    "full": -0.01467808787674378,
+    "half": -0.00733904393837189,
+    "complete": true,
+    "breach_full": false,
+    "breach_half": false,
+    "proxied": [
+     "META"
+    ],
+    "missing": [],
+    "missing_weight": 0.0
+   }
+  ],
+  "sg_income": {
+   "basket_yield": 0.04877391036644859,
+   "names": 14,
+   "in_band": 4,
+   "sgd_per_gbp": 1.6953586424999998,
+   "rate_date": "2026-10-09",
+   "rows": [
+    {
+     "episode": "Global financial crisis",
+     "reason": "ES3 has no history across this window; no SGD/USD FX pair in the history for this window"
+    },
+    {
+     "episode": "Euro crisis",
+     "reason": "ES3 has no history across this window"
+    },
+    {
+     "episode": "China/oil",
+     "payout_cut": 0.0,
+     "price_change": -0.2664756446991404,
+     "fx_change": 0.02065349660791793,
+     "income_change": 0.02065349660791796,
+     "capital_change": -0.2513258019151089
+    },
+    {
+     "episode": "China/oil",
+     "payout_cut": 0.2,
+     "price_change": -0.2664756446991404,
+     "fx_change": 0.02065349660791793,
+     "income_change": -0.18347720271366572,
+     "capital_change": -0.2513258019151089
+    },
+    {
+     "episode": "Covid crash",
+     "payout_cut": 0.0,
+     "price_change": -0.24534161490683226,
+     "fx_change": 0.08015450748310249,
+     "income_change": 0.08015450748310254,
+     "capital_change": -0.1848523437316959
+    },
+    {
+     "episode": "Covid crash",
+     "payout_cut": 0.2,
+     "price_change": -0.24534161490683226,
+     "fx_change": 0.08015450748310249,
+     "income_change": -0.135876394013518,
+     "capital_change": -0.1848523437316959
+    },
+    {
+     "episode": "2022 rates shock",
+     "payout_cut": 0.0,
+     "price_change": -0.04661932695276316,
+     "fx_change": 0.1568890129334073,
+     "income_change": 0.15688901293340723,
+     "capital_change": 0.10295562579140527
+    },
+    {
+     "episode": "2022 rates shock",
+     "payout_cut": 0.2,
+     "price_change": -0.04661932695276316,
+     "fx_change": 0.1568890129334073,
+     "income_change": -0.07448878965327421,
+     "capital_change": 0.10295562579140527
+    }
+   ]
+  },
+  "data_fixes": 16,
+  "limits": "Weekly closes, price only (no dividends), weights held fixed with no exits, cash at 0%. Names without history use their market fund where listed; a window with uncovered weight gets no verdict."
  }
 }

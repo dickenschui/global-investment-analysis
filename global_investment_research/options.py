@@ -12,6 +12,8 @@ from __future__ import annotations
 import math
 from datetime import date
 
+from . import payoff as payoff_engine
+
 SLEEVE_CAP = 0.05          # total premium at risk across all option trades
 PER_TRADE_RISK = 0.01      # premium at risk per trade
 RISK_FREE = 0.04           # annual rate for pricing and probabilities (assumption)
@@ -121,6 +123,10 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
     kind = {c["symbol"]: c.get("kind") for c in dec["calls"]}
     ideas, skipped = [], []
     asof = date.fromisoformat(as_of)
+    chain_issues = payoff_engine.validate_chain(chains)
+    flagged = {}
+    for q in chain_issues:
+        flagged.setdefault((q["symbol"], q["expiry"], q["strike"], q["right"]), []).append(q["issue"])
     for u in chains["underlyings"]:
         sym, S = u["symbol"], u.get("last")
         st = stance.get(sym, "Outside universe")
@@ -149,6 +155,11 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
         if single:
             cands.append(("Long call" if direction == "bull" else "Long put", [(1, right, single["strike"])], [single], [1]))
         for name, legs, cs, qtys in cands:
+            bad = [f"{c['strike']:g}{c['right']}: {'; '.join(flagged[k])}" for c in cs
+                   if (k := (sym, exp["expiry"], c["strike"], c["right"])) in flagged]
+            if bad:
+                skipped.append({"symbol": sym, "reason": f"{name}: chain check failed ({'; '.join(bad)})"})
+                continue
             mids, bases = [], []
             for c in cs:
                 m, b = quote_mid(c)
@@ -167,6 +178,11 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
                 skipped.append({"symbol": sym, "reason": f"{name}: no implied volatility"})
                 continue
             a = analyse(name, legs, debit, S, T, iv)
+            ex = payoff_engine.expiry_analysis(legs, debit, MULTIPLIER)  # exact piecewise payoff as a cross-check
+            if (abs(ex["breakevens"][0] - a["breakeven"]) > 1e-6 or abs(ex["max_loss"] - a["max_loss"] * MULTIPLIER) > 1e-6
+                    or (a["max_gain"] is not None and abs(ex["max_profit"] - a["max_gain"] * MULTIPLIER) > 1e-6)):
+                skipped.append({"symbol": sym, "reason": f"{name}: payoff cross-check failed"})
+                continue
             per_trade = PER_TRADE_RISK * portfolio
             contracts = int(per_trade // (debit * MULTIPLIER))
             thin = [c["strike"] for c in cs if (c.get("open_interest") or 0) < MIN_OPEN_INTEREST]
@@ -204,6 +220,6 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
         used += i["premium_at_risk"]
         chosen.append(i)
     ideas = chosen
-    return {"as_of": as_of, "ideas": ideas, "skipped": skipped, "sleeve_used": used / portfolio,
+    return {"as_of": as_of, "ideas": ideas, "skipped": skipped, "sleeve_used": used / portfolio, "chain_issues": chain_issues,
             "policy": {"sleeve_cap": SLEEVE_CAP, "per_trade": PER_TRADE_RISK, "risk_free": RISK_FREE,
                        "take_profit": TAKE_PROFIT, "stop_loss": STOP_LOSS, "time_stop_days": TIME_STOP_DAYS}}

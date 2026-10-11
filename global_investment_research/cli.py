@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import math
+import re
 from pathlib import Path
 
 import numpy as np
@@ -61,24 +63,35 @@ def synthetic(universe, weeks=60, seed=7):
     return pd.DataFrame(cols, index=idx), meta
 
 
-RATES_DIR = "data/history/weekly_long"
+HISTORY_DIR = "data/history/weekly_long"   # long weekly history: curve readings and stress tests
+MACRO_LATEST = "data/macro/latest.json"   # written by the macro-daily GitHub workflow
 
 
-def _same_trading_week(last_iso: str | None, now_iso: str) -> bool:
-    """True when the hourly schedule (Mon-Fri, every hour, UTC) should have run throughout the gap since the last
-    check: both checks fall on weekdays of the same week. A Friday-to-Monday gap is the weekend, not an outage."""
+HOURLY_UTC = range(1, 22)      # hourly-alerts.yml cron '7 1-21 * * 1-5'
+
+
+def _missed_scheduled_run(last_iso: str | None, now_iso: str, margin_minutes: int = 45) -> bool:
+    """True when the hourly schedule (weekdays, 01:00-21:00 UTC) should have run at least once between the last check
+    and this one, allowing for the scheduler's usual delay. Overnight and weekend gaps are not outages."""
     if not last_iso:
         return False
     last, now = (alert_state._aware(x) for x in (last_iso, now_iso))
-    return (last.weekday() < 5 and now.weekday() < 5 and now >= last
-            and (now.date() - last.date()).days <= now.weekday() - last.weekday())
+    margin = dt.timedelta(minutes=margin_minutes)
+    t = last.replace(minute=0, second=0, microsecond=0) + dt.timedelta(hours=1)
+    while t < now - margin:
+        if t > last + margin and t.weekday() < 5 and t.hour in HOURLY_UTC:
+            return True
+        t += dt.timedelta(hours=1)
+    return False
 
 
 def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str | None, standalone=True,
-                  chains_path: str | Path | None = None, rates_dir: str | Path | None = None):
+                  chains_path: str | Path | None = None, history_dir: str | Path | None = None,
+                  macro_path: str | Path | None = None):
     out.mkdir(parents=True, exist_ok=True)
-    rates = curve.load_rates(rates_dir) if rates_dir else None
-    mon = monitor.build_monitor(prices, meta, events, rates=rates)
+    rates = curve.load_rates(history_dir) if history_dir else None
+    macro = json.loads(Path(macro_path).read_text()) if macro_path and Path(macro_path).exists() else None
+    mon = monitor.build_monitor(prices, meta, events, rates=rates, macro=macro)
     changes = []
     if state_dir:
         monitor.append_history(mon, state_dir)
@@ -92,6 +105,12 @@ def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str |
     dist = ({i["symbol"]: i["corp_actions"] for i in json.loads(hist_path.read_text())["instruments"]}
             if hist_path.exists() else None)
     dec = decisions.build_decisions(mon, meta, prices=prices, dist_history=dist)
+    if history_dir and Path(history_dir).exists():
+        from . import stress
+        hist, hmeta = data.load_ibkr_snapshot(history_dir, {"instruments": list(meta.values())})
+        exc_path = Path(data.DEFAULT_UNIVERSE).parent / "data-exceptions.json"
+        exc = json.loads(exc_path.read_text())["exceptions"] if exc_path.exists() else []
+        dec["stress"] = stress.summary(dec["calls"], hist, hmeta, exc)
     conf = None
     if (out / "backtest.json").exists():
         conf = evidence.confidence_note(json.loads((out / "backtest.json").read_text()))
@@ -171,6 +190,7 @@ def main(argv=None) -> int:
     wl = sub.add_parser("watchlist", help="symbols the hourly pulse must quote, from this week's reports")
     wl.add_argument("--reports", required=True)
     pu = sub.add_parser("pulse", help="quote this week's watch list from Yahoo Finance (for the hourly check)")
+    pu.add_argument("--yahoo", action="store_true", required=True, help="quote source (the only one available outside Claude)")
     pu.add_argument("--reports", required=True)
     pu.add_argument("--out", required=True)
     al = sub.add_parser("alerts", help="evaluate a live pulse against this week's levels; print new exceptions")
@@ -181,6 +201,11 @@ def main(argv=None) -> int:
                     help="quotes older than this are set aside as stale")
     al.add_argument("--news", action="store_true", help="attach official headlines (config/news-sources.json) to URGENT alerts")
     al.add_argument("--telegram", action="store_true", help="also send new WARN/URGENT exceptions to Telegram")
+    al.add_argument("--email", action="store_true",
+                    help="also email new WARN/URGENT exceptions (MAIL_USERNAME, MAIL_APP_PASSWORD, MAIL_TO secrets)")
+    mc = sub.add_parser("macro", help="fetch official macro series (FRED, ECB, BoE, ONS, Treasury, World Bank)")
+    mc.add_argument("--config", default="config/macro-sources.json")
+    mc.add_argument("--out", default="data/macro")
     nt = sub.add_parser("notify", help="send the week's telegram.txt via the Telegram Bot API")
     nt.add_argument("--reports", required=True, help="reports/<date> directory produced by monitor")
     ad = sub.add_parser("app-data", help="write the Investment Desk app's data file from a week's reports")
@@ -200,6 +225,11 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
     universe = data.load_universe(args.universe)
 
+    if args.cmd == "macro":
+        from . import macro_sources
+        res = macro_sources.run(args.config, args.out)
+        print(json.dumps(_clean(res), indent=1, default=_json_default))
+        return 0 if res["ok"] else 1
     if args.cmd == "manifest":
         from . import integrity
         bad = False
@@ -271,7 +301,7 @@ def main(argv=None) -> int:
         found = alerts.evaluate(pulse, dec, mon, opt, kinds, max_age_minutes=args.max_age_minutes)
         usable, frozen = alerts.normalise_quotes(pulse, mon, max_age_minutes=args.max_age_minutes)
         state = Path(args.state_dir) / "alert_state.json"
-        hb = alert_state.heartbeat_gap(state, now, weekday=_same_trading_week(alert_state.load(state).get("last_run_utc"), now))
+        hb = alert_state.heartbeat_gap(state, now, weekday=_missed_scheduled_run(alert_state.load(state).get("last_run_utc"), now))
         if hb:
             found.append(hb)
         res = alert_state.update(found, set(usable), state, now)  # only quoted symbols can clear a condition
@@ -296,13 +326,26 @@ def main(argv=None) -> int:
         # Without a channel flag the printed text is the delivery (the Claude routine relays it). With channels, a
         # notice counts as delivered only once a channel confirms; otherwise it stays pending and is offered again.
         delivered = True
-        if args.telegram and any(a["severity"] in ("URGENT", "WARN") for a in to_send):
+        material = any(a["severity"] in ("URGENT", "WARN") for a in to_send)
+        if args.telegram and material:
             try:
                 notify.send_telegram(text)
                 print("Telegram alert sent.")
             except Exception as exc:  # delivery failure must not hide the alert itself
                 delivered = False
                 print(f"Telegram not sent: {exc}")
+        if args.email and material:
+            from . import mailer
+            urgent = sum(a["severity"] == "URGENT" for a in to_send)
+            subject = f"{'URGENT: ' if urgent else ''}Market exceptions {now[:16].replace('T', ' ')}Z ({len(to_send)})"
+            body = "<div style='font-family:sans-serif;font-size:14px'>" + text.replace("\n", "<br>\n") + "</div>"
+            try:
+                r = mailer.send_if_configured(subject, body, re.sub(r"<[^>]+>", "", text),
+                                              ledger=Path(args.state_dir) / "mail_ledger.json", day=now[:10])
+                print(r.get("reason") or f"Email {r['status']}.")
+            except Exception as exc:  # MailError carries no secret
+                delivered = False
+                print(f"Email not sent: {exc}")
         if delivered and to_send:
             alert_state.mark_delivered([a["key"] for a in to_send], state)
         return 0
@@ -329,7 +372,7 @@ def main(argv=None) -> int:
     if args.cmd == "monitor":
         chains = Path(args.snapshot) / "options.json" if args.snapshot else None
         mon = write_reports(prices, meta, Path(args.out), Path(args.state_dir) if args.state_dir else None, args.events,
-                            chains_path=chains, rates_dir=RATES_DIR)
+                            chains_path=chains, history_dir=HISTORY_DIR, macro_path=MACRO_LATEST)
         dq = mon["data_quality"]
         print(f"Monitor as of {mon['as_of']}: {dq['with_prices']}/{dq['instruments_configured']} instruments; "
               f"missing {dq['missing'] or 'none'}; reports in {args.out}")

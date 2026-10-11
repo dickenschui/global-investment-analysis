@@ -139,10 +139,11 @@ def test_cli_alert_stays_pending_until_a_channel_delivers(tmp_path, capsys, monk
     assert len(sent) == 1
 
 
-def test_heartbeat_only_judged_within_one_trading_week():
-    from global_investment_research.cli import _same_trading_week as same
-    assert same("2026-10-13T10:07:00Z", "2026-10-13T15:07:00Z")       # Tuesday, same day
-    assert same("2026-10-12T23:07:00Z", "2026-10-14T09:07:00Z")       # Monday to Wednesday
-    assert not same("2026-10-09T23:07:00Z", "2026-10-12T00:07:00Z")   # Friday to Monday: weekend
-    assert not same("2026-10-10T12:00:00Z", "2026-10-12T12:00:00Z")   # from a Saturday
-    assert not same(None, "2026-10-12T12:00:00Z")
+def test_heartbeat_only_judged_when_a_scheduled_run_was_missed():
+    from global_investment_research.cli import _missed_scheduled_run as missed
+    assert not missed("2026-10-13T10:20:00Z", "2026-10-13T11:35:00Z")    # normal hourly run, late scheduler
+    assert missed("2026-10-13T10:20:00Z", "2026-10-13T13:20:00Z")        # 12:00 run missing
+    assert not missed("2026-10-12T21:07:00Z", "2026-10-13T01:07:00Z")    # overnight: no runs scheduled
+    assert not missed("2026-10-09T21:07:00Z", "2026-10-12T01:07:00Z")    # Friday to Monday: weekend
+    assert missed("2026-10-12T21:07:00Z", "2026-10-14T09:07:00Z")        # all of Tuesday missing
+    assert not missed(None, "2026-10-12T12:00:00Z")

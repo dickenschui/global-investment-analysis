@@ -108,6 +108,13 @@ def options_page(res: dict, standalone=True) -> str:
         body += H.section("Screened out", H.table(["Underlying", "Reason"],
                           [[H.esc(s["symbol"]), H.esc(s["reason"])] for s in res["skipped"]], wrap={1}),
                           "No idea is forced: underlyings without a clear trend call or a tradable quote are left out.")
+    ci = res.get("chain_issues")
+    if ci is not None:
+        body += H.section("Chain check", H.table(["Contract", "Issue"],
+                          [[H.esc(f"{q['symbol']} {q['expiry']} {q['strike']:g} {q['right']}"), H.esc(q["issue"])] for q in ci], wrap={1})
+                          if ci else "<p>No quote problems found in the saved chains.</p>",
+                          "Crossed or one-sided quotes, bad implied volatilities, expired or duplicate contracts. An idea using a "
+                          "flagged contract is screened out; a clean check does not mean the quotes are executable.")
     body += H.section("How to place one", H.notes([
         "Use a limit order at or below the mid price shown; never pay the full ask on a wide market.",
         "For spreads, enter both legs as one combination order so you never hold one leg alone.",

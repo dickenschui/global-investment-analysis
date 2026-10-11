@@ -50,3 +50,20 @@ def test_monitor_skips_stale_rates_and_never_reads_ahead():
     mon = monitor.build_monitor(prices, meta, rates=ahead)
     yc = next(r for r in mon["regime"] if r["topic"] == "Yield curve")
     assert "spread +1.00 pts" in yc["evidence"]
+
+
+def test_monitor_adds_official_macro_readings_and_skips_stale_snapshot():
+    idx = pd.date_range("2026-01-02", periods=41, freq="W-FRI")      # ends 2026-10-09
+    prices = pd.DataFrame({"SPY": range(100, 141)}, index=idx, dtype=float)
+    meta = {"SPY": {"market": "US", "kind": "etf", "sector": "Broad"}}
+    series = {"T10Y3M": {"status": "ok", "observations": [{"date": "2026-10-09", "value": 0.45}]},
+              "NFCI": {"status": "ok", "observations": [{"date": "2026-10-02", "value": -0.52}]}}
+    rates = pd.DataFrame({"3m": 4.0, "10y": 5.0}, index=idx)
+    mon = monitor.build_monitor(prices, meta, rates=rates, macro={"retrieved_at": "2026-10-09T06:31:00Z", "series": series})
+    topics = {r["topic"]: r for r in mon["regime"]}
+    assert "Yield curve" in topics and "Yield curve (official)" in topics          # IBKR and FRED side by side
+    assert "fetched 2026-10-09" in topics["Financial conditions"]["evidence"]
+    assert mon["data_quality"]["macro"] is None
+    mon = monitor.build_monitor(prices, meta, macro={"retrieved_at": "2026-09-01T06:31:00Z", "series": series})
+    assert "Financial conditions" not in {r["topic"] for r in mon["regime"]}
+    assert "stale" in mon["data_quality"]["macro"]

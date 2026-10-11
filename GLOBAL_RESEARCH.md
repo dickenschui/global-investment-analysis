@@ -18,6 +18,12 @@ It sits next to the original Taiwan three-dimension analysis skill (`SKILL.md`, 
 | Minimum-variance allocation, Ledoit-Wolf covariance, fitted on training data only, evaluated after allocation | `portfolio.py` | JSON |
 | Rule evidence: walk-forward test of the Accumulate/Avoid rules and alternatives on 19 years of IBKR weekly closes (`data/history/weekly_long`, 36 instruments); a new rule is adopted only if it beats equal weight in both halves, all three thirds and with active t ≥ 2 | `backtest.py`, `evidence.py` | `backtest.json`, `evidence.html`, confidence note on Desk/Brief |
 | Investment Desk app: one page with the week's calls, live read-only IBKR checks against exit levels and buy zones, position sizing, SG income, options sleeve, rule evidence, "challenge this trade" and a shared decision journal | `app/index.html`, `app_data.py`, `docs/APP_UPDATE.md` | https://claude.ai/artifact/G7LaSQYJscDLYKNAFNu4Fn |
+| Curve and volatility term structure: 3m/5y/10y/30y Treasury yields and VIX3M from IBKR (weekly since 2009); curve shape, term premium, VIX/VIX3M | `curve.py` | in `monitor.html` macro readings |
+| Official macro data: FRED, ECB, Bank of England, ONS, US Treasury, World Bank, fetched daily on GitHub Actions (blocked inside Claude); readings join the monitor when the snapshot is under 10 days old | `macro_sources.py`, `.github/workflows/macro-daily.yml` | `data/macro/latest.json` |
+| Stress test: this week's Accumulate+Hold book at full and half size through the GFC, euro crisis, China/oil, Covid and 2022 in GBP against the 20% mandate limit; SG income sleeve under measured ES3 and SGD shocks | `stress.py` | Desk, app |
+| Hourly alerts without Claude: Yahoo pulse, condition state (notify on new or escalated, re-arm only when quoted, retry undelivered), 90-minute freshness gate, heartbeat gap, official headlines on URGENT alerts, Telegram and Gmail | `alerts.py`, `alert_state.py`, `pulse_yahoo.py`, `news.py`, `mailer.py`, `.github/workflows/hourly-alerts.yml` | state on the `alert-state` branch |
+| Data integrity: SHA-256 manifests (loader refuses changed files), contract identity (venue, currency, type, contract id), weekly quality review | `integrity.py`, `identity.py`, `quality.py` | `quality.md` for the Improvement Log |
+| Option chain check (crossed or one-sided quotes, bad IV, expired, duplicates) and exact expiry payoff cross-check before an idea is shown | `payoff.py` | Options page, app |
 | Company fundamentals: margins, FCF, cash conversion, ROE on average equity, accounting-equation check, P/E withheld on currency mismatch | `company.py` | library |
 
 ## Data sources
@@ -38,9 +44,26 @@ python -m venv .venv && .venv/bin/pip install -e .[test]
 .venv/bin/global-research monitor --snapshot data/snapshots/2026-10-11 --out reports/2026-10-11 --state-dir data/state
 .venv/bin/global-research portfolio --snapshot data/snapshots/2026-10-11 --symbols SPY TLT GLD --max-weight 0.6
 .venv/bin/global-research backtest --history data/history/weekly_long --start 2007-01-01 --out reports/2026-10-11  # before monitor
+.venv/bin/global-research manifest data/snapshots/2026-10-11            # after every file is collected (--verify to check)
+.venv/bin/global-research quality --snapshot data/snapshots/2026-10-11 --previous data/snapshots/<last week> --out reports/2026-10-11/quality
+.venv/bin/global-research macro --config config/macro-sources.json --out data/macro   # needs open internet (GitHub Actions)
+.venv/bin/global-research pulse --yahoo --reports reports/2026-10-11 --out pulse.json
+.venv/bin/global-research alerts --pulse pulse.json --reports reports/2026-10-11 --state-dir data/state [--news] [--telegram] [--email]
 .venv/bin/global-research demo --out /tmp/demo     # synthetic data, offline
 .venv/bin/python -m pytest -q
 ```
+
+## GitHub Actions setup
+
+| Workflow | When | Needs |
+|---|---|---|
+| `tests.yml` | every push and pull request | nothing |
+| `macro-daily.yml` | 06:30 UTC weekdays, or by hand | nothing (public sources); commits `data/macro/` |
+| `hourly-alerts.yml` | :07 past each hour 01:00–21:00 UTC weekdays, or by hand | repository secrets `MAIL_USERNAME` (your Gmail address), `MAIL_APP_PASSWORD` (a Gmail app password, not your login password), `MAIL_TO`; optional `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` |
+
+Add secrets under the repository's Settings → Secrets and variables → Actions. Scheduled runs fire only from the default
+branch, so they start once this work is merged. Every source in `config/macro-sources.json` and `config/news-sources.json`
+is marked `verified: false` until a run parses it cleanly.
 
 ## Method and limits
 

@@ -44,3 +44,14 @@ Call `get_price_history` with security_type IND, exchange CBOE, step ONE_WEEK, s
 
 Copy `time` and `close` verbatim (record schema as in the existing file). Use closes only: the high and low
 fields carry bad prints. `curve.load_rates` rejects a yield above 25%, which catches a lost ×10 scale.
+
+## Seal and check the week's data (main session, after everything above)
+
+1. `global-research manifest data/snapshots/<date>` once every file, including `options.json`, is written.
+   A file added later counts as "extra" and the loader then refuses the folder. After refreshing `rates.json`,
+   re-run `global-research manifest data/history/weekly_long`.
+2. `global-research quality --snapshot data/snapshots/<date> --previous data/snapshots/<last week> --out reports/<date>/quality`.
+   A non-zero exit means a changed file or an identity problem (wrong venue, currency, type or contract id): fix it before
+   running the monitor. Paste `quality.md` into the week's Improvement Log entry (questions 1 and 6).
+3. Before the monitor, bring in the latest official macro snapshot from the default branch
+   (`git fetch origin main && git checkout origin/main -- data/macro`), where the daily workflow commits it.

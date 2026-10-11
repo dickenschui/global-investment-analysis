@@ -95,6 +95,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
         "others": others,
         "data_quality": mon.get("data_quality"),
         "portfolio": dec.get("portfolio"),
+        "stress": dec.get("stress"),
         "investor": D.INVESTOR,
         "links": notify.LINKS,
     }
@@ -111,7 +112,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
                                                "legs", "debit", "debit_per_contract", "breakeven", "breakeven_move",
                                                "max_loss", "max_gain", "reward_risk", "prob_profit", "iv", "one_sd_move",
                                                "return_at_1sd", "scenarios", "earnings")})
-        out["options"] = {"ideas": ideas, "policy": opt["policy"]}
+        out["options"] = {"ideas": ideas, "policy": opt["policy"], "chain_issues": opt.get("chain_issues")}
     if bt:
         st = bt["strategy"]
         curve = st["curve"]

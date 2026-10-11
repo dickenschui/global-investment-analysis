@@ -111,3 +111,19 @@ def test_sleeve_cap_is_enforced_in_the_output():
     assert len(syms) == len(set(syms))                                   # one idea per underlying
     assert sum(i["premium_at_risk"] for i in res["ideas"]) <= O.SLEEVE_CAP * 1_000_000 + 1e-6
     assert res["sleeve_used"] <= O.SLEEVE_CAP
+
+
+
+def test_flagged_contract_screens_out_the_idea_and_payoff_matches():
+    contracts = [{"right": "C", "strike": k, "bid": b, "ask": b * 1.05, "iv": 0.30, "open_interest": 500}
+                 for k, b in [(100, 6.0), (105, 3.8), (110, 2.3)]]
+    chain = {"retrieved_at_utc": "2026-10-09T20:00:00Z",
+             "underlyings": [{"symbol": "AAA", "last": 100.0, "expiries": [{"expiry": "2026-12-18", "contracts": contracts}]}]}
+    dec = {"calls": [{"symbol": "AAA", "stance": "Accumulate"}]}
+    out = O.build_ideas(chain, dec, "2026-10-09")
+    assert out["chain_issues"] == [] and out["ideas"]
+    contracts[2]["bid"] = 0.0                                   # 110 call: ask with no bid
+    out = O.build_ideas(chain, dec, "2026-10-09")
+    assert any(q["strike"] == 110 for q in out["chain_issues"])
+    assert all(110 not in [l["strike"] for l in i["legs"]] for i in out["ideas"])
+    assert any("chain check failed" in s["reason"] and "110C" in s["reason"] for s in out["skipped"])

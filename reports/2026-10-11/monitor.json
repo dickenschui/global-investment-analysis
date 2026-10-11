@@ -2506,6 +2506,21 @@
    "topic": "Credit",
    "reading": "High-yield keeping pace with investment grade (credit calm)",
    "evidence": "3m: HYG -3.1% vs LQD -4.7% (spread +1.6%)"
+  },
+  {
+   "topic": "Yield curve",
+   "reading": "Curve upward-sloping, steepening",
+   "evidence": "10y 5.24% vs 3m 4.06% (spread +1.19 pts, +0.31 pts over 13 weeks; 43% of weeks since 2009 were at or below this), week to 2026-10-09"
+  },
+  {
+   "topic": "Term premium",
+   "reading": "Long end paying over 5-year",
+   "evidence": "30y 5.60% vs 5y 5.02% (spread +0.58 pts)"
+  },
+  {
+   "topic": "Volatility term structure",
+   "reading": "Contango: near-term volatility below 3-month (normal)",
+   "evidence": "VIX 14.84 / VIX3M 17.77 = 0.84, week to 2026-10-09"
   }
  ],
  "macro_links": [
@@ -2900,6 +2915,8 @@
   "instruments_configured": 98,
   "with_prices": 98,
   "missing": [],
-  "stale_over_10_days": []
+  "stale_over_10_days": [],
+  "rates": null,
+  "macro": null
  }
 }

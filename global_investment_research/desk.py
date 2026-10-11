@@ -111,6 +111,31 @@ def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str
             "names add up. Capping clusters was tested and lowered the Sharpe ratio, so sizes are unchanged: use this to "
             "choose between overlapping names.")
 
+    st = dec.get("stress")
+    if st:
+        def verdict(r):
+            if not r["complete"]:
+                return H.esc(f"No verdict: {', '.join(r['missing'])} had no history ({H.pct(r['missing_weight'], signed=False)} of the book)")
+            return "Within tolerance" if not r["breach_full"] else "<b>Breaches tolerance at full size</b>"
+        srows = [[f"<b>{H.esc(r['episode'])}</b><br><span class=\"mut\">{H.esc(r['start'])} to {H.esc(r['end'])}</span>",
+                  H.pct(r["full"]), H.pct(r["half"]), verdict(r),
+                  H.esc(", ".join(r["proxied"]) or "none")] for r in st["episodes"]]
+        sec = H.table(["Episode", "Full size", "Half size", f"Against the {H.pct(st['tolerance'], signed=False)} tolerance",
+                       "Market fund used for (no history)"], srows, numeric={1, 2}, wrap={0, 3, 4})
+        sg = st.get("sg_income")
+        if sg:
+            grows = [[H.esc(r["episode"]), H.pct(r["price_change"]), H.pct(r["fx_change"]), H.pct(r["payout_cut"], signed=False),
+                      H.pct(r["capital_change"]), H.pct(r["income_change"])] for r in sg["rows"] if "payout_cut" in r]
+            gaps = [f"{r['episode']}: {r['reason']}" for r in sg["rows"] if "payout_cut" not in r]
+            sec += ("<h3>Singapore income sleeve in GBP</h3>" + H.table(
+                ["Episode", "ES3 price", "SGD in GBP", "Payout cut", "Sleeve capital", "Sleeve income"], grows,
+                numeric={1, 2, 3, 4, 5}) + f'<p class="mut">Basket: {sg["names"]} SG names, equal weight, average sustainable '
+                f'yield {H.pct(sg["basket_yield"], signed=False, digits=2)} ({sg["in_band"]} inside 6–8%). Payout cuts are '
+                f'assumptions; history cannot measure them. {H.esc("; ".join(gaps))}</p>')
+        body += H.section(f"Stress test: this week's book through past crises ({H.esc(st['base_currency'])})", sec,
+                          f"Gross {H.pct(st['gross_full'], signed=False)} if every Accumulate and Hold name is held at max size. "
+                          + H.esc(st["limits"]))
+
     # 4. Income desk
     inc = [c for c in calls if c.get("income")]
     inc.sort(key=lambda c: (STANCE_ORDER_INC.get(c["income_call"]["stance"], 9), -(c["income"]["yield"] or 0)))

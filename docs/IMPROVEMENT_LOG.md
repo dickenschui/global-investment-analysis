@@ -102,3 +102,33 @@ Two independent reviews: a code and methodology audit of this repo, and a compar
   - A whole-portfolio stress test calibrated from our 19-year history.
 - **Next improvement:** attach the connectors (owner), then add a SHA-256 manifest written at collection time and checked when loading.
 
+
+### 2026-10-11 (ChatGPT app improvements adopted; new data sources)
+- **Adopted from the ChatGPT app, rebuilt and tested here:**
+  - Delivery without Claude connectors: `hourly-alerts.yml` (Yahoo pulse, Gmail SMTP, optional Telegram) and `macro-daily.yml` on GitHub Actions.
+  - Condition-state alerting: a notice goes out when a condition first appears or worsens, re-arms only when a fresh quote shows it has cleared, and stays pending until a channel confirms delivery. A 90-minute freshness gate and a heartbeat warning cover the monitor's own gaps (not overnight or weekends).
+  - SHA-256 manifests: the loader now refuses a snapshot whose files changed after collection. Contract identity checks and a weekly quality review feed questions 1 and 6 of this log.
+  - Primary-source headlines (Fed, BLS, BEA, BoE, ECB and others) attached to URGENT alerts as context, with XML entity declarations refused.
+  - Whole-portfolio stress test from our own 19-year history in GBP (see below), and an option-chain check plus exact payoff cross-check before an idea is shown.
+  - Journal: a required invalidation condition, Open/Closed status, and every revision kept.
+- **Fixed rather than copied:** their Treasury URL typo, a shared concurrency group across workflows, checks written as string literals, and use of unadjusted closes. Our heartbeat counts only missed scheduled runs, so overnight and weekend breaks are not reported as outages.
+- **New data:**
+  - IBKR CBOE indices for 5, 10 and 30-year Treasury yields and VIX3M (weekly since 2009). The monitor now reads curve shape (10y−3m +1.19 pts, steepening), term premium (30y−5y +0.58 pts) and volatility term structure (VIX/VIX3M 0.84, contango).
+  - 30 official series configured (FRED rates, spreads, inflation, claims and financial conditions; ECB FX; Bank Rate; ONS CPI and CPIH; Treasury par curve; World Bank GDP). These are fetched on GitHub Actions because they are blocked here. All are `verified: false` until the first run.
+- **Stress test this week (Accumulate+Hold at max size, 74.2% gross, GBP):**
+
+  | Episode | Full size | Half size | Verdict |
+  |---|---|---|---|
+  | GFC | −17.6% | −8.8% | none: 13% of the book had no history |
+  | Euro crisis | −4.4% | −2.2% | none: same gap |
+  | China/oil | −4.8% | −2.4% | within 20% |
+  | Covid crash | −14.0% | −7.0% | within 20% |
+  | 2022 rates shock | −1.5% | −0.7% | within 20% |
+
+  The SG income sleeve lost 18–25% of capital in GBP in the China/oil and Covid windows. With a 20% payout cut, its income fell 14–18%. A stronger SGD cushioned 2022.
+- **Chain check:** 154 contracts were checked and 1 issue found (FXI 2027-01-15 31P: an ask with no bid). No idea used it.
+- **Limits:**
+  - No new source has run live yet: news feeds, Yahoo, FRED, ECB, BoE, ONS, Treasury and World Bank are all unproven until the first Actions run.
+  - HKMA, MAS and SingStat are not configured; the endpoints were not confirmed or need keys.
+  - Stress returns are price-only weekly closes with weights held fixed.
+- **Next improvement:** merge, add the mail secrets, run both workflows by hand, and set `verified: true` source by source from the run log.

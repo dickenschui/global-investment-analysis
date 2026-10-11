@@ -121,7 +121,7 @@ def fmt_pct(x) -> str:
 
 
 def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days: int = 372,
-                  rates: pd.DataFrame | None = None) -> dict:
+                  rates: pd.DataFrame | None = None, macro: dict | None = None) -> dict:
     # One common look-back window, so a source that returns extra history (e.g. 2 years
     # for one instrument) does not change drawdown or correlation baselines.
     prices = prices[prices.index > prices.index.max() - pd.Timedelta(days=window_days)]
@@ -143,6 +143,20 @@ def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days
             regime += curve.curve_readings(rates, prices["VIX"] if "VIX" in prices else None)
         else:
             rates_note = f"curve history ends {rates.index.max().date() if len(rates) else 'before the window'}: refresh rates.json"
+    macro_note = None
+    if macro is not None:  # official series fetched daily on GitHub Actions (data/macro/latest.json)
+        got = pd.Timestamp(str(macro.get("retrieved_at", ""))[:10] or None)
+        if pd.isna(got) or got < stale_cutoff:
+            macro_note = f"official macro snapshot from {macro.get('retrieved_at') or 'unknown date'} is stale: not used"
+        else:
+            from . import macro_sources
+            have = {r["topic"] for r in regime}
+            for r in macro_sources.readings(macro):
+                if r["reading"] == macro_sources.NA:
+                    continue  # reported in the macro snapshot's own failure list
+                r = {**r, "topic": r["topic"] + (" (official)" if r["topic"] in have else ""),
+                     "evidence": r["evidence"] + f" [official source, fetched {macro['retrieved_at'][:10]}]"}
+                regime.append(r)
     return {
         "as_of": prices.index.max().date().isoformat(),
         "bars_per_year": bpy,
@@ -155,7 +169,7 @@ def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days
         "events": event_reactions(prices, events_csv),
         "data_quality": {"instruments_configured": len(meta), "with_prices": len(metrics),
                          "missing": missing, "stale_over_10_days": sorted(stale),
-                         "rates": rates_note},
+                         "rates": rates_note, "macro": macro_note},
     }
 
 

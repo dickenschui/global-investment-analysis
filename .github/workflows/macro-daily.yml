@@ -1,0 +1,73 @@
+name: Daily macro data
+
+# Fetches official macro series (FRED, ECB, BoE, ONS, US Treasury, World Bank) that are
+# blocked inside Claude, and commits data/macro/ to the branch this run is on.
+on:
+  schedule:
+    - cron: '30 6 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: macro-daily-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install package
+        run: python -m pip install -e '.[test]'
+      - name: Fetch macro series into data/macro
+        id: fetch
+        # Exits non-zero only when every series failed; partial failures are recorded in macro.json.
+        run: global-research macro --config config/macro-sources.json --out data/macro
+      - name: Summarise sources
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path('data/macro/latest.json')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('## Daily macro data\n\n')
+              if not p.exists():
+                  out.write('No snapshot written; inspect the fetch step.\n')
+                  raise SystemExit(0)
+              d = json.loads(p.read_text())
+              s = d['summary']
+              out.write(f"Retrieved {d['retrieved_at']}: {s['ok']}/{s['configured']} series ok, {s['failed']} failed.\n\n")
+              out.write('| id | status | latest | error |\n|---|---|---|---|\n')
+              for sid, r in d['series'].items():
+                  latest = r.get('latest') or {}
+                  out.write(f"| {sid} | {r['status']} | {latest.get('date', '')} {latest.get('value', '')} | {r.get('error', '')} |\n")
+          PY
+      - name: Commit data/macro to this branch
+        if: always() && hashFiles('data/macro/latest.json') != ''
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/macro
+          if git diff --cached --quiet; then
+            echo "No macro changes to commit"
+            exit 0
+          fi
+          git commit -m "Daily macro data $(date -u +%Y-%m-%d)"
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${BRANCH}"; then exit 0; fi
+            git pull --rebase origin "$BRANCH"
+          done
+          echo "Push failed after 3 attempts" >&2
+          exit 1

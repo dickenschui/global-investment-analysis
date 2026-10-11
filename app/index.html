@@ -484,6 +484,7 @@ function rToday() {
         <div><span>Portfolio volatility</span><b>${pct(D.portfolio.vol, false)}</b></div><div><span>If independent</span><b>${pct(D.portfolio.vol_if_independent, false)}</b></div></div>
       ${D.portfolio.clusters.length ? `<div style="display:grid;gap:8px">${D.portfolio.clusters.sort((a, b) => b.risk_before - a.risk_before).map(g => `<div class="flag warn"><b class="mono">${g.members.map(esc).join(" · ")}</b><span>Move together: ${pct(g.risk_before, false)} combined risk at the exits. Treat as one bet.</span></div>`).join("")}</div>` : ""}
       <p class="note">From the last 52 weekly returns. Capping these clusters was tested on 19 years and lowered the Sharpe ratio, so sizes are unchanged; use this to choose between overlapping names.</p></div>` : ""}
+    ${D.stress ? stressPanel(D.stress) : ""}
     <div class="grid2">
       <div class="panel"><header><h2>Macro readings</h2>${D.changes?.length ? `<span class="chip info">${D.changes.length} changed</span>` : `<span class="mut small">no flips since last week</span>`}</header>
         <ul class="list">${D.regime.map(r => `<li><span class="t">${esc(r.topic)}</span><span><b>${esc(r.reading)}</b><br><span class="small mut">${esc(r.evidence)}</span></span></li>`).join("")}</ul></div>
@@ -650,8 +651,24 @@ function rOptions() {
           <div><span>Reward : risk</span><b>${i.reward_risk == null ? "open" : num(i.reward_risk, 1) + " : 1"}</b></div><div><span>Return at 1σ</span><b class="${cls(i.return_at_1sd)}">${pct(i.return_at_1sd, true, 0)}</b></div></div>
         <div class="bars" aria-label="Return on premium if the underlying moves">${Object.entries(i.scenarios || {}).map(([k, v]) => `<div><i style="height:${Math.max(3, Math.abs(v) / maxBar * 100)}%;background:var(--${v >= 0 ? "up" : "down"})" title="${esc(k)}: ${pct(v, true, 0)}"></i><span>${esc(k)}</span></div>`).join("")}</div>
         ${i.earnings && ["spans", "unverified"].includes(i.earnings.status) ? `<div class="flag warn small">Earnings: ${esc(i.earnings.text)}</div>` : ""}
-        <p class="note">Bars: return on the premium at expiry if ${esc(i.symbol)} moves by the amount shown. The stock's own call is ${esc(i.stance)}.</p></article>`; }).join("")}</div>`;
+        <p class="note">Bars: return on the premium at expiry if ${esc(i.symbol)} moves by the amount shown. The stock's own call is ${esc(i.stance)}.</p></article>`; }).join("")}</div>
+    ${o.chain_issues ? `<div class="panel"><header><h2>Chain check</h2><span class="chip ${o.chain_issues.length ? "warn" : ""}">${o.chain_issues.length}</span></header>
+      ${o.chain_issues.length ? `<ul class="list">${o.chain_issues.map(q => `<li><span class="t mono">${esc(q.symbol)}</span><span class="mono small">${esc(q.expiry)} ${esc(q.strike)}${esc(q.right)}</span><span class="small mut">${esc(q.issue)}</span></li>`).join("")}</ul>` : `<p class="small mut">No quote problems in the saved chains.</p>`}
+      <p class="note">Ideas using a flagged contract are screened out. Each idea's payoff is also recomputed exactly and must match.</p></div>` : ""}`;
   bindPv();
+}
+
+function stressPanel(st) {
+  const verdict = r => !r.complete ? `<span class="mut">No verdict: ${r.missing.map(esc).join(", ")} had no history (${pct(r.missing_weight, false)})</span>`
+    : r.breach_full ? `<b class="neg">Breaches at full size</b>` : `Within tolerance`;
+  const sg = st.sg_income, sgRows = sg ? sg.rows.filter(r => r.payout_cut != null) : [];
+  return `<div class="panel"><header><h2>Stress test in ${esc(st.base_currency)}</h2><span class="mut small">This week's book through past crises, against your ${pct(st.tolerance, false, 0)} limit</span></header>
+    <div class="tw"><table><thead><tr><th>Episode</th><th class="n">Full size</th><th class="n">Half size</th><th>Verdict</th><th>Market fund used for</th></tr></thead><tbody>
+    ${st.episodes.map(r => `<tr><td><b>${esc(r.episode)}</b><br><span class="small mut mono">${esc(r.start.slice(0, 7))} to ${esc(r.end.slice(0, 7))}</span></td><td class="n ${cls(r.full)}">${pct(r.full)}</td><td class="n ${cls(r.half)}">${pct(r.half)}</td><td class="small">${verdict(r)}</td><td class="small mut">${r.proxied.map(esc).join(", ") || "none"}</td></tr>`).join("")}</tbody></table></div>
+    ${sgRows.length ? `<h3 style="margin-top:14px">Singapore income sleeve</h3><div class="tw"><table><thead><tr><th>Episode</th><th class="n">ES3 price</th><th class="n">SGD in ${esc(st.base_currency)}</th><th class="n">Payout cut</th><th class="n">Sleeve capital</th><th class="n">Sleeve income</th></tr></thead><tbody>
+      ${sgRows.map(r => `<tr><td>${esc(r.episode)}</td><td class="n">${pct(r.price_change)}</td><td class="n">${pct(r.fx_change)}</td><td class="n">${pct(r.payout_cut, false, 0)}</td><td class="n ${cls(r.capital_change)}">${pct(r.capital_change)}</td><td class="n ${cls(r.income_change)}">${pct(r.income_change)}</td></tr>`).join("")}</tbody></table></div>
+      <p class="note">${sg.names} SG names, equal weight, sustainable yield ${pct(sg.basket_yield, false, 2)} (${sg.in_band} inside 6–8%). Payout cuts are assumptions.</p>` : ""}
+    <p class="note">Gross ${pct(st.gross_full, false)} at max size. ${esc(st.limits)}</p></div>`;
 }
 
 /* ---------- Evidence ---------- */

@@ -323,6 +323,15 @@
   }
  ],
  "sleeve_used": 0.0474665,
+ "chain_issues": [
+  {
+   "symbol": "FXI",
+   "expiry": "2027-01-15",
+   "strike": 31,
+   "right": "P",
+   "issue": "ask quoted with zero or missing bid"
+  }
+ ],
  "policy": {
   "sleeve_cap": 0.05,
   "per_trade": 0.01,
