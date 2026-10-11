@@ -127,3 +127,16 @@ def test_flagged_contract_screens_out_the_idea_and_payoff_matches():
     assert any(q["strike"] == 110 for q in out["chain_issues"])
     assert all(110 not in [l["strike"] for l in i["legs"]] for i in out["ideas"])
     assert any("chain check failed" in s["reason"] and "110C" in s["reason"] for s in out["skipped"])
+
+
+def test_telegram_refusal_reports_reason_without_token():
+    import io
+    import urllib.error
+    from global_investment_research import notify
+
+    def opener(req, timeout):
+        raise urllib.error.HTTPError(req.full_url, 400, "Bad Request", {},
+                                     io.BytesIO(b'{"ok":false,"description":"Bad Request: chat not found"}'))
+    with pytest.raises(RuntimeError) as e:
+        notify.send_telegram("hi", token="SECRET123", chat_id="1", opener=opener)
+    assert "chat not found" in str(e.value) and "400" in str(e.value) and "SECRET123" not in str(e.value)

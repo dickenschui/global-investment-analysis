@@ -10,6 +10,7 @@ import html
 import json
 import os
 import urllib.parse
+import urllib.error
 import urllib.request
 
 LINKS = {
@@ -131,8 +132,15 @@ def send_telegram(text: str, token: str | None = None, chat_id: str | None = Non
     data = urllib.parse.urlencode({"chat_id": chat_id, "text": text, "parse_mode": "HTML",
                                    "disable_web_page_preview": "true"}).encode()
     req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=data)
-    with opener(req, timeout=20) as r:
-        resp = json.loads(r.read().decode())
+    try:
+        with opener(req, timeout=20) as r:
+            resp = json.loads(r.read().decode())
+    except urllib.error.HTTPError as exc:  # Telegram explains refusals in the body; the URL (with the token) is not echoed
+        try:
+            why = json.loads(exc.read().decode()).get("description")
+        except Exception:
+            why = None
+        raise RuntimeError(f"Telegram refused the message: HTTP {exc.code} {why or exc.reason}") from None
     if not resp.get("ok"):
         raise RuntimeError(f"Telegram refused the message: {resp.get('description')}")
     return resp
