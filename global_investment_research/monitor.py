@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from . import analytics as an
+from . import analytics as an, curve
 
 MARKET_PROXIES = {"US": "SPY", "UK": "ISF", "SG": "ES3", "HK": "2800", "China": "3188"}
 MACRO_FACTORS = {"US dollar": "UUP", "Long Treasuries": "TLT", "Gold": "GLD", "Crude oil": "USO",
@@ -120,7 +120,8 @@ def fmt_pct(x) -> str:
     return "n/a" if x is None else f"{x * 100:+.1f}%"
 
 
-def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days: int = 372) -> dict:
+def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days: int = 372,
+                  rates: pd.DataFrame | None = None) -> dict:
     # One common look-back window, so a source that returns extra history (e.g. 2 years
     # for one instrument) does not change drawdown or correlation baselines.
     prices = prices[prices.index > prices.index.max() - pd.Timedelta(days=window_days)]
@@ -134,6 +135,14 @@ def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days
           "ret_1y": m["ret_1y"], "trend": m["trend"]["state"]}
          for s, m in metrics.items() if meta[s]["kind"] == "sector_proxy"),
         key=lambda r: (r["ret_3m"] is None, -(r["ret_3m"] or 0)))
+    regime = regime_readings(metrics)
+    rates_note = None
+    if rates is not None:
+        rates = rates[rates.index <= prices.index.max()]  # never read past the snapshot week
+        if len(rates) and rates.index.max() >= stale_cutoff:
+            regime += curve.curve_readings(rates, prices["VIX"] if "VIX" in prices else None)
+        else:
+            rates_note = f"curve history ends {rates.index.max().date() if len(rates) else 'before the window'}: refresh rates.json"
     return {
         "as_of": prices.index.max().date().isoformat(),
         "bars_per_year": bpy,
@@ -141,11 +150,12 @@ def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days
         "markets": {m: {"proxy": p, "proxy_metrics": metrics.get(p), "breadth": market_breadth(metrics, meta, m)}
                     for m, p in MARKET_PROXIES.items()},
         "us_sectors": sectors,
-        "regime": regime_readings(metrics),
+        "regime": regime,
         "macro_links": macro_links(prices),
         "events": event_reactions(prices, events_csv),
         "data_quality": {"instruments_configured": len(meta), "with_prices": len(metrics),
-                         "missing": missing, "stale_over_10_days": sorted(stale)},
+                         "missing": missing, "stale_over_10_days": sorted(stale),
+                         "rates": rates_note},
     }
 
 

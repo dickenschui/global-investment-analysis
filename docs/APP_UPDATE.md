@@ -20,6 +20,9 @@ It reads its numbers from `data.json` published beside it, so a weekly refresh r
    price logged with this week's close in `app/data.json` and note in the Improvement Log entry:
    - decisions whose review date has passed, and whether they worked (a sale works when the price falls);
    - decisions taken against the rules (for example a Buy on an Avoid name, or a hold below the exit level);
+   - open entries whose own invalidation condition has been met this week (each entry records one when logged);
+   - revisions: an entry's `history` keeps every earlier version, so check whether a thesis or invalidation was
+     rewritten after the price moved against it (that is moving the goalposts, and worth a note);
    - any pattern worth a rule or checklist change.
    Do not edit or delete journal rows.
 

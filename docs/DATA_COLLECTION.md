@@ -27,3 +27,20 @@ Rules (audit-grade):
 - Keep time and close arrays the same length and in returned order.
 - After writing, run a check script: valid JSON, every config symbol of your group present exactly once, len(time)==len(close) for each, closes all > 0.
 - Final message: a short table of symbol / status / contract_id / exchange / currency / n_weekly_bars, plus any notes. Do not git commit.
+
+## Rates and volatility curve (weekly, main session)
+
+Refresh `data/history/weekly_long/rates.json` each week so the monitor's curve readings stay current
+(the monitor skips them and says "refresh rates.json" when the file ends more than 10 days before the snapshot).
+Call `get_price_history` with security_type IND, exchange CBOE, step ONE_WEEK, step_count 1000, outside_rth false for:
+
+| Symbol | contract_id | Series | Scale |
+|---|---|---|---|
+| IRX | 416748 | 13-week T-bill yield | ten times the yield in percent |
+| FVX | 416730 | 5-year Treasury yield | ten times the yield in percent |
+| TNX | 416921 | 10-year Treasury yield | ten times the yield in percent |
+| TYX | 416933 | 30-year Treasury yield | ten times the yield in percent |
+| VIX3M | 47511905 | 3-month S&P 500 volatility | points |
+
+Copy `time` and `close` verbatim (record schema as in the existing file). Use closes only: the high and low
+fields carry bad prints. `curve.load_rates` rejects a yield above 25%, which catches a lost ×10 scale.

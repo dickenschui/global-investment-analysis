@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import alerts, app_data, backtest, brief, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
+from . import alerts, app_data, backtest, brief, curve, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -61,10 +61,14 @@ def synthetic(universe, weeks=60, seed=7):
     return pd.DataFrame(cols, index=idx), meta
 
 
+RATES_DIR = "data/history/weekly_long"
+
+
 def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str | None, standalone=True,
-                  chains_path: str | Path | None = None):
+                  chains_path: str | Path | None = None, rates_dir: str | Path | None = None):
     out.mkdir(parents=True, exist_ok=True)
-    mon = monitor.build_monitor(prices, meta, events)
+    rates = curve.load_rates(rates_dir) if rates_dir else None
+    mon = monitor.build_monitor(prices, meta, events, rates=rates)
     changes = []
     if state_dir:
         monitor.append_history(mon, state_dir)
@@ -251,7 +255,7 @@ def main(argv=None) -> int:
     if args.cmd == "monitor":
         chains = Path(args.snapshot) / "options.json" if args.snapshot else None
         mon = write_reports(prices, meta, Path(args.out), Path(args.state_dir) if args.state_dir else None, args.events,
-                            chains_path=chains)
+                            chains_path=chains, rates_dir=RATES_DIR)
         dq = mon["data_quality"]
         print(f"Monitor as of {mon['as_of']}: {dq['with_prices']}/{dq['instruments_configured']} instruments; "
               f"missing {dq['missing'] or 'none'}; reports in {args.out}")

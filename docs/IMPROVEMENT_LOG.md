@@ -13,7 +13,7 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 | Earnings dates | **Missing** | An option held through earnings carries a hidden volatility event | Bigdata.com corporate calendar (needs credit) | **Critical** for options |
 | Macro calendar (CPI, payrolls, central banks) | **Missing** | Hourly alerts should know when a release is due | Bigdata.com economic calendar (needs credit) | High |
 | Fundamentals: valuation, margins, FCF, estimates | **Missing** | Trend calls can hide stretched valuations | Financial Datasets (needs credit) or company filings | High |
-| Interest rates and curve (2y/10y, policy rates) | **Partial**: 13-week T-bill from IBKR (cash return in the backtest); curve still proxied by TLT/IEF | Rates drive REITs, growth and FX | Financial Datasets interest rates, or FRED (blocked) | Medium |
+| Interest rates and curve (2y/10y, policy rates) | **Added 2026-10-11**: 3m, 5y, 10y, 30y Treasury yields and VIX3M from IBKR (weekly since 2009); monitor reads curve shape, term premium and volatility term structure. 2-year and policy rates still missing | Rates drive REITs, growth and FX | FRED/ECB/BoE via GitHub Actions (`macro-daily.yml`) | Medium |
 | Credit spreads | **Added 2026-10-11** (HYG vs LQD reading and tilt) | Early warning of risk-off | IBKR | — |
 | Breadth beyond the monitored names | **Partial** | 9–15 names per market is a thin breadth sample | Add equal-weight ETFs (RSP) and advance/decline via IBKR | Medium |
 | News and sentiment | **Missing** | Explains exceptions in hourly alerts | Bigdata.com search/sentiment (needs credit) | Medium |

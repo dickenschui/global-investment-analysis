@@ -602,7 +602,7 @@ function openCall(sym) {
   const lb = $("#sh-live"); if (lb) lb.onclick = async () => { lb.disabled = true; $("#sh-live-msg").textContent = "Asking Interactive Brokers…";
     try { await quote(c); openCall(sym); rerenderBehind(); } catch (e) { $("#sh-live-msg").textContent = mcpMsg(e); lb.disabled = false; } };
   const ch = $("#sh-ch"); if (ch) ch.onclick = () => ask(challengePrompt(c), $("#sh-ch-out"), ch);
-  $("#sh-log").onclick = () => { closeSheet(); S.prefill = c.symbol; show("journal"); };
+  $("#sh-log").onclick = () => { closeSheet(); S.prefill = c.symbol; S.editing = null; show("journal"); };
 }
 function rerenderBehind() { const keep = S.tab; ({today: rToday, decisions: rDecisions, income: rIncome, journal: rJournal})[keep]?.(); }
 function closeSheet() { $("#sheet").hidden = true; $("#scrim").hidden = true; }
@@ -711,42 +711,53 @@ function subscribeJournal() {
   } catch { jState = "error"; }
 }
 const ACTIONS = ["Buy", "Add", "Hold", "Trim", "Sell", "Skip"];
+function hist(j) {  // earlier versions, newest first; written on each revision and never edited
+  const h = Object.entries(j.history || {}).sort((a, b) => b[0].localeCompare(a[0]));
+  if (!h.length) return "";
+  return `<details class="small"><summary class="mut">Version ${esc(j.version || h.length + 1)} · ${h.length} earlier</summary><ul class="list">${h.map(([, v]) =>
+    `<li><span class="mono">v${esc(v.version)}</span><span>${esc(v.action)} at ${px(v.price)} on ${esc(v.date)}${v.status === "Closed" ? " · closed" : ""}<br>${esc(v.reason || "")}${v.invalidation ? `<br><span class="mut">Wrong if: ${esc(v.invalidation)}</span>` : ""}</span></li>`).join("")}</ul></details>`;
+}
 function rJournal() {
   const today = new Date().toISOString().slice(0, 10);
   const canWrite = cap.db && cap.canWrite !== false;
-  const pre = S.prefill ? D.calls.find(c => c.symbol === S.prefill) : null;
+  const ed = S.editing ? journal.find(j => j.id === S.editing) : null;
+  if (S.editing && !ed) S.editing = null;
+  const pre = ed ? D.calls.find(c => c.symbol === ed.symbol) : S.prefill ? D.calls.find(c => c.symbol === S.prefill) : null;
   const all = [...D.calls].sort((a, b) => a.symbol.localeCompare(b.symbol));
-  const due = journal.filter(j => j.review_date && j.review_date <= today);
+  const due = journal.filter(j => j.review_date && j.review_date <= today && j.status !== "Closed");
   $("#v-journal").innerHTML = `
     <div class="grid2">
-      <div class="panel"><header><h2>Log a decision</h2><span class="small mut">Saved for you and the weekly review</span></header>
+      <div class="panel"><header><h2>${ed ? `Revise ${esc(ed.symbol)} entry` : "Log a decision"}</h2><span class="small mut">${ed ? "The previous version is kept in its history" : "Saved for you and the weekly review"}</span></header>
         ${!cap.db ? `<p class="small mut">The journal saves when this page is opened in Claude while signed in.</p>` : !canWrite ? `<p class="small mut">You can read this journal but not add to it.</p>` : `
         <form class="jform" id="jf">
-          <label class="field">Instrument<select class="input" id="j-sym">${all.map(c => `<option value="${esc(c.symbol)}"${pre?.symbol === c.symbol ? " selected" : ""}>${esc(c.symbol)} · ${esc(c.name)}</option>`).join("")}</select></label>
-          <label class="field">Action<select class="input" id="j-act">${ACTIONS.map(a => `<option${pre && pre.stance === "Accumulate" && a === "Buy" ? " selected" : ""}>${a}</option>`).join("")}</select></label>
-          <label class="field">Price<input class="input num" id="j-px" inputmode="decimal" required value="${pre ? (live[pre.symbol]?.price ?? pre.last) : ""}"></label>
-          <label class="field">Weight of portfolio (%)<input class="input num" id="j-w" inputmode="decimal" placeholder="e.g. 1.5" value="${pre && sizing(pre) ? (sizing(pre).w * 100).toFixed(2) : ""}"></label>
-          <label class="field">Date<input class="input" type="date" id="j-date" value="${today}"></label>
-          <label class="field">Review on<input class="input" type="date" id="j-rev" value="${new Date(Date.now() + 91 * 864e5).toISOString().slice(0, 10)}"></label>
-          <label class="field wide">Why (the thesis and what would prove it wrong)<textarea class="input" id="j-why" rows="3" required placeholder="e.g. Oil up-trend intact; exit if it closes below the exit level or Brent loses its 40-week average."></textarea></label>
-          <div class="row wide"><button class="btn primary" type="submit" id="j-save">Save to journal</button><span class="small mut" id="j-msg">The call, exit level and week are saved with it.</span></div>
+          <label class="field">Instrument<select class="input" id="j-sym"${ed ? " disabled" : ""}>${all.map(c => `<option value="${esc(c.symbol)}"${pre?.symbol === c.symbol ? " selected" : ""}>${esc(c.symbol)} · ${esc(c.name)}</option>`).join("")}</select></label>
+          <label class="field">Action<select class="input" id="j-act">${ACTIONS.map(a => `<option${ed ? (ed.action === a ? " selected" : "") : pre && pre.stance === "Accumulate" && a === "Buy" ? " selected" : ""}>${a}</option>`).join("")}</select></label>
+          <label class="field">Price<input class="input num" id="j-px" inputmode="decimal" required value="${ed ? ed.price : pre ? (live[pre.symbol]?.price ?? pre.last) : ""}"></label>
+          <label class="field">Weight of portfolio (%)<input class="input num" id="j-w" inputmode="decimal" placeholder="e.g. 1.5" value="${ed ? (ed.weight != null ? +(ed.weight * 100).toFixed(2) : "") : pre && sizing(pre) ? (sizing(pre).w * 100).toFixed(2) : ""}"></label>
+          <label class="field">Date<input class="input" type="date" id="j-date" value="${ed ? esc(ed.date) : today}"></label>
+          <label class="field">Review on<input class="input" type="date" id="j-rev" value="${ed ? esc(ed.review_date || "") : new Date(Date.now() + 91 * 864e5).toISOString().slice(0, 10)}"></label>
+          <label class="field">Status<select class="input" id="j-st">${["Open", "Closed"].map(x => `<option${(ed?.status || "Open") === x ? " selected" : ""}>${x}</option>`).join("")}</select></label>
+          <label class="field wide">Thesis (why)<textarea class="input" id="j-why" rows="2" required placeholder="e.g. Oil up-trend intact and energy leading the market.">${ed ? esc(ed.reason || "") : ""}</textarea></label>
+          <label class="field wide">Invalidation (what would prove it wrong, decided now)<textarea class="input" id="j-inv" rows="2" required placeholder="e.g. A weekly close below the exit level, or Brent losing its 40-week average.">${ed ? esc(ed.invalidation || "") : ""}</textarea></label>
+          <div class="row wide"><button class="btn primary" type="submit" id="j-save">${ed ? "Save revision" : "Save to journal"}</button>${ed ? `<button class="btn" type="button" id="j-cancel">Cancel</button>` : ""}<span class="small mut" id="j-msg">${ed ? `Version ${(ed.version || 1) + 1}. The original call and exit level stay as logged.` : "The call, exit level and week are saved with it."}</span></div>
         </form>`}
       </div>
       <div class="panel"><header><h2>Review due</h2><span class="chip ${due.length ? "warn" : ""}">${due.length}</span></header>
-        ${due.length ? `<ul class="list">${due.map(j => `<li><span class="t mono">${esc(j.symbol)}</span><span>${esc(j.action)} at ${px(j.price)} on ${esc(j.date)}<br><span class="small mut">Was ${esc(j.stance_at_entry || "")}; review set for ${esc(j.review_date)}</span></span></li>`).join("")}</ul>`
+        ${due.length ? `<ul class="list">${due.filter(j => j.status !== "Closed").map(j => `<li><span class="t mono">${esc(j.symbol)}</span><span>${esc(j.action)} at ${px(j.price)} on ${esc(j.date)}<br><span class="small mut">Was ${esc(j.stance_at_entry || "")}; review set for ${esc(j.review_date)}</span></span></li>`).join("")}</ul>`
           : `<p class="small mut">Nothing due. Entries come up here on their review date, and the weekly review scores them.</p>`}
       </div>
     </div>
     <div class="panel"><header><h2>Decision journal</h2><span class="small mut">${journal.length} ${journal.length === 1 ? "entry" : "entries"}</span>${journal.length && cap.downloads ? `<button class="btn" id="j-csv">Export CSV</button>` : ""}</header>
       ${jState === "loading" && cap.db ? `<p class="small mut">Loading entries…</p>` : jState === "error" ? `<p class="small mut">The journal could not load. Reload the page to try again.</p>` : !journal.length
         ? `<div class="empty"><b>No decisions logged yet.</b><span>Use the form above, or "Log a decision" from any instrument. Each entry records the call and exit level at the time, so the weekly review can score your decisions against the rules.</span></div>`
-        : `<div class="tw"><table><thead><tr><th>Date</th><th>Instrument</th><th>Action</th><th class="n">Price</th><th class="n">Now</th><th class="n">Since</th><th class="n">Weight</th><th>Call then</th><th>Why</th><th>Review</th><th></th></tr></thead><tbody>
+        : `<div class="tw"><table><thead><tr><th>Date</th><th>Instrument</th><th>Action</th><th class="n">Price</th><th class="n">Now</th><th class="n">Since</th><th class="n">Weight</th><th>Call then</th><th>Thesis and invalidation</th><th>Review</th><th></th></tr></thead><tbody>
           ${journal.map(j => { const c = D.calls.find(x => x.symbol === j.symbol), now = live[j.symbol]?.price ?? c?.last, ch = now && j.price ? now / j.price - 1 : null;
             const good = ch == null ? null : ["Sell", "Trim", "Skip"].includes(j.action) ? -ch : ch;
             return `<tr><td class="mono small">${esc(j.date)}</td><td><b class="mono">${esc(j.symbol)}</b></td><td>${esc(j.action)}</td><td class="n">${px(j.price)}</td><td class="n">${px(now)}</td>
             <td class="n ${cls(good)}">${pct(ch)}</td><td class="n">${j.weight != null ? pct(j.weight, false, 2) : "—"}</td><td>${j.stance_at_entry ? stanceChip(j.stance_at_entry) : ""}</td>
-            <td class="small" style="min-width:220px">${esc(j.reason)}</td><td class="mono small ${j.review_date && j.review_date <= today ? "neg" : ""}">${esc(j.review_date || "")}</td>
-            <td>${canWrite ? `<button class="btn ghost small" data-del="${esc(j.id)}">Delete</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>
+            <td class="small" style="min-width:240px">${esc(j.reason)}${j.invalidation ? `<br><span class="mut">Wrong if: ${esc(j.invalidation)}</span>` : ""}${hist(j)}</td>
+            <td class="mono small ${j.review_date && j.review_date <= today && j.status !== "Closed" ? "neg" : ""}">${j.status === "Closed" ? "Closed" : esc(j.review_date || "")}</td>
+            <td>${canWrite ? `<button class="btn ghost small" data-edit="${esc(j.id)}">Revise</button> <button class="btn ghost small" data-del="${esc(j.id)}">Delete</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>
           <p class="note">"Since" is the move from your price to the latest price (live if priced, else this week's close), signed so that positive means the decision is working: a sale gains when the price falls.</p>`}
     </div>`;
   S.prefill = null;
@@ -755,8 +766,22 @@ function rJournal() {
     const sym = $("#j-sym").value, c = D.calls.find(x => x.symbol === sym), price = Number($("#j-px").value), w = $("#j-w").value.trim();
     if (!(price > 0)) { $("#j-msg").textContent = "Enter the price you dealt at (a positive number)."; return; }
     const why = $("#j-why").value.trim(); if (!why) { $("#j-msg").textContent = "Add the reason: it is what the review checks."; return; }
+    const inv = $("#j-inv").value.trim(); if (!inv) { $("#j-msg").textContent = "Add what would prove it wrong: decide it before the market does."; return; }
+    if (ed) {
+      const at = new Date().toISOString(), keys = ["action", "price", "weight", "date", "review_date", "status", "reason", "invalidation"];
+      const prev = Object.fromEntries(keys.map(k => [k, ed[k] ?? null]));
+      const next = {action: $("#j-act").value, price, weight: w ? Number(w) / 100 : null, date: $("#j-date").value,
+        review_date: $("#j-rev").value || null, status: $("#j-st").value, reason: why.slice(0, 1500), invalidation: inv.slice(0, 1000)};
+      if (keys.every(k => String(prev[k] ?? "") === String(next[k] ?? ""))) { $("#j-msg").textContent = "Nothing changed."; return; }
+      $("#j-save").disabled = true; $("#j-msg").textContent = "Saving…";
+      try {
+        await cap.db.doc("journal/" + ed.id).update({...next, updated: at, version: (ed.version || 1) + 1, history: {[at.replace(/[.:]/g, "-")]: {...prev, version: ed.version || 1}}});
+        S.editing = null; toast("Revision saved"); rJournal();
+      } catch (e) { $("#j-save").disabled = false; $("#j-msg").textContent = e.code === "invalid_argument" ? "Not saved: you cannot edit this entry." : "Not saved: the store did not answer. Try again."; }
+      return;
+    }
     const doc = {created: new Date().toISOString(), date: $("#j-date").value, symbol: sym, action: $("#j-act").value, price,
-      weight: w ? Number(w) / 100 : null, reason: why.slice(0, 1500), review_date: $("#j-rev").value || null,
+      weight: w ? Number(w) / 100 : null, reason: why.slice(0, 1500), invalidation: inv.slice(0, 1000), status: $("#j-st").value, version: 1, review_date: $("#j-rev").value || null,
       stance_at_entry: c?.stance || null, exit_at_entry: c?.stop ?? null, buy_zone_at_entry: c?.entry || null, week: D.as_of};
     $("#j-save").disabled = true; $("#j-msg").textContent = "Saving…";
     try { await cap.db.collection("journal").add(doc); toast("Saved to journal"); }
@@ -766,13 +791,15 @@ function rJournal() {
       if (e.code === "invalid_argument") cap.canWrite = false;
     }
   };
+  const cancel = $("#j-cancel"); if (cancel) cancel.onclick = () => { S.editing = null; rJournal(); };
+  document.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => { S.editing = b.dataset.edit; rJournal(); $("#jf")?.scrollIntoView({behavior: "smooth", block: "start"}); });
   document.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
     if (b.dataset.armed !== "1") { b.dataset.armed = "1"; b.textContent = "Confirm delete"; b.classList.add("primary"); setTimeout(() => { if (b.isConnected) { b.dataset.armed = ""; b.textContent = "Delete"; b.classList.remove("primary"); } }, 4000); return; }
     b.disabled = true;
     try { await cap.db.doc("journal/" + b.dataset.del).delete(); toast("Deleted"); } catch { b.disabled = false; toast("Not deleted. Try again."); }
   });
   const csv = $("#j-csv"); if (csv) csv.onclick = async () => {
-    const cols = ["date", "symbol", "action", "price", "weight", "stance_at_entry", "exit_at_entry", "review_date", "reason", "week"];
+    const cols = ["date", "symbol", "action", "price", "weight", "stance_at_entry", "exit_at_entry", "review_date", "status", "reason", "invalidation", "version", "updated", "week"];
     const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
     const text = [cols.join(","), ...journal.map(j => cols.map(k => q(j[k])).join(","))].join("\n");
     try { await cap.downloads.save({filename: `decision-journal-${today}.csv`, data: new Blob([text], {type: "text/csv"})}); }

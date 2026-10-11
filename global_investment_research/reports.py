@@ -68,7 +68,8 @@ def _footer(mon, meta):
     dq = mon["data_quality"]
     return (f"Data: {H.esc(', '.join(srcs))}; weekly closes to {mon['as_of']} in each instrument's quote currency "
             f"(price return, dividends excluded unless stated). {dq['with_prices']}/{dq['instruments_configured']} instruments "
-            f"have prices. Missing: {H.esc(', '.join(dq['missing']) or 'none')}. Trend = price vs 10- and 40-week averages. "
+            f"have prices. Missing: {H.esc(', '.join(dq['missing']) or 'none')}. "
+            + (f"Rates: {H.esc(dq['rates'])}. " if dq.get("rates") else "") + "Trend = price vs 10- and 40-week averages. "
             "† 1-year figure spans 51 weeks where the vendor returned 52 weekly bars. "
             "Research screen only, not investment advice; verify against issuer filings before acting.")
 
