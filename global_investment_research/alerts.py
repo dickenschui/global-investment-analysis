@@ -3,16 +3,18 @@
 Compares a 'pulse' of live quotes against this week's Decision Desk levels and each
 instrument's own volatility, and reports only exceptions. Each exception carries a
 severity (URGENT / WARN / INFO), the rule, the evidence and the action from the Handbook.
-Already-reported exceptions are suppressed for the rest of the day via a state file.
+Already-reported exceptions are suppressed for the rest of the day via a state file (new_since_last), or by
+condition state in alert_state.py, which re-arms when a condition clears.
 
-Pulse schema: {"retrieved_at_utc": str, "quotes": [{"symbol", "last", "prior_close", "data_status"}]}
+Pulse schema: {"retrieved_at_utc": str, "quotes": [{"symbol", "last", "prior_close", "data_status", "ts"}]}
+`ts` (optional) is the quote's own time, epoch seconds or ISO; quotes older than max_age_minutes are stale.
 """
 from __future__ import annotations
 
 import html
 import json
 import math
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 DAILY_WARN_SD = 2.5      # daily move in standard deviations of the instrument's own volatility
@@ -21,6 +23,8 @@ VIX_STRESS = 25.0
 VIX_JUMP = 0.20          # +20% day-on-day
 HKD_PEG_BAND = (7.75, 7.85)
 FX_URGENT_MOVE = 0.015   # 1.5% daily move in a major pair
+MAX_QUOTE_AGE_MIN = 90   # a quote older than this at retrieval is not live movement
+FUTURE_SKEW_MIN = 5      # clock skew tolerated before a quote time "in the future" is rejected
 MACRO = {"VIX", "TLT", "IEF", "UUP", "GLD", "SLV", "USO", "CPER", "UNG", "DBA"}
 MARKETS = {"SPY": "US", "QQQ": "US", "ISF": "UK", "ES3": "SG", "2800": "HK", "3188": "China"}
 
@@ -45,17 +49,44 @@ def _is_fx(sym: str, kinds: dict | None) -> bool:
     return len(a) == 3 and len(b) == 3 and a.isalpha() and b.isalpha()
 
 
-def normalise_quotes(pulse: dict, mon: dict) -> tuple[dict, list[str]]:
+def _utc(value) -> datetime | None:
+    """Epoch seconds or ISO string -> aware UTC datetime; None if absent or unreadable."""
+    try:
+        if isinstance(value, bool) or value is None:
+            return None
+        if isinstance(value, (int, float)):
+            return datetime.fromtimestamp(value, timezone.utc)
+        d = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        return (d if d.tzinfo else d.replace(tzinfo=timezone.utc)).astimezone(timezone.utc)
+    except (ValueError, OverflowError, OSError, TypeError):
+        return None
+
+
+def quote_age_minutes(quote: dict, retrieved_at_utc) -> float | None:
+    """Minutes between the quote's own time (`ts`) and retrieval; None when either is missing or unreadable."""
+    t, r = _utc(quote.get("ts")), _utc(retrieved_at_utc)
+    return None if t is None or r is None else (r - t).total_seconds() / 60
+
+
+def normalise_quotes(pulse: dict, mon: dict, *, max_age_minutes: float = MAX_QUOTE_AGE_MIN) -> tuple[dict, list[str]]:
     """Usable quotes in the same units as this week's levels. London lines quote live prices in pence while
     the weekly closes (and so every exit and trigger) are in pounds: a quote about 100x the weekly close is
-    divided by 100, whoever collected it. Frozen quotes (market closed, weekend) are set aside as stale."""
+    divided by 100, whoever collected it. Set aside as stale: frozen quotes (market closed, weekend), quotes whose
+    `ts` is more than max_age_minutes before the pulse's retrieved_at_utc, and quotes whose `ts` is unreadable or
+    in the future. Quotes without `ts` are judged on data_status alone."""
     q, stale = {}, []
+    retrieved = pulse.get("retrieved_at_utc")
     for x in pulse["quotes"]:
         if not x.get("last"):
             continue
         if "FROZEN" in str(x.get("data_status") or "").upper():
             stale.append(x["symbol"])
             continue
+        if x.get("ts") is not None and retrieved:
+            age = quote_age_minutes(x, retrieved)
+            if age is None or age > max_age_minutes or age < -FUTURE_SKEW_MIN:
+                stale.append(x["symbol"])
+                continue
         ref = (mon["metrics"].get(x["symbol"]) or {}).get("last")
         k = 100.0 if ref and x["last"] / ref > 50 else 1.0
         q[x["symbol"]] = {**x, "last": x["last"] / k,
@@ -63,8 +94,9 @@ def normalise_quotes(pulse: dict, mon: dict) -> tuple[dict, list[str]]:
     return q, stale
 
 
-def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None, kinds: dict | None = None) -> list[dict]:
-    q, _ = normalise_quotes(pulse, mon)
+def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None, kinds: dict | None = None, *,
+             max_age_minutes: float = MAX_QUOTE_AGE_MIN) -> list[dict]:
+    q, _ = normalise_quotes(pulse, mon, max_age_minutes=max_age_minutes)
     calls = {c["symbol"]: c for c in dec["calls"]}
     out = []
     for sym, x in q.items():
@@ -152,7 +184,16 @@ def alert_text(alerts: list[dict], as_of: str, stale: list[str] | None = None) -
     urgent = sum(a["severity"] == "URGENT" for a in alerts)
     lines = [f"<b>{'URGENT: ' if urgent else ''}Market exceptions · {e(as_of)}</b>"]
     for a in alerts:
-        lines += [f"{icon[a['severity']]} <b>{e(a['symbol'])}: {e(a['rule'])}</b>", e(a["evidence"]), f"→ {e(a['action'])}", ""]
+        lines += [f"{icon[a['severity']]} <b>{e(a['symbol'])}: {e(a['rule'])}</b>", e(a["evidence"]), f"→ {e(a['action'])}"]
+        if a.get("cleared_at"):
+            lines.append(f"<i>Condition cleared at {e(a['cleared_at'])}; resent because this notice was not delivered earlier.</i>")
+        for h in a.get("context") or []:  # headline context from news.headline_context: unverified, for review
+            when = f" ({e(h['published'][:16].replace('T', ' '))})" if h.get("published") else ""
+            title = e(h["title"])
+            link = f'<a href="{e(h["link"], quote=True)}">{title}</a>' if h.get("link") else title
+            src = f" · {e(h['source'])}" if h.get("source") else ""
+            lines.append(f"📰 {link}{when}{src}")
+        lines.append("")
     if stale:
         lines.append(f"<i>No live quote for: {e(', '.join(stale))}</i>")
     lines.append('<a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a>')

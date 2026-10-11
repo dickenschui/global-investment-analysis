@@ -1,0 +1,36 @@
+{
+ "algorithm": "sha256",
+ "files": {
+  "credit.json": {
+   "bytes": 6840,
+   "sha256": "18444c30f2c09baf2250c6f7ce0befb8e2d3d34dffbed3eba1a35049a4e36e78"
+  },
+  "hk_cn.json": {
+   "bytes": 64237,
+   "sha256": "3c24e8ca47033eda57a798450e78f96be754ee75a62943d76e076c8da26f0434"
+  },
+  "options.json": {
+   "bytes": 69656,
+   "sha256": "3c1292e030a60d73e97e40f6b500cda6431c92f2f4f86788238cc3c5dd70fe4e"
+  },
+  "sg.json": {
+   "bytes": 64772,
+   "sha256": "54931ec3547ad0a98f172b8aff1cd0bc61ad39424f339a5104bf9878b0463f72"
+  },
+  "uk.json": {
+   "bytes": 59620,
+   "sha256": "0ec9bc5aca13b68fc667d1c7b6ee3a6c26abea7d5a4c293c66e43ae34cc37289"
+  },
+  "us_equity.json": {
+   "bytes": 52843,
+   "sha256": "c83acbb59004129e0ace07e9bc54957b2fe7547b2fd8e3fa9ec8497461937117"
+  },
+  "us_sector_macro.json": {
+   "bytes": 95043,
+   "sha256": "0e89a6179a11d83668f76a1b145de774af59de8ea6d73cbb50fd0a3c3552c1fc"
+  }
+ },
+ "instruments": [],
+ "note": "Integrity manifest: verify with integrity.verify_manifest; not an instrument group.",
+ "schema_version": 1
+}

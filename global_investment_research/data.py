@@ -12,6 +12,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from . import integrity
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_UNIVERSE = REPO_ROOT / "config" / "universe.json"
 
@@ -24,12 +26,51 @@ def load_universe(path: str | Path = DEFAULT_UNIVERSE) -> dict:
     return cfg
 
 
-def load_ibkr_snapshot(directory: str | Path, universe: dict) -> tuple[pd.DataFrame, dict]:
-    """Read every <group>.json written by the IBKR collection step."""
+# Files in a snapshot or history directory that are not instrument groups: option chains and the
+# T-bill series are loaded separately, and the manifest only records hashes.
+NON_GROUP_FILES = ("options.json", "rates.json", integrity.MANIFEST)
+
+
+def snapshot_files(directory: str | Path) -> list[Path]:
+    """The <group>.json files of a snapshot or history directory, sorted by name."""
+    return sorted(f for f in Path(directory).glob("*.json") if f.name not in NON_GROUP_FILES)
+
+
+def snapshot_rows(directory: str | Path) -> list[tuple[str, dict]]:
+    """Every instrument row as (group file name, row), in file order; duplicates are kept so callers can see them."""
+    out = []
+    for f in snapshot_files(directory):
+        for row in json.loads(f.read_text(encoding="utf-8")).get("instruments") or []:
+            out.append((f.name, row))
+    return out
+
+
+def snapshot_integrity(directory: str | Path) -> dict:
+    """Manifest status of a data directory, for reports: status is 'verified', 'no manifest' or 'failed'.
+
+    Directories collected before manifests existed have none and still load (backwards compatible);
+    callers should report 'no manifest' rather than treat the data as verified."""
     directory = Path(directory)
+    problems = integrity.verify_manifest(directory)
+    if problems == ["no manifest"]:
+        return {"directory": str(directory), "status": "no manifest", "problems": [],
+                "files": len(integrity.covered_files(directory))}
+    return {"directory": str(directory), "status": "failed" if problems else "verified", "problems": problems,
+            "files": len(integrity.covered_files(directory))}
+
+
+def load_ibkr_snapshot(directory: str | Path, universe: dict) -> tuple[pd.DataFrame, dict]:
+    """Read every <group>.json written by the IBKR collection step.
+
+    If the directory has a manifest.json, every file must match it, otherwise ValueError names the
+    problems; without a manifest the files load as before (see `snapshot_integrity`)."""
+    directory = Path(directory)
+    check = snapshot_integrity(directory)
+    if check["status"] == "failed":
+        raise ValueError(f"{directory}: integrity check failed: " + "; ".join(check["problems"]))
     by_symbol = {i["symbol"]: i for i in universe["instruments"]}
     series, meta = {}, {}
-    files = sorted(f for f in directory.glob("*.json") if f.name not in ("options.json", "rates.json"))  # loaded separately
+    files = snapshot_files(directory)
     if not files:
         raise FileNotFoundError(f"no snapshot JSON files in {directory}")
     for f in files:

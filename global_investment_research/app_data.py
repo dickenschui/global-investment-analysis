@@ -18,9 +18,7 @@ TOP_OPTIONS = 12
 
 def _contracts(snapshot_dir: Path) -> dict:
     out = {}
-    for f in sorted(snapshot_dir.glob("*.json")):
-        if f.name == "options.json":
-            continue
+    for f in data.snapshot_files(snapshot_dir):
         for i in json.loads(f.read_text())["instruments"]:
             weekly = (i.get("weekly") or {}).get("close") or []
             snap_last = (i.get("snapshot") or {}).get("last")

@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import alerts, app_data, backtest, brief, curve, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
+from . import alert_state, alerts, app_data, backtest, brief, curve, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -62,6 +62,16 @@ def synthetic(universe, weeks=60, seed=7):
 
 
 RATES_DIR = "data/history/weekly_long"
+
+
+def _same_trading_week(last_iso: str | None, now_iso: str) -> bool:
+    """True when the hourly schedule (Mon-Fri, every hour, UTC) should have run throughout the gap since the last
+    check: both checks fall on weekdays of the same week. A Friday-to-Monday gap is the weekend, not an outage."""
+    if not last_iso:
+        return False
+    last, now = (alert_state._aware(x) for x in (last_iso, now_iso))
+    return (last.weekday() < 5 and now.weekday() < 5 and now >= last
+            and (now.date() - last.date()).days <= now.weekday() - last.weekday())
 
 
 def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str | None, standalone=True,
@@ -160,10 +170,16 @@ def main(argv=None) -> int:
                          "and several London series change quote unit)")
     wl = sub.add_parser("watchlist", help="symbols the hourly pulse must quote, from this week's reports")
     wl.add_argument("--reports", required=True)
+    pu = sub.add_parser("pulse", help="quote this week's watch list from Yahoo Finance (for the hourly check)")
+    pu.add_argument("--reports", required=True)
+    pu.add_argument("--out", required=True)
     al = sub.add_parser("alerts", help="evaluate a live pulse against this week's levels; print new exceptions")
     al.add_argument("--pulse", required=True)
     al.add_argument("--reports", required=True)
     al.add_argument("--state-dir", default="data/state")
+    al.add_argument("--max-age-minutes", type=float, default=alerts.MAX_QUOTE_AGE_MIN,
+                    help="quotes older than this are set aside as stale")
+    al.add_argument("--news", action="store_true", help="attach official headlines (config/news-sources.json) to URGENT alerts")
     al.add_argument("--telegram", action="store_true", help="also send new WARN/URGENT exceptions to Telegram")
     nt = sub.add_parser("notify", help="send the week's telegram.txt via the Telegram Bot API")
     nt.add_argument("--reports", required=True, help="reports/<date> directory produced by monitor")
@@ -172,11 +188,41 @@ def main(argv=None) -> int:
     ad.add_argument("--snapshot", required=True, help="data/snapshots/<date> directory (for IBKR contract ids)")
     ad.add_argument("--state-dir", default=None)
     ad.add_argument("--out", required=True)
+    mf = sub.add_parser("manifest", help="write (or --verify) SHA-256 manifests for snapshot/history directories")
+    mf.add_argument("dirs", nargs="+")
+    mf.add_argument("--verify", action="store_true")
+    qa = sub.add_parser("quality", help="weekly data-quality review: coverage, staleness, cross-checks, identity, manifest")
+    qa.add_argument("--snapshot", required=True)
+    qa.add_argument("--previous", help="last week's snapshot directory, for contract and dividend changes")
+    qa.add_argument("--out", help="directory for quality.json and quality.md")
     hb = sub.add_parser("handbook", help="write docs/HANDBOOK.md from the policy source")
     hb.add_argument("--out", default="docs/HANDBOOK.md")
     args = p.parse_args(argv)
     universe = data.load_universe(args.universe)
 
+    if args.cmd == "manifest":
+        from . import integrity
+        bad = False
+        for d in args.dirs:
+            if args.verify:
+                problems = integrity.verify_manifest(d)
+                print(f"{d}: " + ("OK" if not problems else "; ".join(problems)))
+                bad |= bool(problems)
+            else:
+                path = integrity.write_manifest(d)
+                print(f"{path}: {len(json.loads(path.read_text())['files'])} files")
+        return 1 if bad else 0
+    if args.cmd == "quality":
+        from . import quality
+        rev = quality.review(args.snapshot, args.previous, universe)
+        md = quality.to_markdown(rev)
+        if args.out:
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            (out / "quality.json").write_text(json.dumps(_clean(rev), indent=1, default=_json_default))
+            (out / "quality.md").write_text(md + "\n", encoding="utf-8")
+        print(md)
+        return 1 if rev["manifest"]["status"] == "failed" or rev["identity"] else 0
     if args.cmd == "app-data":
         res = app_data.build(args.reports, args.snapshot, universe, args.state_dir)
         Path(args.out).write_text(json.dumps(_clean(res), separators=(",", ":"), default=_json_default))
@@ -204,7 +250,7 @@ def main(argv=None) -> int:
         print(f"Backtest {res['first_date']}..{res['last_date']}: {len(res['instruments'])} instruments; "
               f"supported both halves={v['supported_both_halves']}, significant={v['significant']}")
         return 0
-    if args.cmd in ("watchlist", "alerts"):
+    if args.cmd in ("watchlist", "alerts", "pulse"):
         rep = Path(args.reports)
         dec = json.loads((rep / "decisions.json").read_text())
         mon = json.loads((rep / "monitor.json").read_text())
@@ -213,24 +259,52 @@ def main(argv=None) -> int:
             kinds = {i["symbol"]: i["kind"] for i in universe["instruments"]}
             print(json.dumps(alerts.watch_list(dec, opt, kinds)))
             return 0
-        pulse = json.loads(Path(args.pulse).read_text())
         kinds = {i["symbol"]: i["kind"] for i in universe["instruments"]}
-        found = alerts.evaluate(pulse, dec, mon, opt, kinds)
-        fresh = alerts.new_since_last(found, args.state_dir, pulse["retrieved_at_utc"][:10])
-        usable, frozen = alerts.normalise_quotes(pulse, mon)
+        if args.cmd == "pulse":
+            from . import pulse_yahoo
+            pulse = pulse_yahoo.build_pulse(alerts.watch_list(dec, opt, kinds), universe)
+            Path(args.out).write_text(json.dumps(pulse, indent=1))
+            print(f"Pulse {pulse['retrieved_at_utc']}: {len(pulse['quotes'])} quotes, missing {pulse['missing'] or 'none'}")
+            return 0
+        pulse = json.loads(Path(args.pulse).read_text())
+        now = pulse["retrieved_at_utc"]
+        found = alerts.evaluate(pulse, dec, mon, opt, kinds, max_age_minutes=args.max_age_minutes)
+        usable, frozen = alerts.normalise_quotes(pulse, mon, max_age_minutes=args.max_age_minutes)
+        state = Path(args.state_dir) / "alert_state.json"
+        hb = alert_state.heartbeat_gap(state, now, weekday=_same_trading_week(alert_state.load(state).get("last_run_utc"), now))
+        if hb:
+            found.append(hb)
+        res = alert_state.update(found, set(usable), state, now)  # only quoted symbols can clear a condition
+        to_send = res["escalated"] + res["new"] + res["pending"]
+        failures = []
+        if args.news and to_send:
+            from . import news
+            sources = json.loads((Path(args.universe).parent / "news-sources.json").read_text())["sources"]
+            items, failures = news.fetch(sources)
+            to_send = news.headline_context(to_send, items, {i["symbol"]: i["name"] for i in universe["instruments"]},
+                                            now_iso=now)
         stale = sorted((set(alerts.watch_list(dec, opt, kinds)) - set(usable)) | set(frozen))
-        text = alerts.alert_text(fresh, pulse["retrieved_at_utc"], stale)
+        text = alerts.alert_text(to_send, now, stale)
         out = rep / "alerts"
         out.mkdir(exist_ok=True)
-        stamp = pulse["retrieved_at_utc"].replace(":", "").replace("-", "")[:13]
-        (out / f"alerts-{stamp}.json").write_text(json.dumps({"all": found, "new": fresh, "missing_quotes": stale}, indent=1))
-        print(text if fresh else f"No new exceptions ({len(found)} already reported today).")
-        if args.telegram and any(a["severity"] in ("URGENT", "WARN") for a in fresh):
+        stamp = now.replace(":", "").replace("-", "")[:13]
+        (out / f"alerts-{stamp}.json").write_text(json.dumps(
+            {"all": found, "sent": to_send, "cleared": res["cleared"], "missing_quotes": stale,
+             "news_failures": failures, "pulse_source": pulse.get("source")}, indent=1))
+        print(text if to_send else f"No new or escalated exceptions ({len(found)} conditions active, "
+                                   f"{len(res['cleared'])} cleared).")
+        # Without a channel flag the printed text is the delivery (the Claude routine relays it). With channels, a
+        # notice counts as delivered only once a channel confirms; otherwise it stays pending and is offered again.
+        delivered = True
+        if args.telegram and any(a["severity"] in ("URGENT", "WARN") for a in to_send):
             try:
                 notify.send_telegram(text)
                 print("Telegram alert sent.")
             except Exception as exc:  # delivery failure must not hide the alert itself
+                delivered = False
                 print(f"Telegram not sent: {exc}")
+        if delivered and to_send:
+            alert_state.mark_delivered([a["key"] for a in to_send], state)
         return 0
     if args.cmd == "notify":
         import os
