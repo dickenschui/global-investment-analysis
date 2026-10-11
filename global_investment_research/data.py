@@ -29,7 +29,7 @@ def load_ibkr_snapshot(directory: str | Path, universe: dict) -> tuple[pd.DataFr
     directory = Path(directory)
     by_symbol = {i["symbol"]: i for i in universe["instruments"]}
     series, meta = {}, {}
-    files = sorted(directory.glob("*.json"))
+    files = sorted(f for f in directory.glob("*.json") if f.name != "options.json")  # chains load separately
     if not files:
         raise FileNotFoundError(f"no snapshot JSON files in {directory}")
     for f in files:

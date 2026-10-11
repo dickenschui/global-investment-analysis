@@ -87,7 +87,25 @@ Each run appends to data/state/history.jsonl. The Monitor lists macro readings t
 
 Each month run `global-research review` against config/decision-log.csv. It marks each decision as working, not working yet, avoided a loss, missed a gain or exit level hit. Change a rule only after it misfires repeatedly, and record the change and its reason in this handbook.
 
-## 9. What the tool does not do
+## 9. Speculative options sleeve
+
+A small sleeve for high-payoff trades that express the strongest Decision Desk calls. It is optional and separate from the core portfolio.
+
+| Rule | Value |
+|---|---|
+| Sleeve cap (total premium at risk) | 5% of portfolio |
+| Per-trade premium at risk | 1% of portfolio |
+| Allowed structures | Long calls, long puts, call and put debit spreads |
+| Forbidden | Naked short options, margin, averaging down on a losing option |
+| Direction | Bullish only on Accumulate names; bearish only on Avoid names |
+| Take profit | +100% on long options; 75% of maximum gain on spreads |
+| Stop | −50% of premium, or the underlying breaks its Decision Desk exit level |
+| Time stop | Close or roll with 21 days to expiry |
+| Liquidity | Skip quotes wider than 25% of mid; flag open interest under 100 |
+
+Spreads cap the upside but cut the cost and the volatility you pay for; long options keep the upside but need a bigger, faster move. Probability of profit is read from the option market's implied volatility.
+
+## 10. What the tool does not do
 
 - It does not value companies: fundamentals were not refreshed in the 11 Oct 2026 run.
 - It does not include dividends in price returns (except the income desk), costs or taxes.

@@ -5,11 +5,12 @@ from __future__ import annotations
 from pathlib import Path
 
 from . import decisions as D
+from . import options as OPT
 
 BLUE, GREEN = "0000FF", "008000"
 
 
-def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_000) -> Path:
+def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_000, opt: dict | None = None) -> Path:
     from openpyxl import Workbook
     from openpyxl.comments import Comment
     from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -73,6 +74,8 @@ def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_0
         ("Exit buffer below 40-week average", D.STOP_BUFFER, "Exit level = 40w average × (1 − buffer)", "0.0%", False),
         ("Income band low", 0.06, "Singapore income target: lower bound", "0.0%", False),
         ("Income band high", 0.08, "Singapore income target: upper bound", "0.0%", False),
+        ("Options sleeve cap", OPT.SLEEVE_CAP, "Total option premium at risk, share of portfolio", "0.0%", False),
+        ("Options per-trade risk", OPT.PER_TRADE_RISK, "Premium at risk per option trade", "0.0%", False),
     ]
     for r, (k, v, note, fmt, user) in enumerate(policy, 2):
         po.cell(row=r, column=1, value=k).font = F()
@@ -82,9 +85,9 @@ def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_0
             c.fill = yellow
         po.cell(row=r, column=3, value=note).font = F(color="5B6673")
     po["B3"].comment = Comment(f"Engine output for week to {dec['as_of']}: VIX-based.", "global-research")
-    PV, RB, RPP, CAP_S, CAP_E, BUF, BAND_LO, BAND_HI = (f"Policy!$B${i}" for i in range(2, 10))
-    po.cell(row=11, column=1, value="Portfolio tilts this week").font = F(bold=True)
-    for r, t in enumerate(dec["posture"]["tilts"], 12):
+    PV, RB, RPP, CAP_S, CAP_E, BUF, BAND_LO, BAND_HI, OPT_CAP, OPT_PT = (f"Policy!$B${i}" for i in range(2, 12))
+    po.cell(row=13, column=1, value="Portfolio tilts this week").font = F(bold=True)
+    for r, t in enumerate(dec["posture"]["tilts"], 14):
         po.cell(row=r, column=1, value=t["action"]).font = F()
         po.cell(row=r, column=3, value="Because: " + t["because"]).font = F(color="5B6673")
 
@@ -170,6 +173,43 @@ def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_0
         for i, v in enumerate([f["pair"], f["state"], f["view"], f["ret_3m"]], 1):
             fx.cell(row=r, column=i, value=v).font = F(color=BLUE) if i == 4 else F()
         fx.cell(row=r, column=4).number_format = "0.0%;(0.0%);-"
+
+    # --- Options sleeve ---------------------------------------------------------------
+    if opt and opt["ideas"]:
+        op = wb.create_sheet("Options")
+        ocols = ["Underlying", "Structure", "Legs", "Expiry", "Days", "Spot", "Debit / share", "Cost per contract",
+                 "Breakeven", "Move to breakeven", "Max gain / share", "Reward : risk", "Prob. of profit", "IV",
+                 "Contracts (per-trade budget)", "Premium at risk", "Stop: close at value"]
+        header(op, 1, ocols)
+        widths(op, [10, 16, 52, 11, 6, 10, 11, 12, 10, 11, 12, 10, 10, 8, 12, 13, 13])
+        for r, i in enumerate(opt["ideas"], 2):
+            legs = " / ".join(f"{'Buy' if l['qty'] > 0 else 'Sell'} {l['strike']:g}{l['right']}" for l in i["legs"])
+            for col, v in enumerate([i["symbol"], i["structure"], legs, i["expiry"], i["days"], i["underlying"], i["debit"]], 1):
+                op.cell(row=r, column=col, value=v).font = F(color=BLUE) if col >= 5 else F()
+            op.cell(row=r, column=8, value=f"=G{r}*100")
+            op.cell(row=r, column=9, value=i["breakeven"]).font = F(color=BLUE)
+            op.cell(row=r, column=10, value=f"=I{r}/F{r}-1")
+            op.cell(row=r, column=11, value=i["max_gain"]).font = F(color=BLUE)
+            op.cell(row=r, column=12, value=f'=IF(K{r}="","open",K{r}/G{r})')
+            op.cell(row=r, column=13, value=i["prob_profit"]).font = F(color=BLUE)
+            op.cell(row=r, column=14, value=i["iv"]).font = F(color=BLUE)
+            op.cell(row=r, column=15, value=f"=INT({PV}*{OPT_PT}/H{r})")
+            op.cell(row=r, column=16, value=f"=O{r}*H{r}")
+            op.cell(row=r, column=17, value=f"=G{r}*(1-{OPT.STOP_LOSS})")
+            for col, fmt in ((6, "#,##0.00"), (7, "0.00"), (8, "#,##0"), (9, "#,##0.00"), (10, "0.0%;(0.0%);-"),
+                             (11, "0.00"), (12, "0.0x"), (13, "0%"), (14, "0%"), (16, "#,##0"), (17, "0.00")):
+                op.cell(row=r, column=col).number_format = fmt
+        n = len(opt["ideas"]) + 1
+        op.cell(row=n + 2, column=1, value="Sleeve check").font = F(bold=True)
+        op.cell(row=n + 2, column=15, value="Total if all taken").font = F(bold=True)
+        op.cell(row=n + 2, column=16, value=f"=SUM(P2:P{n})").number_format = "#,##0"
+        op.cell(row=n + 3, column=15, value="Sleeve cap").font = F(bold=True)
+        op.cell(row=n + 3, column=16, value=f"={PV}*{OPT_CAP}").number_format = "#,##0"
+        op.cell(row=n + 4, column=15, value="Within cap?").font = F(bold=True)
+        op.cell(row=n + 4, column=16, value=f'=IF(P{n+2}<=P{n+3},"Yes","No: pick fewer trades")')
+        op.cell(row=n + 6, column=1, value=("Probability of profit is risk-neutral, from the option's implied volatility. Debits are "
+                                            "mid prices from IBKR weekend quotes; re-price live before trading. Defined risk only: "
+                                            "maximum loss = premium paid.")).font = F(color="5B6673")
 
     # --- Decision Log --------------------------------------------------------------
     lg = wb.create_sheet("Decision Log")

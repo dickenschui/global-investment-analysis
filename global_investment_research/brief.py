@@ -27,7 +27,7 @@ def _sector_concentration(acc):
     return top, top_w, total
 
 
-def brief_page(dec: dict, mon: dict, standalone=True) -> str:
+def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None) -> str:
     calls, p = dec["calls"], dec["posture"]
     acc = [c for c in calls if c["stance"] == "Accumulate"]
     counts = Counter(c["stance"] for c in calls)
@@ -76,6 +76,18 @@ def brief_page(dec: dict, mon: dict, standalone=True) -> str:
              f'<div><h3>Portfolio tilts</h3><ul class="notes">{tilts}</ul></div>'
              f'<div><h3>Singapore income (6–8%)</h3><ul class="notes">{inc_items or "<li>No names in band.</li>"}</ul></div>'
              "</section>")
+
+    if opt and opt["ideas"]:
+        orows = [[f"<b>{H.esc(i['symbol'])}</b> {H.esc(i['structure'])}",
+                  H.esc(" / ".join(f"{'Buy' if l['qty'] > 0 else 'Sell'} {l['strike']:g}{l['right']}" for l in i["legs"])),
+                  i["expiry"], f"{i['debit_per_contract']:,.0f}", fmt_pct(i["breakeven_move"]),
+                  "open" if i["reward_risk"] is None else f"{i['reward_risk']:.1f} : 1", f"{i['prob_profit']*100:.0f}%"]
+                 for i in opt["ideas"][:4]]
+        body += H.section("Speculative sleeve: top option ideas", H.table(
+            ["Idea", "Legs", "Expiry", "Cost / contract", "Move to breakeven", "Reward : risk", "Prob. of profit"],
+            orows, numeric={3, 4, 5, 6}),
+            f"Defined risk, capped at {opt['policy']['sleeve_cap']*100:.0f}% of the portfolio in total and "
+            f"{opt['policy']['per_trade']*100:.0f}% per trade. Full list and payoff charts on the Options Sleeve page.")
 
     reading = {r["topic"]: r for r in mon["regime"]}
     risks = []

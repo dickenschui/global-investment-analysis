@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from . import decisions as D
 from . import html as H
+from . import options as O
 
 P = lambda t: ("p", t)        # noqa: E731
 L = lambda *xs: ("ul", xs)    # noqa: E731
@@ -86,7 +87,23 @@ SECTIONS = [
           "not working yet, avoided a loss, missed a gain or exit level hit. Change a rule only after it misfires repeatedly, "
           "and record the change and its reason in this handbook."),
     ]),
-    ("9. What the tool does not do", [
+    ("9. Speculative options sleeve", [
+        P("A small sleeve for high-payoff trades that express the strongest Decision Desk calls. It is optional and separate "
+          "from the core portfolio."),
+        T(["Rule", "Value"],
+          ["Sleeve cap (total premium at risk)", f"{O.SLEEVE_CAP*100:.0f}% of portfolio"],
+          ["Per-trade premium at risk", f"{O.PER_TRADE_RISK*100:.0f}% of portfolio"],
+          ["Allowed structures", "Long calls, long puts, call and put debit spreads"],
+          ["Forbidden", "Naked short options, margin, averaging down on a losing option"],
+          ["Direction", "Bullish only on Accumulate names; bearish only on Avoid names"],
+          ["Take profit", f"+{O.TAKE_PROFIT*100:.0f}% on long options; 75% of maximum gain on spreads"],
+          ["Stop", f"−{O.STOP_LOSS*100:.0f}% of premium, or the underlying breaks its Decision Desk exit level"],
+          ["Time stop", f"Close or roll with {O.TIME_STOP_DAYS} days to expiry"],
+          ["Liquidity", f"Skip quotes wider than {O.MAX_SPREAD_PCT*100:.0f}% of mid; flag open interest under {O.MIN_OPEN_INTEREST}"]),
+        P("Spreads cap the upside but cut the cost and the volatility you pay for; long options keep the upside but need a "
+          "bigger, faster move. Probability of profit is read from the option market's implied volatility."),
+    ]),
+    ("10. What the tool does not do", [
         L("It does not value companies: fundamentals were not refreshed in the 11 Oct 2026 run.",
           "It does not include dividends in price returns (except the income desk), costs or taxes.",
           "It uses about one year of weekly data, a small sample. Patterns are hypotheses, not laws.",

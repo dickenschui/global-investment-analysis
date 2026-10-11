@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import brief, data, decisions, desk, handbook, monitor, portfolio, reports
+from . import brief, data, decisions, desk, handbook, monitor, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -61,7 +61,8 @@ def synthetic(universe, weeks=60, seed=7):
     return pd.DataFrame(cols, index=idx), meta
 
 
-def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str | None, standalone=True):
+def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str | None, standalone=True,
+                  chains_path: str | Path | None = None):
     out.mkdir(parents=True, exist_ok=True)
     mon = monitor.build_monitor(prices, meta, events)
     changes = []
@@ -77,10 +78,15 @@ def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str |
     (out / "decisions.json").write_text(json.dumps(_clean(dec), indent=1, default=_json_default))
     (out / "decision-desk.html").write_text(desk.desk_page(dec, mon, meta, standalone), encoding="utf-8")
     (out / "handbook.html").write_text(handbook.to_html(standalone), encoding="utf-8")
-    (out / "brief.html").write_text(brief.brief_page(dec, mon, standalone), encoding="utf-8")
+    opt = None
+    if chains_path and Path(chains_path).exists():
+        opt = options.build_ideas(json.loads(Path(chains_path).read_text()), dec, mon["as_of"])
+        (out / "options.json").write_text(json.dumps(_clean(opt), indent=1, default=_json_default))
+        (out / "options.html").write_text(options_desk.options_page(opt, standalone), encoding="utf-8")
+    (out / "brief.html").write_text(brief.brief_page(dec, mon, standalone, opt), encoding="utf-8")
     try:
         from . import workbook
-        workbook.build_workbook(dec, out / "decision-book.xlsx")
+        workbook.build_workbook(dec, out / "decision-book.xlsx", opt=opt)
     except ImportError:
         print("openpyxl not installed: skipped decision-book.xlsx (pip install -e .[excel])")
     (out / "index.html").write_text(index_page(mon["as_of"], out), encoding="utf-8")
@@ -91,6 +97,7 @@ DELIVERABLES = [
     ("brief.html", "Weekly Investment Brief", "The call in one page: posture, actions, income plan, risks."),
     ("decision-desk.html", "Decision Desk", "Every instrument's decision with buy zone, exit level and position size."),
     ("decision-book.xlsx", "Decision Book (Excel)", "Editable limits drive sizes and limit prices; includes the decision log."),
+    ("options.html", "Speculative Options Sleeve", "Defined-risk call/put ideas from real chains, capped at 5% of portfolio."),
     ("handbook.html", "Investment Handbook", "The routine, rules, risk limits and review loop."),
     ("monitor.html", "Global Markets Monitor", "Markets, macro readings, factor links, sectors, all instruments."),
     ("us-tech.html", "US Tech Watchlist", "Large-cap tech ranked by risk-adjusted momentum."),
@@ -103,7 +110,7 @@ def index_page(as_of: str, out: Path) -> str:
     from . import html as H
     items = "".join(
         f'<li><a href="{f}">{H.esc(t)}</a> <span class="mut">· {H.esc(d)}</span></li>'
-        for f, t, d in DELIVERABLES if (out / f).exists() or f.endswith(".html"))
+        for f, t, d in DELIVERABLES if (out / f).exists() or (f.endswith(".html") and f != "options.html"))
     return H.page("Global Investment Pack", f"Week to {as_of}",
                   "Start with the Brief, act from the Desk, follow the Handbook.",
                   H.section("Deliverables", f'<ul class="notes">{items}</ul>'),
@@ -148,7 +155,9 @@ def main(argv=None) -> int:
         return 0
     prices, meta = load(args, universe)
     if args.cmd == "monitor":
-        mon = write_reports(prices, meta, Path(args.out), Path(args.state_dir) if args.state_dir else None, args.events)
+        chains = Path(args.snapshot) / "options.json" if args.snapshot else None
+        mon = write_reports(prices, meta, Path(args.out), Path(args.state_dir) if args.state_dir else None, args.events,
+                            chains_path=chains)
         dq = mon["data_quality"]
         print(f"Monitor as of {mon['as_of']}: {dq['with_prices']}/{dq['instruments_configured']} instruments; "
               f"missing {dq['missing'] or 'none'}; reports in {args.out}")
