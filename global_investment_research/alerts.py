@@ -38,8 +38,33 @@ def _alert(sev, sym, rule, evidence, action):
     return {"severity": sev, "symbol": sym, "rule": rule, "evidence": evidence, "action": action}
 
 
-def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None) -> list[dict]:
-    q = {x["symbol"]: x for x in pulse["quotes"] if x.get("last")}
+def _is_fx(sym: str, kinds: dict | None) -> bool:
+    if kinds is not None:
+        return kinds.get(sym) == "fx"
+    a, _, b = sym.partition(".")
+    return len(a) == 3 and len(b) == 3 and a.isalpha() and b.isalpha()
+
+
+def normalise_quotes(pulse: dict, mon: dict) -> tuple[dict, list[str]]:
+    """Usable quotes in the same units as this week's levels. London lines quote live prices in pence while
+    the weekly closes (and so every exit and trigger) are in pounds: a quote about 100x the weekly close is
+    divided by 100, whoever collected it. Frozen quotes (market closed, weekend) are set aside as stale."""
+    q, stale = {}, []
+    for x in pulse["quotes"]:
+        if not x.get("last"):
+            continue
+        if "FROZEN" in str(x.get("data_status") or "").upper():
+            stale.append(x["symbol"])
+            continue
+        ref = (mon["metrics"].get(x["symbol"]) or {}).get("last")
+        k = 100.0 if ref and x["last"] / ref > 50 else 1.0
+        q[x["symbol"]] = {**x, "last": x["last"] / k,
+                          "prior_close": x["prior_close"] / k if x.get("prior_close") else x.get("prior_close")}
+    return q, stale
+
+
+def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None, kinds: dict | None = None) -> list[dict]:
+    q, _ = normalise_quotes(pulse, mon)
     calls = {c["symbol"]: c for c in dec["calls"]}
     out = []
     for sym, x in q.items():
@@ -49,9 +74,9 @@ def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None) -> list
         # 1. Exit levels and revisit triggers from the Decision Desk
         if c and c.get("stop") and last < c["stop"]:
             out.append(_alert("URGENT", sym, "Exit level breached",
-                              f"{sym} {last:,.2f} below exit {c['stop']:,.2f} ({c['stance']})",
-                              "Handbook §3: close on a weekly close below the exit, or write down why you hold. "
-                              "Cancel any add orders now."))
+                              f"{sym} {last:,.2f} below exit {c['stop']:,.2f} ({c['stance']}), intraday",
+                              "Handbook §3: the exit acts on the weekly close. Cancel any add orders now; if Friday's "
+                              "close is still below the exit, close the position or write down why you hold."))
         if c and c.get("trigger") and c["stance"] in ("Watch", "Avoid") and last > c["trigger"]:
             out.append(_alert("INFO", sym, "Revisit trigger crossed",
                               f"{sym} {last:,.2f} above revisit level {c['trigger']:,.2f}",
@@ -83,12 +108,12 @@ def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None) -> list
         if sym == "USD.HKD" and not (HKD_PEG_BAND[0] <= last <= HKD_PEG_BAND[1]):
             out.append(_alert("URGENT", sym, "HKD peg band breached", f"USD/HKD {last:.4f} outside 7.75–7.85",
                               "Systemic Hong Kong risk: review all HK exposure immediately."))
-        if "." in sym and prev and abs(last / prev - 1) >= FX_URGENT_MOVE:
+        if _is_fx(sym, kinds) and prev and abs(last / prev - 1) >= FX_URGENT_MOVE:
             out.append(_alert("URGENT", sym, "FX shock", f"{sym.replace('.', '/')} {100*(last/prev-1):+.2f}% on the day",
                                "Check hedges and non-base-currency positions."))
     # 5. Options: underlying through breakeven against us, or desk exit hit on the underlying
     for i in (opt or {}).get("ideas", []):
-        x = q.get(i["symbol"])
+        x = q.get(i["symbol"])  # already in the units of the weekly levels
         if not x:
             continue
         last = x["last"]

@@ -59,6 +59,14 @@ def drawdown_from_high(s: pd.Series) -> float | None:
     return float(s.iloc[-1] / s.max() - 1)
 
 
+def ma_windows(bars_per_year: int) -> tuple[int, int]:
+    """10/40 weeks on weekly bars (the rule as written in the Handbook and tested in the backtest),
+    50/200 days on daily bars. Rounding 52*200/252 would give 41 weeks, which the backtest never tested."""
+    if bars_per_year <= 60:
+        return 10, 40
+    return round(bars_per_year * 50 / 252), round(bars_per_year * 200 / 252)
+
+
 def trend_state(s: pd.Series, bars_per_year: int) -> dict:
     """Classic 50/200-day structure (10/40 weeks on weekly bars).
 
@@ -67,7 +75,7 @@ def trend_state(s: pd.Series, bars_per_year: int) -> dict:
     mixed : anything else; insufficient history -> None
     """
     s = s.dropna()
-    short_n, long_n = round(bars_per_year * 50 / 252), round(bars_per_year * 200 / 252)
+    short_n, long_n = ma_windows(bars_per_year)
     if len(s) < long_n:
         return {"state": None, "short_ma": None, "long_ma": None, "pct_vs_long_ma": None}
     short_ma, long_ma, last = s.iloc[-short_n:].mean(), s.iloc[-long_n:].mean(), s.iloc[-1]

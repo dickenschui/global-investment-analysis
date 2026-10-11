@@ -9,7 +9,7 @@
     "because": "Long yields rising (bond prices down-trend)"
    },
    {
-    "action": "Hedge or underweight non-USD assets for a USD-based portfolio; strong dollar is a headwind for HK/EM",
+    "action": "Dollar strengthening: for a GBP-based portfolio unhedged US assets gain from the currency, so do not hedge USD exposure now; a strong dollar is a headwind for HK/EM",
     "because": "Dollar strengthening"
    },
    {
@@ -43,9 +43,9 @@
     62.918000000000006,
     65.08
    ],
-   "stop": 55.59282926829269,
-   "stop_distance": 0.17065457643686255,
-   "size": 0.029298950572531884,
+   "stop": 55.87563749999999,
+   "stop_distance": 0.16472944044710025,
+   "size": 0.02706661151518952,
    "trigger": null,
    "symbol": "XLE",
    "name": "Energy Select Sector ETF",
@@ -59,7 +59,7 @@
    "momentum": 1.511370472014722,
    "vol": 0.2300542931086422,
    "trend": "up",
-   "size_standalone": 0.029298950572531884,
+   "size_standalone": 0.02706661151518952,
    "cluster": [
     "XLE",
     "XOM"
@@ -72,9 +72,9 @@
     34.869,
     37.954
    ],
-   "stop": 31.01818682926829,
-   "stop_distance": 0.22360472612110205,
-   "size": 0.02236088693980489,
+   "stop": 31.122886499999993,
+   "stop_distance": 0.21948843016215758,
+   "size": 0.02087783529506833,
    "trigger": null,
    "symbol": "SHEL",
    "name": "Shell",
@@ -88,7 +88,7 @@
    "momentum": 1.41291302176624,
    "vol": 0.23285023472655472,
    "trend": "up",
-   "size_standalone": 0.02236088693980489,
+   "size_standalone": 0.02087783529506833,
    "cluster": null
   },
   {
@@ -98,9 +98,9 @@
     161.75000000000003,
     168.94
    ],
-   "stop": 146.14469512195117,
-   "stop_distance": 0.15597764160394023,
-   "size": 0.03205587639731112,
+   "stop": 146.82405,
+   "stop_distance": 0.1506289330664834,
+   "size": 0.02930335383420474,
    "trigger": null,
    "symbol": "XOM",
    "name": "Exxon Mobil",
@@ -114,7 +114,7 @@
    "momentum": 1.3868796749964443,
    "vol": 0.260157158462401,
    "trend": "up",
-   "size_standalone": 0.03205587639731112,
+   "size_standalone": 0.02930335383420474,
    "cluster": [
     "XLE",
     "XOM"
@@ -124,12 +124,43 @@
    "stance": "Accumulate",
    "rule": "Up-trend with risk-adjusted momentum >= 0.5.",
    "entry": [
+    542.3340000000001,
+    559.4
+   ],
+   "stop": 455.4778075,
+   "stop_distance": 0.22816082537676663,
+   "size": 0.020148224412168285,
+   "trigger": null,
+   "symbol": "SOXX",
+   "name": "Semiconductor ETF",
+   "market": "US",
+   "group": "us_equity",
+   "sector": "Semiconductors",
+   "kind": "index_proxy",
+   "last": 559.4,
+   "ret_3m": -0.03774039288540276,
+   "ret_1y": 1.0566932607816462,
+   "momentum": 1.3282690969116726,
+   "vol": 0.3835641701916377,
+   "trend": "up",
+   "size_standalone": 0.020148224412168285,
+   "cluster": [
+    "QQQ",
+    "SOXX",
+    "SPY",
+    "XLK"
+   ]
+  },
+  {
+   "stance": "Accumulate",
+   "rule": "Up-trend with risk-adjusted momentum >= 0.5.",
+   "entry": [
     39.937,
     40.31
    ],
-   "stop": 36.44148048780488,
-   "stop_distance": 0.10615703479691829,
-   "size": 0.047100034487258954,
+   "stop": 36.5042525,
+   "stop_distance": 0.10425490838361928,
+   "size": 0.040239859052997845,
    "trigger": null,
    "symbol": "CPER",
    "name": "US Copper Index Fund",
@@ -143,7 +174,7 @@
    "momentum": 1.038871310773212,
    "vol": 0.18902737571441325,
    "trend": "up",
-   "size_standalone": 0.047100034487258954,
+   "size_standalone": 0.040239859052997845,
    "cluster": null
   },
   {
@@ -153,9 +184,9 @@
     190.63899999999998,
     198.78
    ],
-   "stop": 161.82770243902436,
-   "stop_distance": 0.22834346038434927,
-   "size": 0.021896839049316174,
+   "stop": 162.37412,
+   "stop_distance": 0.22420986792722886,
+   "size": 0.02047419312920611,
    "trigger": null,
    "symbol": "XLK",
    "name": "Technology Select Sector ETF",
@@ -169,7 +200,7 @@
    "momentum": 0.9781263174236828,
    "vol": 0.23763477981645204,
    "trend": "up",
-   "size_standalone": 0.021896839049316174,
+   "size_standalone": 0.02047419312920611,
    "cluster": [
     "QQQ",
     "SOXX",
@@ -184,9 +215,9 @@
     770.0400000000001,
     778.57
    ],
-   "stop": 701.6781268292683,
-   "stop_distance": 0.10958282755398052,
-   "size": 0.04562758701893323,
+   "stop": 702.6532074999999,
+   "stop_distance": 0.10804304554462618,
+   "size": 0.03904936795850718,
    "trigger": null,
    "symbol": "SPY",
    "name": "S&P 500 ETF",
@@ -200,7 +231,7 @@
    "momentum": 0.9280042621941922,
    "vol": 0.12044525183982586,
    "trend": "up",
-   "size_standalone": 0.04562758701893323,
+   "size_standalone": 0.03904936795850718,
    "cluster": [
     "QQQ",
     "SOXX",
@@ -215,9 +246,9 @@
     324.808,
     336.64
    ],
-   "stop": 282.4990146341463,
-   "stop_distance": 0.19165017419961483,
-   "size": 0.02608920143632225,
+   "stop": 282.9894975,
+   "stop_distance": 0.18958478308899052,
+   "size": 0.023856693822456476,
    "trigger": null,
    "symbol": "AAPL",
    "name": "Apple",
@@ -231,7 +262,7 @@
    "momentum": 0.9190194616280561,
    "vol": 0.23946287601209423,
    "trend": "up",
-   "size_standalone": 0.02608920143632225,
+   "size_standalone": 0.023856693822456476,
    "cluster": null
   },
   {
@@ -241,9 +272,9 @@
     728.461,
     751.27
    ],
-   "stop": 652.8372073170731,
-   "stop_distance": 0.1507769342489691,
-   "size": 0.03316157093195564,
+   "stop": 654.2899775,
+   "stop_distance": 0.14822177602437758,
+   "size": 0.029722668005094856,
    "trigger": null,
    "symbol": "QQQ",
    "name": "Nasdaq-100 ETF",
@@ -257,7 +288,7 @@
    "momentum": 0.8454045139588844,
    "vol": 0.18329985932302917,
    "trend": "up",
-   "size_standalone": 0.03316157093195564,
+   "size_standalone": 0.029722668005094856,
    "cluster": [
     "QQQ",
     "SOXX",
@@ -272,9 +303,9 @@
     169.172,
     170.81
    ],
-   "stop": 152.4447268292683,
-   "stop_distance": 0.12047168539519282,
-   "size": 0.041503528265567996,
+   "stop": 152.48472750000002,
+   "stop_distance": 0.12017775681830156,
+   "size": 0.035668997089752276,
    "trigger": null,
    "symbol": "XLV",
    "name": "Health Care Select Sector ETF",
@@ -288,7 +319,7 @@
    "momentum": 0.8258693868051881,
    "vol": 0.1597972410644716,
    "trend": "up",
-   "size_standalone": 0.041503528265567996,
+   "size_standalone": 0.035668997089752276,
    "cluster": null
   },
   {
@@ -298,9 +329,9 @@
     345.719,
     351.66
    ],
-   "stop": 329.9734170731707,
-   "stop_distance": 0.06572221216844376,
-   "size": 0.07607778002336825,
+   "stop": 330.58036500000003,
+   "stop_distance": 0.06376553852495137,
+   "size": 0.05969041789793594,
    "trigger": null,
    "symbol": "GOOGL",
    "name": "Alphabet",
@@ -314,7 +345,7 @@
    "momentum": 0.6974549942705075,
    "vol": 0.3376849365111104,
    "trend": "up",
-   "size_standalone": 0.07607778002336825,
+   "size_standalone": 0.05969041789793594,
    "cluster": null
   },
   {
@@ -324,9 +355,9 @@
     224.061,
     229.28
    ],
-   "stop": 195.98684390243906,
-   "stop_distance": 0.1698744437873292,
-   "size": 0.029433503289403834,
+   "stop": 196.30690250000004,
+   "stop_distance": 0.16796708154467455,
+   "size": 0.026600402362536225,
    "trigger": null,
    "symbol": "NVDA",
    "name": "Nvidia",
@@ -340,19 +371,19 @@
    "momentum": 0.5228763724287293,
    "vol": 0.32382684378588755,
    "trend": "up",
-   "size_standalone": 0.029433503289403834,
+   "size_standalone": 0.026600402362536225,
    "cluster": null
   },
   {
    "stance": "Hold",
-   "rule": "Up-trend but 74% above 40-week average: hold, do not chase; add on pullback.",
+   "rule": "Up-trend but 73% above 40-week average: hold, do not chase; add on pullback.",
    "entry": [
     229.642,
     275.04
    ],
-   "stop": 153.11911341463414,
-   "stop_distance": 0.7962486450350192,
-   "size": 0.006279445536488289,
+   "stop": 154.1972625,
+   "stop_distance": 0.783689253238202,
+   "size": 0.006221310014852309,
    "trigger": null,
    "symbol": "CRWD",
    "name": "CrowdStrike",
@@ -366,7 +397,7 @@
    "momentum": 1.5909439031297412,
    "vol": 0.5466556792892971,
    "trend": "up",
-   "size_standalone": 0.006279445536488289,
+   "size_standalone": 0.006221310014852309,
    "cluster": [
     "CRWD",
     "PANW"
@@ -374,14 +405,14 @@
   },
   {
    "stance": "Hold",
-   "rule": "Up-trend but 25% above 40-week average: hold, do not chase; add on pullback.",
+   "rule": "Up-trend but 24% above 40-week average: hold, do not chase; add on pullback.",
    "entry": [
     140.34999999999997,
     148.2
    ],
-   "stop": 114.64382682926828,
-   "stop_distance": 0.29269934630413874,
-   "size": 0.01708237501427348,
+   "stop": 115.8376425,
+   "stop_distance": 0.27937686577141774,
+   "size": 0.01670135729130665,
    "trigger": null,
    "symbol": "USO",
    "name": "US Oil Fund",
@@ -395,50 +426,19 @@
    "momentum": 1.369560738528492,
    "vol": 0.5473068312641706,
    "trend": "up",
-   "size_standalone": 0.01708237501427348,
+   "size_standalone": 0.01670135729130665,
    "cluster": null
   },
   {
    "stance": "Hold",
-   "rule": "Up-trend but 20% above 40-week average: hold, do not chase; add on pullback.",
-   "entry": [
-    542.3340000000001,
-    559.4
-   ],
-   "stop": 451.79003902439024,
-   "stop_distance": 0.23818577587054834,
-   "size": 0.02099201760359297,
-   "trigger": null,
-   "symbol": "SOXX",
-   "name": "Semiconductor ETF",
-   "market": "US",
-   "group": "us_equity",
-   "sector": "Semiconductors",
-   "kind": "index_proxy",
-   "last": 559.4,
-   "ret_3m": -0.03774039288540276,
-   "ret_1y": 1.0566932607816462,
-   "momentum": 1.3282690969116726,
-   "vol": 0.3835641701916377,
-   "trend": "up",
-   "size_standalone": 0.02099201760359297,
-   "cluster": [
-    "QQQ",
-    "SOXX",
-    "SPY",
-    "XLK"
-   ]
-  },
-  {
-   "stance": "Hold",
-   "rule": "Up-trend but 63% above 40-week average: hold, do not chase; add on pullback.",
+   "rule": "Up-trend but 61% above 40-week average: hold, do not chase; add on pullback.",
    "entry": [
     370.184,
     418.78
    ],
-   "stop": 249.6515024390244,
-   "stop_distance": 0.6774583605892137,
-   "size": 0.00738052741079362,
+   "stop": 251.54306749999998,
+   "stop_distance": 0.6648441325062557,
+   "size": 0.0073009313545580054,
    "trigger": null,
    "symbol": "PANW",
    "name": "Palo Alto Networks",
@@ -452,7 +452,7 @@
    "momentum": 1.2866850953371176,
    "vol": 0.5024584477888902,
    "trend": "up",
-   "size_standalone": 0.00738052741079362,
+   "size_standalone": 0.0073009313545580054,
    "cluster": [
     "CRWD",
     "PANW"
@@ -460,14 +460,14 @@
   },
   {
    "stance": "Hold",
-   "rule": "Up-trend but 23% above 40-week average: hold, do not chase; add on pullback.",
+   "rule": "Up-trend but 24% above 40-week average: hold, do not chase; add on pullback.",
    "entry": [
     505.0039999999999,
     535.07
    ],
-   "stop": 420.68616097560977,
-   "stop_distance": 0.27189826914943827,
-   "size": 0.018389230706179836,
+   "stop": 419.73452,
+   "stop_distance": 0.2747819740916235,
+   "size": 0.016961688432298477,
    "trigger": null,
    "symbol": "MSFT",
    "name": "Microsoft",
@@ -481,7 +481,7 @@
    "momentum": 0.5837658721152027,
    "vol": 0.3739658543598121,
    "trend": "up",
-   "size_standalone": 0.018389230706179836,
+   "size_standalone": 0.016961688432298477,
    "cluster": [
     "IGV",
     "MSFT",
@@ -495,9 +495,9 @@
     199.492,
     216.74
    ],
-   "stop": 156.68883170731706,
-   "stop_distance": 0.38325110755088154,
-   "size": 0.013046276713854468,
+   "stop": 157.3662525,
+   "stop_distance": 0.3772965712581864,
+   "size": 0.012585057012109751,
    "trigger": null,
    "symbol": "ANET",
    "name": "Arista Networks",
@@ -511,7 +511,7 @@
    "momentum": 0.5750741418772266,
    "vol": 0.4919145724965039,
    "trend": "up",
-   "size_standalone": 0.013046276713854468,
+   "size_standalone": 0.012585057012109751,
    "cluster": null
   },
   {
@@ -521,9 +521,9 @@
     40.251,
     41.42
    ],
-   "stop": 37.980231707317074,
-   "stop_distance": 0.09056733300603437,
-   "size": 0.055207543758265,
+   "stop": 37.91851249999999,
+   "stop_distance": 0.09234242772577139,
+   "size": 0.044506782532820394,
    "trigger": null,
    "symbol": "600036",
    "name": "China Merchants Bank A",
@@ -537,7 +537,7 @@
    "momentum": 0.4527915234696397,
    "vol": 0.17001541463900757,
    "trend": "up",
-   "size_standalone": 0.055207543758265,
+   "size_standalone": 0.044506782532820394,
    "cluster": null
   },
   {
@@ -547,9 +547,9 @@
     259.481,
     262.43
    ],
-   "stop": 235.31750487804877,
-   "stop_distance": 0.11521665222484012,
-   "size": 0.04339650478858494,
+   "stop": 235.70781749999998,
+   "stop_distance": 0.11336994582286186,
+   "size": 0.03748970556410705,
    "trigger": null,
    "symbol": "AMZN",
    "name": "Amazon",
@@ -563,7 +563,7 @@
    "momentum": 0.38228404657223886,
    "vol": 0.36953481005518646,
    "trend": "up",
-   "size_standalone": 0.04339650478858494,
+   "size_standalone": 0.03748970556410705,
    "cluster": null
   },
   {
@@ -573,9 +573,9 @@
     105.71900000000001,
     112.67
    ],
-   "stop": 90.52844390243902,
-   "stop_distance": 0.2445812072217055,
-   "size": 0.020443107860971716,
+   "stop": 90.30312,
+   "stop_distance": 0.24768668015014317,
+   "size": 0.018678553588081195,
    "trigger": null,
    "symbol": "IGV",
    "name": "Software ETF",
@@ -589,7 +589,7 @@
    "momentum": 0.322457376064392,
    "vol": 0.34797584429780526,
    "trend": "up",
-   "size_standalone": 0.020443107860971716,
+   "size_standalone": 0.018678553588081195,
    "cluster": [
     "IGV",
     "MSFT",
@@ -603,9 +603,9 @@
     28.288999999999998,
     28.99
    ],
-   "stop": 26.58131219512195,
-   "stop_distance": 0.09061583518514471,
-   "size": 0.0551779938879787,
+   "stop": 26.575575,
+   "stop_distance": 0.09085127979356966,
+   "size": 0.04510547834279531,
    "trigger": null,
    "symbol": "600900",
    "name": "China Yangtze Power",
@@ -619,7 +619,7 @@
    "momentum": 0.29605432556548217,
    "vol": 0.13458201021102906,
    "trend": "up",
-   "size_standalone": 0.0551779938879787,
+   "size_standalone": 0.04510547834279531,
    "cluster": null
   },
   {
@@ -629,9 +629,9 @@
     643.883,
     718.67
    ],
-   "stop": 608.0617707317073,
-   "stop_distance": 0.18190294899676562,
-   "size": 0.027487184938870365,
+   "stop": 607.4908724999999,
+   "stop_distance": 0.18301365918876433,
+   "size": 0.024628884676921887,
    "trigger": null,
    "symbol": "META",
    "name": "Meta Platforms",
@@ -645,19 +645,19 @@
    "momentum": 0.1056078546597575,
    "vol": 0.4396666968878612,
    "trend": "up",
-   "size_standalone": 0.027487184938870365,
+   "size_standalone": 0.024628884676921887,
    "cluster": null
   },
   {
    "stance": "Hold",
-   "rule": "Up-trend but 23% above 40-week average: hold, do not chase; add on pullback.",
+   "rule": "Up-trend but 24% above 40-week average: hold, do not chase; add on pullback.",
    "entry": [
     134.219,
     140.86
    ],
-   "stop": 110.90459512195122,
-   "stop_distance": 0.270100664856219,
-   "size": 0.018511616780586673,
+   "stop": 110.10154749999998,
+   "stop_distance": 0.2793643976711593,
+   "size": 0.016702052879021087,
    "trigger": null,
    "symbol": "NOW",
    "name": "ServiceNow",
@@ -671,7 +671,7 @@
    "momentum": 0.07463676750337495,
    "vol": 0.5842205756639705,
    "trend": "up",
-   "size_standalone": 0.018511616780586673,
+   "size_standalone": 0.016702052879021087,
    "cluster": [
     "IGV",
     "MSFT",
@@ -685,9 +685,9 @@
     25.821000000000005,
     27.22
    ],
-   "stop": 24.872929268292683,
-   "stop_distance": 0.09436245752925032,
-   "size": 0.05298717446448561,
+   "stop": 24.770889999999998,
+   "stop_distance": 0.09887048870670379,
+   "size": 0.042062584703734134,
    "trigger": null,
    "symbol": "REL",
    "name": "RELX",
@@ -701,7 +701,7 @@
    "momentum": -0.09426189808896077,
    "vol": 0.3508384093311713,
    "trend": "up",
-   "size_standalone": 0.05298717446448561,
+   "size_standalone": 0.042062584703734134,
    "cluster": null
   },
   {
@@ -711,8 +711,8 @@
     46.484399999999994,
     46.77
    ],
-   "stop": 44.97279609756098,
-   "stop_distance": 0.03996202278684846,
+   "stop": 44.92705349999999,
+   "stop_distance": 0.041020862852713336,
    "size": 0.08,
    "trigger": null,
    "symbol": "ULVR",
@@ -766,6 +766,7 @@
     },
     "yield_sustainable": 0.03181034482758621,
     "yield_4y_avg": 0.03181034482758621,
+    "payments_per_year": 2,
     "ltm_vs_prior": 1.1931818181818181,
     "cash_by_year": [
      1.05,
@@ -819,6 +820,7 @@
     },
     "yield_sustainable": 0.03441930207197383,
     "yield_4y_avg": 0.03441930207197383,
+    "payments_per_year": 4,
     "ltm_vs_prior": 1.3786127167630058,
     "cash_by_year": [
      3.18,
@@ -906,7 +908,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 9.901341463414633,
+   "trigger": 9.935875,
    "symbol": "857",
    "name": "PetroChina H",
    "market": "HK",
@@ -948,7 +950,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 24.666341463414636,
+   "trigger": 24.726499999999998,
    "symbol": "SSE",
    "name": "SSE",
    "market": "UK",
@@ -1061,6 +1063,7 @@
     },
     "yield_sustainable": 0.017514395393474085,
     "yield_4y_avg": 0.017514395393474085,
+    "payments_per_year": 4,
     "ltm_vs_prior": 1.469387755102041,
     "cash_by_year": [
      0.24000000000000002,
@@ -1240,6 +1243,7 @@
     },
     "yield_sustainable": 0.03978978978978979,
     "yield_4y_avg": 0.04498248248248248,
+    "payments_per_year": 2,
     "ltm_vs_prior": 0.8517857142857143,
     "cash_by_year": [
      1.5899999999999999,
@@ -1306,7 +1310,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 11.35048780487805,
+   "trigger": 11.33275,
    "symbol": "UNG",
    "name": "US Natural Gas Fund",
    "market": "Cross-asset",
@@ -1327,7 +1331,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 87.25853658536586,
+   "trigger": 87.236,
    "symbol": "LSEG",
    "name": "London Stock Exchange Group",
    "market": "UK",
@@ -1339,48 +1343,6 @@
    "ret_1y": -0.015419501133786873,
    "momentum": -0.055426995071268,
    "vol": 0.35011201626013083,
-   "trend": "mixed"
-  },
-  {
-   "stance": "Watch",
-   "rule": "Trend unresolved: wait for price to reclaim both averages.",
-   "entry": null,
-   "stop": null,
-   "stop_distance": null,
-   "size": null,
-   "trigger": 20.270400000000002,
-   "symbol": "BA.",
-   "name": "BAE Systems",
-   "market": "UK",
-   "group": "uk",
-   "sector": "Defence",
-   "kind": "stock",
-   "last": 18.574,
-   "ret_3m": 0.0034575904916260836,
-   "ret_1y": -0.06569416498993952,
-   "momentum": -0.0793167183981112,
-   "vol": 0.39232948459826533,
-   "trend": "mixed"
-  },
-  {
-   "stance": "Watch",
-   "rule": "Trend unresolved: wait for price to reclaim both averages.",
-   "entry": null,
-   "stop": null,
-   "stop_distance": null,
-   "size": null,
-   "trigger": 43.367000000000004,
-   "symbol": "XLRE",
-   "name": "Real Estate Select Sector ETF",
-   "market": "US",
-   "group": "us_sector_macro",
-   "sector": "Property",
-   "kind": "sector_proxy",
-   "last": 41.61,
-   "ret_3m": -0.06389201349831275,
-   "ret_1y": 0.02286135693215341,
-   "momentum": -0.13629333493963716,
-   "vol": 0.15052334211475335,
    "trend": "mixed"
   },
   {
@@ -1411,7 +1373,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 135.1131707317073,
+   "trigger": 135.08350000000002,
    "symbol": "AZN",
    "name": "AstraZeneca",
    "market": "UK",
@@ -1461,6 +1423,7 @@
     },
     "yield_sustainable": 0.03836055276381909,
     "yield_4y_avg": 0.03836055276381909,
+    "payments_per_year": 2,
     "ltm_vs_prior": 1.1023287057769815,
     "cash_by_year": [
      0.1641,
@@ -1485,7 +1448,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 84.03024390243903,
+   "trigger": 84.18875,
    "symbol": "XLP",
    "name": "Consumer Staples Select ETF",
    "market": "US",
@@ -1506,7 +1469,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 65.15926829268294,
+   "trigger": 65.1445,
    "symbol": "SLV",
    "name": "iShares Silver Trust",
    "market": "Cross-asset",
@@ -1527,7 +1490,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 415.32512195121956,
+   "trigger": 415.75124999999997,
    "symbol": "GLD",
    "name": "SPDR Gold Shares",
    "market": "Cross-asset",
@@ -1548,7 +1511,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 57.50414634146342,
+   "trigger": 57.16275,
    "symbol": "601318",
    "name": "Ping An A",
    "market": "China",
@@ -1569,7 +1532,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 19.480731707317073,
+   "trigger": 19.510849999999998,
    "symbol": "GSK",
    "name": "GSK",
    "market": "UK",
@@ -1590,7 +1553,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 12.357512195121952,
+   "trigger": 12.377699999999999,
    "symbol": "NG.",
    "name": "National Grid",
    "market": "UK",
@@ -1611,7 +1574,28 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 79.88341463414635,
+   "trigger": 20.3037,
+   "symbol": "BA.",
+   "name": "BAE Systems",
+   "market": "UK",
+   "group": "uk",
+   "sector": "Defence",
+   "kind": "stock",
+   "last": 18.574,
+   "ret_3m": 0.0034575904916260836,
+   "ret_1y": -0.06569416498993952,
+   "momentum": -0.0793167183981112,
+   "vol": 0.39232948459826533,
+   "trend": "down"
+  },
+  {
+   "stance": "Avoid",
+   "rule": "Price below 10- and 40-week averages (down-trend): no new money until trend repairs.",
+   "entry": null,
+   "stop": null,
+   "stop_distance": null,
+   "size": null,
+   "trigger": 79.79799999999999,
    "symbol": "1299",
    "name": "AIA",
    "market": "HK",
@@ -1632,7 +1616,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 4.586829268292683,
+   "trigger": 4.587000000000001,
    "symbol": "Z74",
    "name": "Singtel",
    "market": "SG",
@@ -1659,23 +1643,24 @@
      "20%": 0.03490566037735849,
      "30%": 0.030542452830188676
     },
-    "yield_sustainable": 0.03856132075471697,
-    "yield_4y_avg": 0.03856132075471697,
-    "ltm_vs_prior": 1.183368869936034,
+    "yield_sustainable": 0.03856132075471698,
+    "yield_4y_avg": 0.03856132075471698,
+    "payments_per_year": 2,
+    "ltm_vs_prior": 1.1833688699360339,
     "cash_by_year": [
      0.185,
      0.189,
      0.131,
-     0.149
+     0.14900000000000002
     ],
     "history_flag": "volatile: lowest year under 70% of the highest"
    },
    "income_call": {
     "stance": "Avoid",
     "rule": "Yield 3.86% below band; would reach 6% at 2.725.",
-    "price_for_7pct": 2.335714285714285,
-    "price_for_8pct": 2.0437499999999997,
-    "price_for_6pct": 2.7249999999999996
+    "price_for_7pct": 2.3357142857142854,
+    "price_for_8pct": 2.04375,
+    "price_for_6pct": 2.725
    }
   },
   {
@@ -1685,7 +1670,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 113.35707317073171,
+   "trigger": 113.26849999999999,
    "symbol": "XLC",
    "name": "Communication Services Select ETF",
    "market": "US",
@@ -1706,7 +1691,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 0.9821951219512194,
+   "trigger": 0.98275,
    "symbol": "CJLU",
    "name": "NetLink NBN Trust",
    "market": "SG",
@@ -1735,6 +1720,7 @@
     },
     "yield_sustainable": 0.055811518324607325,
     "yield_4y_avg": 0.055811518324607325,
+    "payments_per_year": 2,
     "ltm_vs_prior": 1.0226415094339623,
     "cash_by_year": [
      0.0542,
@@ -1759,7 +1745,28 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 1341.8512195121953,
+   "trigger": 43.39175,
+   "symbol": "XLRE",
+   "name": "Real Estate Select Sector ETF",
+   "market": "US",
+   "group": "us_sector_macro",
+   "sector": "Property",
+   "kind": "sector_proxy",
+   "last": 41.61,
+   "ret_3m": -0.06389201349831275,
+   "ret_1y": 0.02286135693215341,
+   "momentum": -0.13629333493963716,
+   "vol": 0.15052334211475335,
+   "trend": "down"
+  },
+  {
+   "stance": "Avoid",
+   "rule": "Price below 10- and 40-week averages (down-trend): no new money until trend repairs.",
+   "entry": null,
+   "stop": null,
+   "stop_distance": null,
+   "size": null,
+   "trigger": 1340.0442500000001,
    "symbol": "600519",
    "name": "Kweichow Moutai",
    "market": "China",
@@ -1780,7 +1787,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 80.80829268292683,
+   "trigger": 80.742,
    "symbol": "941",
    "name": "China Mobile",
    "market": "HK",
@@ -1801,7 +1808,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 116.00097560975613,
+   "trigger": 115.94224999999999,
    "symbol": "XLY",
    "name": "Consumer Discretionary Select ETF",
    "market": "US",
@@ -1822,7 +1829,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 25.78341463414634,
+   "trigger": 25.764499999999998,
    "symbol": "2800",
    "name": "Tracker Fund of Hong Kong (HSI)",
    "market": "HK",
@@ -1843,7 +1850,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 55.69121951219511,
+   "trigger": 55.736000000000004,
    "symbol": "3188",
    "name": "ChinaAMC CSI 300 Index ETF",
    "market": "China",
@@ -1864,7 +1871,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 160.6695121951219,
+   "trigger": 159.7935,
    "symbol": "ORCL",
    "name": "Oracle",
    "market": "US",
@@ -1885,7 +1892,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 125.9560975609756,
+   "trigger": 125.38000000000002,
    "symbol": "9988",
    "name": "Alibaba",
    "market": "HK",
@@ -1906,7 +1913,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 403.28780487804875,
+   "trigger": 402.975,
    "symbol": "388",
    "name": "HKEX",
    "market": "HK",
@@ -1927,7 +1934,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 82.56536585365853,
+   "trigger": 82.0145,
    "symbol": "3690",
    "name": "Meituan",
    "market": "HK",
@@ -1948,7 +1955,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 2.366829268292683,
+   "trigger": 2.3665,
    "symbol": "C38U",
    "name": "CapitaLand Integrated Commercial Trust",
    "market": "SG",
@@ -1977,6 +1984,7 @@
     },
     "yield_sustainable": 0.04745535714285714,
     "yield_4y_avg": 0.049765624999999994,
+    "payments_per_year": 2,
     "ltm_vs_prior": 0.9390459363957597,
     "cash_by_year": [
      0.1063,
@@ -2001,7 +2009,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 44.4109756097561,
+   "trigger": 44.44175,
    "symbol": "XLU",
    "name": "Utilities Select Sector ETF",
    "market": "US",
@@ -2022,7 +2030,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 378.42317073170733,
+   "trigger": 378.495,
    "symbol": "300750",
    "name": "CATL",
    "market": "China",
@@ -2043,7 +2051,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 92.3009756097561,
+   "trigger": 92.1395,
    "symbol": "1211",
    "name": "BYD H",
    "market": "HK",
@@ -2064,7 +2072,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 2.2487804878048783,
+   "trigger": 2.249,
    "symbol": "AJBU",
    "name": "Keppel DC REIT",
    "market": "SG",
@@ -2093,6 +2101,7 @@
     },
     "yield_sustainable": 0.049712441314554,
     "yield_4y_avg": 0.049712441314554,
+    "payments_per_year": 2,
     "ltm_vs_prior": 1.3616984759027873,
     "cash_by_year": [
      0.13223000000000001,
@@ -2117,7 +2126,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 486.3073170731706,
+   "trigger": 482.89,
    "symbol": "700",
    "name": "Tencent",
    "market": "HK",
@@ -2138,7 +2147,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 1.2160975609756095,
+   "trigger": 1.2135,
    "symbol": "M44U",
    "name": "Mapletree Logistics Trust",
    "market": "SG",
@@ -2167,6 +2176,7 @@
     },
     "yield_sustainable": 0.06727777777777777,
     "yield_4y_avg": 0.07586805555555554,
+    "payments_per_year": 4,
     "ltm_vs_prior": 0.8545219334352582,
     "cash_by_year": [
      0.07266,
@@ -2191,7 +2201,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 1.9687804878048776,
+   "trigger": 1.9662499999999998,
    "symbol": "ME8U",
    "name": "Mapletree Industrial Trust",
    "market": "SG",
@@ -2220,6 +2230,7 @@
     },
     "yield_sustainable": 0.0685792349726776,
     "yield_4y_avg": 0.07226775956284152,
+    "payments_per_year": 4,
     "ltm_vs_prior": 0.9330855018587362,
     "cash_by_year": [
      0.1255,
@@ -2244,7 +2255,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 2.228292682926829,
+   "trigger": 2.226,
    "symbol": "J69U",
    "name": "Frasers Centrepoint Trust",
    "market": "SG",
@@ -2273,6 +2284,7 @@
     },
     "yield_sustainable": 0.05844927536231884,
     "yield_4y_avg": 0.058613526570048306,
+    "payments_per_year": 2,
     "ltm_vs_prior": 0.9962671204677077,
     "cash_by_year": [
      0.12098999999999999,
@@ -2297,7 +2309,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 1.3270731707317072,
+   "trigger": 1.3235000000000001,
    "symbol": "N2IU",
    "name": "Mapletree Pan Asia Commercial Trust",
    "market": "SG",
@@ -2326,6 +2338,7 @@
     },
     "yield_sustainable": 0.0665546218487395,
     "yield_4y_avg": 0.07023109243697478,
+    "payments_per_year": 4,
     "ltm_vs_prior": 0.9313994511956096,
     "cash_by_year": [
      0.0792,
@@ -2350,7 +2363,7 @@
    "stop": null,
    "stop_distance": null,
    "size": null,
-   "trigger": 2.5414634146341464,
+   "trigger": 2.53425,
    "symbol": "A17U",
    "name": "CapitaLand Ascendas REIT",
    "market": "SG",
@@ -2379,6 +2392,7 @@
     },
     "yield_sustainable": 0.06853881278538813,
     "yield_4y_avg": 0.06938013698630137,
+    "payments_per_year": 3,
     "ltm_vs_prior": 0.9838966941245876,
     "cash_by_year": [
      0.1501,
@@ -2463,17 +2477,17 @@
   }
  ],
  "portfolio": {
-  "gross": 0.8409867578766999,
-  "risk_to_exits": 0.12319696182294788,
-  "vol": 0.08850998793837044,
-  "vol_if_independent": 0.05270005146629407,
+  "gross": 0.741643010767724,
+  "risk_to_exits": 0.1100488088128626,
+  "vol": 0.07675590753960128,
+  "vol_if_independent": 0.04588934269461525,
   "clusters": [
    {
     "members": [
      "XLE",
      "XOM"
     ],
-    "risk_before": 0.01,
+    "risk_before": 0.008872600693012114,
     "factor": 1.0
    },
    {
@@ -2483,7 +2497,7 @@
      "SPY",
      "XLK"
     ],
-    "risk_before": 0.02,
+    "risk_before": 0.017812110929900475,
     "factor": 1.0
    },
    {
@@ -2491,7 +2505,7 @@
      "CRWD",
      "PANW"
     ],
-    "risk_before": 0.01,
+    "risk_before": 0.009729555172611794,
     "factor": 1.0
    },
    {
@@ -2500,10 +2514,10 @@
      "MSFT",
      "NOW"
     ],
-    "risk_before": 0.015,
+    "risk_before": 0.013953154102011985,
     "factor": 1.0
    }
   ],
-  "gross_before": 0.8409867578766999
+  "gross_before": 0.741643010767724
  }
 }

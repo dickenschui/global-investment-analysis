@@ -10,7 +10,7 @@ import datetime as dt
 import json
 from pathlib import Path
 
-from . import data, evidence, monitor, notify
+from . import data, decisions as D, evidence, monitor, notify
 
 SPARK_WEEKS = 53
 TOP_OPTIONS = 12
@@ -97,6 +97,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
         "others": others,
         "data_quality": mon.get("data_quality"),
         "portfolio": dec.get("portfolio"),
+        "investor": D.INVESTOR,
         "links": notify.LINKS,
     }
     if opt:
@@ -129,6 +130,8 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
                       "benchmark": curve["benchmark"][::step]},
             "variants": bt.get("variants", []), "data_fixes": bt.get("data_fixes", []),
             "desk": {k: v for k, v in (bt.get("desk") or {}).items() if k != "curve"} or None,
+            "desk_next_week": {k: v for k, v in (bt.get("desk_next_week") or {}).items() if k not in ("curve", "years")} or None,
+            "desk_half_size": {k: v for k, v in (bt.get("desk_half_size") or {}).items() if k not in ("curve", "years")} or None,
             "desk_cluster_cap": {k: v for k, v in (bt.get("desk_cluster_cap") or {}).items() if k not in ("curve", "years")} or None,
             "universe_note": bt.get("universe_note"),
         }

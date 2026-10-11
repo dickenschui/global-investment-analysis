@@ -76,6 +76,7 @@ def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_0
         ("Income band high", 0.08, "Singapore income target: upper bound", "0.0%", False),
         ("Options sleeve cap", OPT.SLEEVE_CAP, "Total option premium at risk, share of portfolio", "0.0%", False),
         ("Options per-trade risk", OPT.PER_TRADE_RISK, "Premium at risk per option trade", "0.0%", False),
+        ("Gap allowance at the exit", D.GAP_ALLOWANCE, "Exits close beyond the level (mean 2.3% since 2008); added to the distance when sizing", "0.0%", False),
     ]
     for r, (k, v, note, fmt, user) in enumerate(policy, 2):
         po.cell(row=r, column=1, value=k).font = F()
@@ -85,9 +86,9 @@ def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_0
             c.fill = yellow
         po.cell(row=r, column=3, value=note).font = F(color="5B6673")
     po["B3"].comment = Comment(f"Engine output for week to {dec['as_of']}: VIX-based.", "global-research")
-    PV, RB, RPP, CAP_S, CAP_E, BUF, BAND_LO, BAND_HI, OPT_CAP, OPT_PT = (f"Policy!$B${i}" for i in range(2, 12))
-    po.cell(row=13, column=1, value="Portfolio tilts this week").font = F(bold=True)
-    for r, t in enumerate(dec["posture"]["tilts"], 14):
+    PV, RB, RPP, CAP_S, CAP_E, BUF, BAND_LO, BAND_HI, OPT_CAP, OPT_PT, GAP = (f"Policy!$B${i}" for i in range(2, 13))
+    po.cell(row=14, column=1, value="Portfolio tilts this week").font = F(bold=True)
+    for r, t in enumerate(dec["posture"]["tilts"], 15):
         po.cell(row=r, column=1, value=t["action"]).font = F()
         po.cell(row=r, column=3, value="Because: " + t["because"]).font = F(color="5B6673")
 
@@ -112,7 +113,7 @@ def build_workbook(dec: dict, path: str | Path, portfolio_value: float = 1_000_0
         ds.cell(row=r, column=13, value=c.get("trigger")).font = F(color=BLUE)
         ds.cell(row=r, column=14, value=f'=IF(L{r}="","",H{r}/L{r}-1)')
         ds.cell(row=r, column=15, value=(f'=IF(AND(F{r}="Accumulate",N{r}<>"",N{r}>0),'
-                                         f'MIN({RPP}/N{r},IF(E{r}="Stock",{CAP_S},{CAP_E})),"")'))
+                                         f'MIN({RPP}/(N{r}+{GAP}),IF(E{r}="Stock",{CAP_S},{CAP_E})),"")'))
         ds.cell(row=r, column=16, value=f'=IF(O{r}="","",O{r}*{RB}*{PV})')
         for i, key in ((17, "ret_3m"), (18, "ret_1y"), (19, "momentum")):
             ds.cell(row=r, column=i, value=c.get(key)).font = F(color=BLUE)

@@ -257,15 +257,22 @@ function tradeCcy(c) {
   if (k.exchange === "SEHK") return "HKD";
   return null;
 }
-const pv = () => S.pv ?? 1000000;
+const BASE = () => D.investor?.base_currency || "USD";
+function defaultPv() {   // the mandate's illustrative principal, converted to the base currency at this week's close
+  const ip = D.investor?.illustrative_principal;
+  if (!ip) return 1000000;
+  const a = usdPer(ip.currency), b = usdPer(BASE());
+  return a && b ? Math.round(ip.amount * a / b) : ip.amount;
+}
+const pv = () => S.pv ?? defaultPv();
 const halfOn = () => S.half ?? (D.evidence?.level === "LOW");
 function sizing(c) {
   if (!c.size) return null;
   const w = c.size * (D.posture.risk_budget ?? 1) * (halfOn() ? 0.5 : 1);
-  const value = pv() * w;
+  const value = pv() * w;                                   // in the base currency
   const price = live[c.symbol]?.price ?? c.last;
-  const ccy = tradeCcy(c), rate = ccy && usdPer(ccy);
-  const shares = rate ? Math.floor(value / (price * rate)) : null;
+  const ccy = tradeCcy(c), rate = ccy && usdPer(ccy), base = usdPer(BASE());
+  const shares = rate && base ? Math.floor(value * base / (price * rate)) : null;
   return {w, value, shares, ccy, risk: c.stop_distance != null ? value * c.stop_distance : null, price};
 }
 
@@ -527,7 +534,7 @@ function rDecisions() {
       <td class="n">${c.entry ? px(c.entry[0]) + "–" + px(c.entry[1]) : "—"}</td>
       <td class="n">${c.stop != null ? px(c.stop) : c.trigger != null ? `<span class="mut">↑ ${px(c.trigger)}</span>` : "—"}</td>
       <td class="n">${s ? pct(s.w, false) : "—"}</td><td class="n">${s ? num(s.value, 0) : "—"}</td><td class="sp">${spark(c.spark)}</td></tr>`; }).join("") || `<tr><td colspan="12" class="mut">No instruments match these filters.</td></tr>`}</tbody></table></div>
-    <p class="note">Max weight is the rule's cap from risk per position (0.5% of the portfolio to the exit level)${halfOn() ? ", halved while rule confidence is LOW" : ""}. Position is in your portfolio's currency (USD). "↑ trigger" is the price that would reopen a Watch or Avoid name. Click a row for levels, live price, sizing and a challenge.</p>`;
+    <p class="note">Max weight is the rule's cap from risk per position (0.5% of the portfolio to the exit level, allowing a 2% gap through it)${halfOn() ? ", halved while rule confidence is LOW" : ""}. Position is in your base currency (${esc(BASE())}). "↑ trigger" is the price that would reopen a Watch or Avoid name. Click a row for levels, live price, sizing and a challenge.</p>`;
   document.querySelectorAll("[data-st]").forEach(b => b.onclick = () => { S.stance = b.dataset.st; store.set("stance", S.stance); rDecisions(); });
   $("#f-mkt").onchange = e => { S.market = e.target.value; store.set("market", S.market); rDecisions(); };
   $("#f-sort").onchange = e => { S.sort = e.target.value; store.set("sort", S.sort); rDecisions(); };
@@ -536,9 +543,9 @@ function rDecisions() {
   document.querySelectorAll("tr[data-sym]").forEach(tr => { tr.onclick = () => openCall(tr.dataset.sym); tr.onkeydown = e => { if (e.key === "Enter") openCall(tr.dataset.sym); }; });
 }
 function pvControl() {
-  return `<label class="pv" for="pv">Portfolio (USD) <input class="input num" id="pv" inputmode="numeric" value="${num(pv(), 0)}"></label>
+  return `<label class="pv" for="pv">Portfolio (${esc(BASE())}) <input class="input num" id="pv" inputmode="numeric" value="${num(pv(), 0)}"></label>
     <label class="pv" title="Rule confidence is ${esc(D.evidence?.level || "n/a")}"><input type="checkbox" id="half"${halfOn() ? " checked" : ""}> Half size</label>`
-    + (S.pv == null ? `<span class="chip">example value</span>` : "");
+    + (S.pv == null ? `<span class="chip">illustrative: ${esc(D.investor?.illustrative_principal ? num(D.investor.illustrative_principal.amount, 0) + " " + D.investor.illustrative_principal.currency : "example")}</span>` : "");
 }
 function bindPv() {
   const i = $("#pv"); if (i) i.onchange = () => { const v = Number(i.value.replace(/[^0-9.]/g, "")); if (v > 0) { S.pv = v; store.set("pv", v); } rerender(); };
@@ -578,10 +585,10 @@ function openCall(sym) {
         <div><span>Momentum</span><b>${num(c.momentum, 2)}</b></div><div><span>Volatility</span><b>${pct(c.vol, false, 0)}</b></div></div>
       ${c.spark?.length ? ladder(c) : ""}
       <div class="row">${cap.mcp ? `<button class="btn" id="sh-live">Get live price</button>` : ""}<span class="small mut" id="sh-live-msg">${q ? "Priced " + new Date(q.at).toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit"}) : ""}</span></div>
-      ${s ? `<div class="panel" style="background:var(--sunk)"><header><h3>Position size</h3><span class="small mut">Portfolio ${num(pv(), 0)} USD${S.pv == null ? " (example)" : ""}${halfOn() ? " · half size" : ""} · change on the Decisions tab</span></header>
-        <div class="kv"><div><span>Weight</span><b>${pct(s.w, false)}</b></div><div><span>Value (USD)</span><b>${num(s.value, 0)}</b></div>
+      ${s ? `<div class="panel" style="background:var(--sunk)"><header><h3>Position size</h3><span class="small mut">Portfolio ${num(pv(), 0)} ${esc(BASE())}${S.pv == null ? " (illustrative)" : ""}${halfOn() ? " · half size" : ""} · change on the Decisions tab</span></header>
+        <div class="kv"><div><span>Weight</span><b>${pct(s.w, false)}</b></div><div><span>Value (${esc(BASE())})</span><b>${num(s.value, 0)}</b></div>
         <div><span>Shares</span><b>${s.shares != null ? num(s.shares, 0) : "—"}</b></div><div><span>Loss at exit</span><b class="neg">${s.risk != null ? num(s.risk, 0) : "—"}</b></div></div>
-        <p class="note">Shares at ${px(s.price)} ${esc(s.ccy || "")}${s.ccy && s.ccy !== "USD" ? " converted at this week's FX close" : ""}. Loss at exit assumes the exit fills at the level; gaps can make it worse.</p></div>` : ""}
+        <p class="note">Shares at ${px(s.price)} ${esc(s.ccy || "")}${s.ccy && s.ccy !== BASE() ? ", converted from " + esc(BASE()) + " at this week's FX close" : ""}. Loss at exit assumes the exit fills at the level; gaps can make it worse.</p></div>` : ""}
       ${c.income ? `<div class="panel" style="background:var(--sunk)"><header><h3>Income</h3>${stanceChip(c.income.stance)}</header>
         <div class="kv"><div><span>Trailing yield</span><b>${pct(c.income.yield, false, 2)}</b></div><div><span>Yield at 6%</span><b>${px(c.income.price_for_6pct)}</b></div>
         <div><span>Yield at 7%</span><b>${px(c.income.price_for_7pct)}</b></div><div><span>Yield at 8%</span><b>${px(c.income.price_for_8pct)}</b></div></div><p class="note">${esc(c.income.rule)}</p></div>` : ""}
@@ -629,16 +636,16 @@ function rIncome() {
 function rOptions() {
   const o = D.options;
   if (!o) { $("#v-options").innerHTML = `<div class="empty">No option chains were collected this week.</div>`; return; }
-  const pol = o.policy, budget = pv() * pol.per_trade;
+  const pol = o.policy, budget = pv() * pol.per_trade, budgetUsd = budget * (usdPer(BASE()) || 1);
   const maxBar = Math.max(...o.ideas.flatMap(i => Object.values(i.scenarios || {}).map(Math.abs)), 1);
   $("#v-options").innerHTML = `
     <div class="banner low"><p class="lead">Speculative sleeve: at most ${pct(pol.sleeve_cap, false, 0)} of the portfolio, ${pct(pol.per_trade, false, 0)} per trade, defined risk only.</p>
       <p class="mut small">Take profit at +${Math.round(pol.take_profit * 100)}%, cut at −${Math.round(pol.stop_loss * 100)}%, and close after ${pol.time_stop_days} days if nothing has happened. Prices are last week's mids: re-price before trading.</p></div>
-    <div class="toolbar">${pvControl()}<span class="note">Per-trade budget ${num(budget, 0)} USD</span></div>
-    <div class="grid3">${o.ideas.map(i => { const n = Math.floor(budget / i.debit_per_contract);
+    <div class="toolbar">${pvControl()}<span class="note">Per-trade budget ${num(budget, 0)} ${esc(BASE())} (${num(budgetUsd, 0)} USD)</span></div>
+    <div class="grid3">${o.ideas.map(i => { const n = Math.floor(budgetUsd / i.debit_per_contract);
       return `<article class="opt"><div class="ttl"><b>${esc(i.symbol)} ${esc(i.structure)}</b><span class="chip ${i.direction === "bull" ? "up" : "down"}">${esc(i.direction)}</span></div>
         <div class="mono small">${i.legs.map(l => `${l.qty > 0 ? "Buy" : "Sell"} ${l.strike}${l.right}`).join(" / ")} · ${esc(i.expiry)} (${i.days}d)</div>
-        <div class="kv"><div><span>Cost / contract</span><b>${num(i.debit_per_contract, 0)}</b></div><div><span>Contracts at ${pct(pol.per_trade, false, 0)}</span><b>${n}</b></div>
+        <div class="kv"><div><span>Cost / contract (USD)</span><b>${num(i.debit_per_contract, 0)}</b></div><div><span>Contracts at ${pct(pol.per_trade, false, 0)}</span><b>${n}</b></div>
           <div><span>Breakeven move</span><b>${pct(i.breakeven_move)}</b></div><div><span>Prob. of profit</span><b>${Math.round(i.prob_profit * 100)}%</b></div>
           <div><span>Reward : risk</span><b>${i.reward_risk == null ? "open" : num(i.reward_risk, 1) + " : 1"}</b></div><div><span>Return at 1σ</span><b class="${cls(i.return_at_1sd)}">${pct(i.return_at_1sd, true, 0)}</b></div></div>
         <div class="bars" aria-label="Return on premium if the underlying moves">${Object.entries(i.scenarios || {}).map(([k, v]) => `<div><i style="height:${Math.max(3, Math.abs(v) / maxBar * 100)}%;background:var(--${v >= 0 ? "up" : "down"})" title="${esc(k)}: ${pct(v, true, 0)}"></i><span>${esc(k)}</span></div>`).join("")}</div>
@@ -667,7 +674,13 @@ function rEvidence() {
       <div class="tile"><h3>Rule return a year</h3><div class="big">${pct(e.strategy.cagr)}</div><div class="sub">Equal weight ${pct(e.benchmark.cagr)}</div></div>
       <div class="tile"><h3>Sharpe ratio</h3><div class="big">${num(e.strategy.sharpe, 2)}</div><div class="sub">Equal weight ${num(e.benchmark.sharpe, 2)}</div></div>
       <div class="tile"><h3>Worst fall</h3><div class="big neg">${pct(e.strategy.max_drawdown)}</div><div class="sub">Equal weight ${pct(e.benchmark.max_drawdown)}</div></div>
-      <div class="tile"><h3>Time invested</h3><div class="big">${pct(e.avg_invested, false, 0)}</div><div class="sub">Cash earns 0% in the test</div></div></div>
+      <div class="tile"><h3>Names switched on</h3><div class="big">${pct(e.avg_invested, false, 0)}</div><div class="sub">Average share; fully invested in them, cash at 0% only when none</div></div></div>
+    ${e.desk ? `<div class="panel"><header><h2>The Desk as you would run it</h2><span class="small mut">Sizes, exits, T-bill cash, 10 bp a trade</span></header>
+      <div class="tw"><table><thead><tr><th>Version</th><th class="n">A year</th><th class="n">Sharpe</th><th class="n">Worst fall</th><th class="n">Exposure</th><th>Beats same exposure, both halves</th></tr></thead><tbody>
+      ${[["Full size, trade at the signal close", e.desk], ["Full size, trade a week later", e.desk_next_week], ["Half size (the rule while confidence is LOW)", e.desk_half_size]].filter(x => x[1]).map(([n, d]) => `<tr><td>${n}</td><td class="n">${pct(d.desk.cagr)}</td><td class="n">${num(d.desk.sharpe, 2)}</td><td class="n ${D.investor?.drawdown_tolerance && -d.desk.max_drawdown > D.investor.drawdown_tolerance ? "neg" : ""}">${pct(d.desk.max_drawdown)}</td><td class="n">${pct(d.avg_exposure, false, 0)}</td><td>${d.beats_matched_both_halves ? `<span class="chip up">yes</span>` : `<span class="chip down">no</span>`}</td></tr>`).join("")}
+      <tr><td>Same exposure spread over everything</td><td class="n">${pct(e.desk.matched.cagr)}</td><td class="n">${num(e.desk.matched.sharpe, 2)}</td><td class="n">${pct(e.desk.matched.max_drawdown)}</td><td class="n">${pct(e.desk.avg_exposure, false, 0)}</td><td>—</td></tr>
+      </tbody></table></div>
+      <p class="note">${D.investor?.drawdown_tolerance ? `Your stated tolerance is about a ${Math.round(D.investor.drawdown_tolerance * 100)}% whole-portfolio decline; worst falls beyond it are marked. ` : ""}Exits at the 40-week average less 3% are what cut the falls; picking names added nothing over the same exposure.${e.desk.exit_overshoot ? ` Exits closed a mean ${pct(e.desk.exit_overshoot.mean, false)} beyond the level (${e.desk.exit_overshoot.exits} exits), which sizing now allows for.` : ""}</p></div>` : ""}
     <div class="panel"><header><h2>Growth of 1 unit</h2><span class="small mut"><span style="color:var(--accent)">━</span> current rule &nbsp; <span style="color:var(--muted)">┅</span> equal weight</span></header>
       <svg class="curve" viewBox="0 0 ${W} ${H}" role="img" aria-label="Growth of one unit: current rule against equal weight">
         ${ticks.map(v => `<line class="g" x1="46" x2="${W - 10}" y1="${Y(v)}" y2="${Y(v)}"/><text x="4" y="${Y(v) + 4}">${v.toFixed(2)}</text>`).join("")}
@@ -683,8 +696,8 @@ function rEvidence() {
     ${yrs.length ? `<div class="panel"><header><h2>Year by year</h2><span class="small mut">Shading scales with the size of the gain or loss</span></header>
       <div class="tw heat"><table><thead><tr><th>Year</th><th class="n">Equal weight</th>${rules.map(v => `<th class="n">${esc(short(v))}</th>`).join("")}</tr></thead>
       <tbody>${yrs.map(y => `<tr><td class="mono">${y}</td><td class="n" style="${heat(bench.years[y])}">${pct(bench.years[y])}</td>${rules.map(v => `<td class="n" style="${heat(v.years?.[y])}">${pct(v.years?.[y])}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>` : ""}
-    ${e.data_fixes?.length ? `<p class="note">${e.data_fixes.map(f => f.reason ? `Excluded ${esc(f.symbol)} ${esc(f.date)}: ${esc(f.reason)}` : `Excluded bad print: ${esc(f.symbol)} ${esc(f.date)} closed ${f.close} between ${f.previous} and ${f.next}.`).join(" ")}</p>` : ""}
-    <p class="note">Limits: today's instrument list (survivorship), price returns in local currency, weekly closes, no costs, taxes or dividends, no macro overlay.</p>`;
+    ${e.data_fixes?.length ? `<p class="note">${e.data_fixes.map(f => f.reason ? `Excluded ${esc(f.symbol)} ${esc(f.date)}: ${esc(f.reason)}` : `Excluded bad print: ${esc(f.symbol)} ${esc(f.date)} closed ${Number(f.close).toPrecision(4)} between ${Number(f.previous).toPrecision(4)} and ${Number(f.next).toPrecision(4)}.`).join(" ")}</p>` : ""}
+    <p class="note">Limits: today's instrument list (survivorship), price returns in local currency, weekly closes, no taxes or dividends, no macro overlay; the Desk simulation charges 10 bp a trade.</p>`;
 }
 
 /* ---------- Journal (shared db) ---------- */

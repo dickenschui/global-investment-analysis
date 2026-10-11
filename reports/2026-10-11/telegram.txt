@@ -1,7 +1,7 @@
 <b>Weekly investment brief · week to 2026-10-09</b>
 Deploy 100% of the normal risk budget (Volatility calm).
 
-⚠️ Rule confidence: LOW. On 83 instruments from 2008-01-04 to 2026-10-09, Accumulate calls returned +0.2% versus the average instrument over the next 13 weeks and Avoid calls -0.4%. Following the calls returned 8.8% a year against 9.8% for holding everything equally (worst fall -41% vs -44%). Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
+⚠️ Rule confidence: LOW. On 83 instruments from 2008-01-04 to 2026-10-09, Accumulate calls returned +0.2% versus the average instrument over the next 13 weeks and Avoid calls -0.5%. Following the calls returned 8.7% a year against 9.9% for holding everything equally (worst fall -40% vs -44%). Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
 
 <b>Markets (1w / 3m)</b>
 • US: +1.2% / +3.1% (up)
@@ -10,18 +10,19 @@ Deploy 100% of the normal risk budget (Volatility calm).
 • HK: +1.1% / +0.9% (down)
 • China: -0.1% / -9.4% (down)
 
-<b>Accumulate (11)</b>
-• XLE: exit &lt; 55.59, max 2.9%
-• SHEL: exit &lt; 31.02, max 2.2%
-• XOM: exit &lt; 146.14, max 3.2%
-• CPER: exit &lt; 36.44, max 4.7%
-• XLK: exit &lt; 161.83, max 2.2%
-• SPY: exit &lt; 701.68, max 4.6%
-• AAPL: exit &lt; 282.50, max 2.6%
-• QQQ: exit &lt; 652.84, max 3.3%
-• XLV: exit &lt; 152.44, max 4.2%
-• GOOGL: exit &lt; 329.97, max 7.6%
-• NVDA: exit &lt; 195.99, max 2.9%
+<b>Accumulate (12)</b>
+• XLE: exit &lt; 55.88, max 2.7%
+• SHEL: exit &lt; 31.12, max 2.1%
+• XOM: exit &lt; 146.82, max 2.9%
+• SOXX: exit &lt; 455.48, max 2.0%
+• CPER: exit &lt; 36.50, max 4.0%
+• XLK: exit &lt; 162.37, max 2.0%
+• SPY: exit &lt; 702.65, max 3.9%
+• AAPL: exit &lt; 282.99, max 2.4%
+• QQQ: exit &lt; 654.29, max 3.0%
+• XLV: exit &lt; 152.48, max 3.6%
+• GOOGL: exit &lt; 330.58, max 6.0%
+• NVDA: exit &lt; 196.31, max 2.7%
 
 <b>SG income (6–8%)</b>
 • ME8U 6.9%; add at 1.793 (7%)

@@ -155,7 +155,7 @@ def uk_fx_report(mon, meta, prices, standalone=True) -> str:
     body = H.section("UK equities", H.table(METRIC_HEADERS + ["Prior thesis (9 Oct, to verify)"],
                      [r + [H.esc(PRIOR_THESES.get(s, ""))] for r, s in zip(metric_rows(uk, mon, meta, prices), uk)],
                      METRIC_NUMERIC, wrap={12}),
-                     "London prices are quoted in pence (GBp) where the exchange does so; returns are unaffected by the unit.")
+                     "London prices are shown in pounds (weekly closes); live exchange quotes are in pence. Returns are unaffected by the unit.")
     sectors: dict[str, list[float]] = {}
     for s in uk:
         m = mon["metrics"].get(s)

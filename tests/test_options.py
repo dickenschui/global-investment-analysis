@@ -37,7 +37,8 @@ def test_ideas_follow_desk_and_size_to_budget():
     dec = {"calls": [{"symbol": "AAA", "stance": "Accumulate"}, {"symbol": "BBB", "stance": "Watch"}]}
     out = O.build_ideas(chain, dec, "2026-10-09", portfolio=1_000_000)
     names = {i["structure"] for i in out["ideas"]}
-    assert names == {"Bull call spread", "Long call"}
+    assert len(names) == 1 and names <= {"Bull call spread", "Long call"}   # one idea per underlying in the sleeve
+    assert any(s["symbol"] == "AAA" and "better-ranked" in s["reason"] for s in out["skipped"])
     for i in out["ideas"]:
         assert i["premium_at_risk"] <= O.PER_TRADE_RISK * 1_000_000
     assert any(s["symbol"] == "BBB" for s in out["skipped"])
@@ -96,3 +97,17 @@ def test_earnings_note_never_invents_a_date():
     n = earnings_note("stock", 70, d0, "2026-12-18", {"XOM": "2026-10-30"}, "XOM")
     assert n["status"] == "spans" and n["date"] == "2026-10-30"
     assert earnings_note("stock", 70, d0, "2026-12-18", {"XOM": "2027-01-30"}, "XOM")["status"] == "clear"
+
+
+def test_sleeve_cap_is_enforced_in_the_output():
+    import json
+    from pathlib import Path
+    from global_investment_research import options as O
+    root = Path(__file__).resolve().parents[1]
+    chains = json.loads((root / "data/snapshots/2026-10-11/options.json").read_text())
+    dec = json.loads((root / "reports/2026-10-11/decisions.json").read_text())
+    res = O.build_ideas(chains, dec, "2026-10-09")
+    syms = [i["symbol"] for i in res["ideas"]]
+    assert len(syms) == len(set(syms))                                   # one idea per underlying
+    assert sum(i["premium_at_risk"] for i in res["ideas"]) <= O.SLEEVE_CAP * 1_000_000 + 1e-6
+    assert res["sleeve_used"] <= O.SLEEVE_CAP

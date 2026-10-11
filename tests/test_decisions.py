@@ -25,7 +25,7 @@ def test_stance_rules():
 def test_sizing_and_levels():
     c = D.equity_call(metrics("up"))  # stop = 97, distance = 110/97-1
     assert c["stop"] == pytest.approx(97.0)
-    assert c["size"] == pytest.approx(min(D.RISK_PER_POSITION / (110 / 97 - 1), D.MAX_POSITION))
+    assert c["size"] == pytest.approx(min(D.RISK_PER_POSITION / (110 / 97 - 1 + D.GAP_ALLOWANCE), D.MAX_POSITION))
     assert c["entry"] == (105.0, 110.0)
     tight = D.equity_call(metrics("up", last=100.5, short=100.2, long=100.0))
     assert tight["size"] == D.MAX_POSITION  # cap binds when stop is close
@@ -104,7 +104,27 @@ def test_sustainable_yield_discounts_a_special_and_flags_cuts():
     assert [round(x, 4) for x in h["prior_12m"]] == [0.06, 0.06, 0.06]
     out = sustainable_yield({"yield": 0.10, "trailing_cash": 0.10}, h)   # last year paid 0.10 vs 0.06 before
     assert out["yield_sustainable"] < 0.10 and "special or timing" in out["history_flag"]
-    cut = sustainable_yield({"yield": 0.05, "trailing_cash": 0.04}, h)
-    assert cut["yield_sustainable"] == 0.05 * 1 or cut["yield_sustainable"] <= 0.05
-    assert "falling" in cut["history_flag"]
+    cut_ca = [dict(a, value="0.02") if a["date"].startswith("2026") else a for a in ca]   # last two payments cut
+    cut = sustainable_yield({"yield": 0.04, "trailing_cash": 0.04}, distribution_history(cut_ca, asof))
+    assert cut["yield_sustainable"] <= 0.04 + 1e-12 and "falling" in cut["history_flag"]
+    # an ex-date that slipped past the 365-day window: the 12-month sum holds one payment, the payer pays twice
+    slip = [a for a in ca if a["date"] != "20251001"] + [{"type": "CashDividends", "date": "20251008", "value": "0.03"}]
+    slip = [a for a in slip if a["date"] != "20260801"] + [{"type": "CashDividends", "date": "20261012", "value": "0.03"}]
+    hs = distribution_history(slip, asof)
+    assert hs["payments_per_year"] == 2
     assert distribution_history(ca[:2], asof) is None                     # no multi-year record: say so, never guess
+
+
+def test_distribution_components_on_one_ex_date_are_one_payment():
+    import pandas as pd
+    from global_investment_research.income import distribution_history
+    asof = pd.Timestamp("2026-10-09")
+    ca = []
+    for y in (2022, 2023, 2024, 2025, 2026):
+        for m in ("02", "05", "08", "11"):
+            if f"{y}{m}01" <= "20261009":
+                ca += [{"type": "CashDividends", "date": f"{y}{m}01", "value": "0.007", "currency": "SGD"},
+                       {"type": "CashDividends", "date": f"{y}{m}01", "value": "0.011", "currency": "SGD"}]
+    h = distribution_history(ca, asof, currency="SGD")
+    assert h["payments_per_year"] == 4                       # quarterly payer, two components each
+    assert round(h["last_n_cash"], 6) == round(4 * 0.018, 6)

@@ -24,6 +24,14 @@ WARMUP = 52  # weeks needed for 1-year momentum and 40-week average
 COST = 0.001  # 10 bp of traded value, charged on turnover (one-way), for every simulated portfolio
 
 
+def forward_return(s: pd.Series, h: int) -> pd.Series:
+    """Return from each bar to the bar h bars later, kept only when those bars are h weeks apart (3 days'
+    slack). Across a data gap (a suspended line, a long holiday) the move is not a weekly return; drop it."""
+    r = s.shift(-h) / s - 1
+    gap = (s.index.to_series().shift(-h) - s.index.to_series()).dt.days
+    return r.where(gap <= 7 * h + 3)
+
+
 def stance_panel(prices: pd.DataFrame, funds: set | None = None) -> pd.DataFrame:
     """Long table: date, symbol, stance, size, levels, forward returns. Uses only past data for the stance."""
     funds = funds or set()
@@ -35,7 +43,7 @@ def stance_panel(prices: pd.DataFrame, funds: set | None = None) -> pd.DataFrame
         ma10, ma40 = s.rolling(10).mean(), s.rolling(40).mean()
         r13, r52 = s / s.shift(13) - 1, s / s.shift(52) - 1
         vol = s.pct_change().rolling(52).std() * math.sqrt(52)
-        fwd = {h: s.shift(-h) / s - 1 for h in HORIZONS}
+        fwd = {h: forward_return(s, h) for h in HORIZONS}
         for i in range(WARMUP, len(s)):
             last, sh, lo = s.iloc[i], ma10.iloc[i], ma40.iloc[i]
             state = "up" if last > sh > lo else "down" if last < sh < lo else "mixed"
@@ -54,7 +62,7 @@ def stance_panel(prices: pd.DataFrame, funds: set | None = None) -> pd.DataFrame
     nxt = []
     for sym, g in df.groupby("symbol"):
         s = prices[sym].dropna()
-        r = (s.shift(-1) / s - 1).reindex(g["date"])
+        r = forward_return(s, 1).reindex(g["date"])
         nxt.append(pd.Series(r.values, index=g.index))
     df["next1"] = pd.concat(nxt).sort_index()
     for h in HORIZONS:
@@ -118,7 +126,7 @@ def _perf(r: pd.Series, rf: pd.Series) -> dict:
 
 
 def desk_portfolio(df: pd.DataFrame, cash: pd.Series | None = None, cost: float = COST,
-                   cap_clusters: bool = D.CAP_CLUSTERS) -> dict:
+                   cap_clusters: bool = D.CAP_CLUSTERS, lag: int = 0, size_scale: float = 1.0) -> dict:
     """Simulate the Desk as it is meant to be used: buy a name when it turns Accumulate at the rule's
     risk-based size (0.5% risk to the exit level, capped), hold it until the weekly close falls below the
     exit level (40-week average x 0.97, re-set every week), keep the rest in cash. Weights are reset to
@@ -132,14 +140,19 @@ def desk_portfolio(df: pd.DataFrame, cash: pd.Series | None = None, cost: float 
     rets = piv["last"].pct_change(fill_method=None)
     held, prev = {}, {}
     rows = []
+    overshoot = []                      # how far below the exit level each exit actually closed
+    queue = [{} for _ in range(lag)]   # lag=1: weights decided on a Friday earn from the following week
     for i, dt in enumerate(dates):
         st, sz, last, ma40, nx = (piv[k].loc[dt] for k in ("stance", "size", "last", "ma40", "next1"))
         for sym in list(held):
-            if pd.isna(last.get(sym)) or last[sym] < ma40[sym] * (1 - D.STOP_BUFFER):
-                held.pop(sym)                                   # exit level broken (or no data)
+            if pd.isna(last.get(sym)):
+                held.pop(sym)
+            elif last[sym] < ma40[sym] * (1 - D.STOP_BUFFER):
+                held.pop(sym)                                   # exit level broken on the weekly close
+                overshoot.append(1 - last[sym] / (ma40[sym] * (1 - D.STOP_BUFFER)))
         for sym, stance in st.items():
             if sym not in held and stance == "Accumulate" and sz.get(sym) and sz[sym] > 0:
-                held[sym] = float(sz[sym])
+                held[sym] = float(sz[sym]) * size_scale
         if len(held) > 1:
             # same portfolio caps as the live Desk (gross, and clusters when switched on), trailing 52 weeks only
             dist = {k: last[k] / (ma40[k] * (1 - D.STOP_BUFFER)) - 1 for k in held}
@@ -149,6 +162,9 @@ def desk_portfolio(df: pd.DataFrame, cash: pd.Series | None = None, cost: float 
             target = dict(held)
         tot = sum(target.values())
         w = {k: v / tot for k, v in target.items()} if tot > 1 else target
+        if lag:
+            queue.append(w)
+            w = {k: v for k, v in queue.pop(0).items() if pd.notna(nx.get(k))}
         expo = sum(w.values())
         turn = sum(abs(w.get(k, 0.0) - prev.get(k, 0.0)) for k in set(w) | set(prev))
         bench_eq = nx.dropna().mean()
@@ -168,7 +184,11 @@ def desk_portfolio(df: pd.DataFrame, cash: pd.Series | None = None, cost: float 
             "annual_turnover": float(out["turn"].sum() / (len(out) / 52)), "halves": halves, "active_t": t,
             "beats_matched_both_halves": bool(all(h["desk"] is not None and h["matched"] is not None
                                                   and h["desk"] > h["matched"] for h in halves.values())),
-            "cost_per_trade": cost, "cash_yield": cash is not None and not cash.empty,
+            "cost_per_trade": cost, "cash_yield": cash is not None and not cash.empty, "lag_weeks": lag,
+            "exit_overshoot": {"exits": len(overshoot), "mean": float(np.mean(overshoot)) if overshoot else None,
+                               "median": float(np.median(overshoot)) if overshoot else None,
+                               "p90": float(np.percentile(overshoot, 90)) if overshoot else None,
+                               "worst": float(max(overshoot)) if overshoot else None},
             "years": {"desk": calendar_years(out["r"]), "matched": calendar_years(out["matched"])},
             "curve": {"dates": [x.date().isoformat() for x in out.index],
                       "desk": [float(v) for v in (1 + out["r"]).cumprod()],
@@ -190,6 +210,25 @@ def drop_bad_prints(prices: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
     return out, fixes
 
 
+def drop_before_level_breaks(prices: pd.DataFrame, persist: int = 4) -> tuple[pd.DataFrame, list[dict]]:
+    """A one-week move beyond 20x (or below 1/20) that does not reverse within `persist` weeks is a change of
+    quote unit (pence/pounds) or an unadjusted corporate action, not a market move. Drop the history before
+    it: rescaling would be an estimate."""
+    out, fixes = prices.copy(), []
+    for sym in prices.columns:
+        s = prices[sym].dropna()
+        ratio = s / s.shift(1)
+        for i in np.where((ratio > 20) | (ratio < 0.05))[0]:
+            after = s.iloc[i: i + persist + 1]
+            if len(after) > persist and (after / after.iloc[0]).between(0.5, 2).all():
+                d = s.index[i]
+                out.loc[out.index < d, sym] = np.nan
+                fixes.append({"symbol": sym, "date": f"before {d.date().isoformat()}",
+                              "reason": f"price level changed {ratio.iloc[i]:.3g}x in one week and stayed there "
+                                        "(quote unit or unadjusted corporate action); earlier history dropped"})
+    return out, fixes
+
+
 def apply_exceptions(prices: pd.DataFrame, exceptions: list[dict] | None) -> tuple[pd.DataFrame, list[dict]]:
     """Blank documented windows of unreliable source prices (config/data-exceptions.json)."""
     out, used = prices.copy(), []
@@ -205,8 +244,9 @@ def apply_exceptions(prices: pd.DataFrame, exceptions: list[dict] | None) -> tup
 def run(prices: pd.DataFrame, cash: pd.Series | None = None, funds: set | None = None,
         exceptions: list[dict] | None = None) -> dict:
     prices, excluded = apply_exceptions(prices, exceptions)
+    prices, breaks = drop_before_level_breaks(prices)
     prices, fixes = drop_bad_prints(prices)
-    fixes = fixes + excluded
+    fixes = fixes + breaks + excluded
     df = stance_panel(prices, funds)
     if df.empty:
         raise ValueError("not enough history to backtest")
@@ -233,11 +273,13 @@ def run(prices: pd.DataFrame, cash: pd.Series | None = None, funds: set | None =
             "split_date": pd.Timestamp(mid).date().isoformat(),
             "by_stance": by_stance, "t_accumulate_vs_avoid_13w": t_acc_avoid,
             "verdict": {"supported_both_halves": supported,
-                        "significant": t_acc_avoid is not None and abs(t_acc_avoid) >= 2,
+                        "significant": t_acc_avoid is not None and t_acc_avoid >= 2,
                         "strategy_beats_benchmark_risk_adjusted": (strat["strategy"]["sharpe"] or 0) > (strat["benchmark"]["sharpe"] or 0),
                         "drawdown_reduced": strat["strategy"]["max_drawdown"] > strat["benchmark"]["max_drawdown"]},
             "strategy": strat, "variants": compare_variants(prices), "data_fixes": fixes,
-            "desk": desk_portfolio(df, cash), "desk_cluster_cap": desk_portfolio(df, cash, cap_clusters=True)}
+            "desk": desk_portfolio(df, cash), "desk_next_week": desk_portfolio(df, cash, lag=1),
+            "desk_half_size": desk_portfolio(df, cash, size_scale=0.5),
+            "desk_cluster_cap": desk_portfolio(df, cash, cap_clusters=True)}
 
 
 # --- Rule variants -------------------------------------------------------------------
@@ -268,8 +310,8 @@ def compare_variants(prices: pd.DataFrame) -> list[dict]:
         if len(s) < WARMUP + 2:
             continue
         ma10, ma40 = s.rolling(10).mean(), s.rolling(40).mean()
-        nxt = s.shift(-1) / s - 1
-        f13 = s.shift(-13) / s - 1
+        nxt = forward_return(s, 1)
+        f13 = forward_return(s, 13)
         for i in range(WARMUP, len(s)):
             rows.append({"date": s.index[i], "symbol": sym, "p": s.iloc[i], "s": ma10.iloc[i], "l": ma40.iloc[i],
                          "next1": nxt.iloc[i], "fwd13": f13.iloc[i]})

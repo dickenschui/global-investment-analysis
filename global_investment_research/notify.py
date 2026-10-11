@@ -50,7 +50,7 @@ def digest(dec: dict, mon: dict, opt: dict | None = None, changes: list | None =
         "risk_note": dec["posture"]["risk_note"],
         "tilts": [t["action"] for t in dec["posture"]["tilts"]],
         "markets": [(m, p, pm["ret_1w"], pm["ret_3m"], pm["trend"]["state"]) for m, p, pm in markets],
-        "accumulate": [(c["symbol"], c["name"], c["last"], c["stop"], c["size"]) for c in acc],
+        "accumulate": [(c["symbol"], c["name"], c["last"], c["stop"], c["size"] * dec["posture"]["risk_budget"]) for c in acc],
         "avoid_count": len(avoid),
         "income": [(c["symbol"], c["name"], c["income"]["yield"], c["income_call"]["price_for_7pct"]) for c in inc],
         "options": [(i["symbol"], i["structure"], " / ".join(f"{'Buy' if l['qty'] > 0 else 'Sell'} {l['strike']:g}{l['right']}"

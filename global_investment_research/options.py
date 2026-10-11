@@ -190,6 +190,20 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
         i["return_at_1sd"] = payoff(legs, s1) / i["debit"] - 1
         i["score"] = i["prob_profit"] * max(i["return_at_1sd"], 0) - (1 - i["prob_profit"])
     ideas.sort(key=lambda i: -i["score"])
-    return {"as_of": as_of, "ideas": ideas, "skipped": skipped,
+    # Enforce the sleeve in the output, not only in prose: best idea per underlying, then take ideas in score
+    # order while the summed premium at risk stays within the sleeve cap.
+    chosen, used, seen = [], 0.0, set()
+    for i in ideas:
+        if i["symbol"] in seen:
+            skipped.append({"symbol": i["symbol"], "reason": f"{i['structure']}: a better-ranked idea on {i['symbol']} is already in the sleeve"})
+            continue
+        if used + i["premium_at_risk"] > SLEEVE_CAP * portfolio + 1e-9:
+            skipped.append({"symbol": i["symbol"], "reason": f"{i['structure']}: sleeve full ({SLEEVE_CAP*100:.0f}% of the portfolio)"})
+            continue
+        seen.add(i["symbol"])
+        used += i["premium_at_risk"]
+        chosen.append(i)
+    ideas = chosen
+    return {"as_of": as_of, "ideas": ideas, "skipped": skipped, "sleeve_used": used / portfolio,
             "policy": {"sleeve_cap": SLEEVE_CAP, "per_trade": PER_TRADE_RISK, "risk_free": RISK_FREE,
                        "take_profit": TAKE_PROFIT, "stop_loss": STOP_LOSS, "time_stop_days": TIME_STOP_DAYS}}

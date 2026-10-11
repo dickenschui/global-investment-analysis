@@ -16,12 +16,12 @@ h3{font:600 .8rem/1.2 var(--f-data);letter-spacing:.06em;text-transform:uppercas
 """
 
 
-def _sector_concentration(acc):
+def _sector_concentration(acc, risk_budget=1.0):
     if not acc:
         return None, 0.0, 0.0
     w = Counter()
     for c in acc:
-        w[c["sector"]] += c["size"] or 0
+        w[c["sector"]] += (c["size"] or 0) * risk_budget
     total = sum(w.values())
     top, top_w = w.most_common(1)[0]
     return top, top_w, total
@@ -35,7 +35,7 @@ def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None, c
     leaders = sorted(((m, v["proxy_metrics"]["ret_3m"]) for m, v in mk.items() if v["proxy_metrics"]),
                      key=lambda x: -x[1])
     best, worst = leaders[0], leaders[-1]
-    top_sector, top_w, total_w = _sector_concentration(acc)
+    top_sector, top_w, total_w = _sector_concentration(acc, p["risk_budget"])
     inc = sorted((c for c in calls if c.get("income_call") and c["income_call"]["stance"] == "Accumulate"),
                  key=lambda c: -c["income"]["yield"])
 
@@ -61,7 +61,7 @@ def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None, c
             + (f'<p class="warn" style="margin-top:6px">{H.esc(confidence)}</p>' if confidence else "") + '</div>')
 
     rows = [[f"<b>{H.esc(c['symbol'])}</b> {H.esc(c['name'])}", H.esc(c["sector"]), H.num(c["last"]),
-             f"{c['entry'][0]:,.2f}–{c['entry'][1]:,.2f}", H.num(c["stop"]), H.pct(c["size"], signed=False),
+             f"{c['entry'][0]:,.2f}–{c['entry'][1]:,.2f}", H.num(c["stop"]), H.pct(c["size"] * p["risk_budget"], signed=False),
              H.pct(c["ret_3m"])] for c in acc]
     body += H.section("Actions: Accumulate list", H.table(
         ["Instrument", "Sector", "Last", "Buy zone", "Exit below", "Max weight", "3m"], rows, numeric={2, 4, 5, 6}),
@@ -108,7 +108,7 @@ def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None, c
         risks.append("Rates: long yields are rising; a further jump would hit long-duration growth stocks and REITs together.")
     risks.append("Model limit: calls use price trend only. A strong trend can hide a stretched valuation; check before buying.")
     if "strengthening" in reading.get("US dollar", {}).get("reading", ""):
-        risks.append("Dollar: if the dollar trend reverses, the hedge tilt becomes a cost and Asia could rebound quickly.")
+        risks.append("Dollar: a reversal would take back the currency gain on US assets for a GBP-based investor, and Asia could rebound quickly.")
     body += H.section("Pre-mortem: why this could fail, most likely first", H.notes(risks))
     body += H.section("Next steps", H.notes([
         "Pass the five-question checklist (Handbook §6) for each Accumulate name you act on.",

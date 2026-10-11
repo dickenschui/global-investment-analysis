@@ -151,7 +151,9 @@ def main(argv=None) -> int:
     bt = sub.add_parser("backtest", help="walk-forward test of the decision rules on long weekly history")
     bt.add_argument("--history", required=True, help="directory of long weekly history JSON files")
     bt.add_argument("--out", required=True)
-    bt.add_argument("--start", help="ignore history before this date (YYYY-MM-DD), e.g. when only a few instruments exist")
+    bt.add_argument("--start", default="2007-01-01",
+                    help="ignore history before this date (default 2007-01-01: before it only a few instruments exist "
+                         "and several London series change quote unit)")
     wl = sub.add_parser("watchlist", help="symbols the hourly pulse must quote, from this week's reports")
     wl.add_argument("--reports", required=True)
     al = sub.add_parser("alerts", help="evaluate a live pulse against this week's levels; print new exceptions")
@@ -208,11 +210,11 @@ def main(argv=None) -> int:
             print(json.dumps(alerts.watch_list(dec, opt, kinds)))
             return 0
         pulse = json.loads(Path(args.pulse).read_text())
-        found = alerts.evaluate(pulse, dec, mon, opt)
-        fresh = alerts.new_since_last(found, args.state_dir, pulse["retrieved_at_utc"][:10])
-        quoted = {x["symbol"] for x in pulse["quotes"] if x.get("last")}
         kinds = {i["symbol"]: i["kind"] for i in universe["instruments"]}
-        stale = sorted(set(alerts.watch_list(dec, opt, kinds)) - quoted)
+        found = alerts.evaluate(pulse, dec, mon, opt, kinds)
+        fresh = alerts.new_since_last(found, args.state_dir, pulse["retrieved_at_utc"][:10])
+        usable, frozen = alerts.normalise_quotes(pulse, mon)
+        stale = sorted((set(alerts.watch_list(dec, opt, kinds)) - set(usable)) | set(frozen))
         text = alerts.alert_text(fresh, pulse["retrieved_at_utc"], stale)
         out = rep / "alerts"
         out.mkdir(exist_ok=True)

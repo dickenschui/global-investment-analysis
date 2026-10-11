@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from . import html as H
+from . import decisions as D, html as H
 
 CSS = """
 svg.curve{width:100%;height:auto;display:block}
@@ -55,7 +55,7 @@ def evidence_page(res: dict, standalone=True) -> str:
         ("Strategy CAGR", H.pct(st["strategy"]["cagr"]), f"Benchmark {H.pct(st['benchmark']['cagr'])}"),
         ("Sharpe ratio", H.num(st["strategy"]["sharpe"]), f"Benchmark {H.num(st['benchmark']['sharpe'])}"),
         ("Max drawdown", H.pct(st["strategy"]["max_drawdown"]), f"Benchmark {H.pct(st['benchmark']['max_drawdown'])}"),
-        ("Average invested", H.pct(st["avg_invested"], signed=False), "Rest held in cash at 0%"),
+        ("Names switched on", H.pct(st["avg_invested"], signed=False), "Average share; fully invested in them, cash only when none"),
     ]) + curve_svg(st["curve"]),
         "Each week, hold equal weights in every instrument rated Accumulate or Hold (price above both averages), cash otherwise. "
         f"Benchmark holds every instrument equally. {st['weeks']} weeks from {st['start']} to {st['end']}.")
@@ -72,6 +72,16 @@ def evidence_page(res: dict, standalone=True) -> str:
             f"Beats the same exposure spread over everything in both halves: <b>{'yes' if dk['beats_matched_both_halves'] else 'no'}</b> "
             f"(Sharpe {H.num(h['first']['desk'])} vs {H.num(h['first']['matched'])}, then {H.num(h['second']['desk'])} vs "
             f"{H.num(h['second']['matched'])}); active t {H.num(dk['active_t'])}.",
+            (f"Trading a week later instead of at the signal close (you read the pack at the weekend): "
+             f"{H.pct(res['desk_next_week']['desk']['cagr'])} a year, Sharpe {H.num(res['desk_next_week']['desk']['sharpe'])}, "
+             f"worst fall {H.pct(res['desk_next_week']['desk']['max_drawdown'])}; beats the same exposure in both halves: "
+             f"<b>{'yes' if res['desk_next_week']['beats_matched_both_halves'] else 'no'}</b>. A rule must pass with either fill."
+             if res.get("desk_next_week") else ""),
+            (f"Against your stated tolerance of a {D.INVESTOR['drawdown_tolerance']*100:.0f}% whole-portfolio decline: worst "
+             f"fall {H.pct(dk['desk']['max_drawdown'])} at full size, {H.pct(res['desk_half_size']['desk']['max_drawdown'])} at "
+             f"half size ({H.pct(res['desk_half_size']['desk']['cagr'])} a year). Holding everything all the time fell "
+             f"{H.pct(res['strategy']['benchmark']['max_drawdown'])}."
+             if res.get("desk_half_size") and D.INVESTOR.get("drawdown_tolerance") else ""),
             (f"Tested and not adopted: capping correlated clusters at 1% risk gives Sharpe {H.num(cc['desk']['sharpe'])} "
              f"and worst fall {H.pct(cc['desk']['max_drawdown'])}." if cc else ""),
         ]), "Buy on Accumulate at the rule's size (0.5% risk to the exit, capped), hold until the weekly close breaks the exit "
@@ -130,7 +140,7 @@ def evidence_page(res: dict, standalone=True) -> str:
     ]))
     body += H.section("Limits of this test", H.notes([
         "Survivorship: today's instrument list is used for the whole period; past losers that left the list are missing.",
-        "Price returns in local currency, weekly closes, no trading costs, taxes or dividends.",
+        "Price returns in local currency, weekly closes, no taxes or dividends. The Desk simulation charges 10 bp a trade; the other rule tests are before costs.",
         "The macro stress overlay (VIX risk budget) is not applied historically.",
         "Instruments join the test when their history starts (for example XLC in 2018); each week the rule and the "
         "benchmark use the same set of instruments.",
@@ -150,8 +160,9 @@ def confidence_level(res: dict) -> str:
     risk-adjusted; MEDIUM drops the significance requirement; anything else is LOW."""
     v = res["verdict"]
     beats = v.get("strategy_beats_benchmark_risk_adjusted", False)
-    if res.get("desk") and not res["desk"]["beats_matched_both_halves"]:
-        return "LOW"  # the process as actually run (sizes, exits, cash, costs) adds nothing over the same exposure
+    for k in ("desk", "desk_next_week"):
+        if res.get(k) and not res[k]["beats_matched_both_halves"]:
+            return "LOW"  # the process as run (sizes, exits, cash, costs, either fill) adds nothing over the same exposure
     if v["supported_both_halves"] and v["significant"] and beats:
         return "HIGH"
     return "MEDIUM" if v["supported_both_halves"] and beats else "LOW"

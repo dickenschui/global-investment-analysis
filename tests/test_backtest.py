@@ -74,3 +74,20 @@ def test_adoption_test_fields_and_confidence_requires_beating_benchmark():
     assert confidence_level(good_ranking) == "LOW"   # ranking alone is not enough if following it loses to equal weight
     assert confidence_level(dict(good_ranking, verdict=dict(good_ranking["verdict"],
                                                             strategy_beats_benchmark_risk_adjusted=True))) == "HIGH"
+
+
+def test_permanent_unit_change_drops_earlier_history_only():
+    px = make_prices()
+    px.iloc[:120, px.columns.get_loc("UP")] *= 100        # quoted in pence before week 120, pounds after
+    clean, fixes = B.drop_before_level_breaks(px)
+    assert len(fixes) == 1 and fixes[0]["symbol"] == "UP"
+    assert clean["UP"].iloc[:120].isna().all() and clean["UP"].iloc[120:].equals(px["UP"].iloc[120:])
+    assert B.drop_before_level_breaks(make_prices())[1] == []
+
+
+def test_forward_return_skips_data_gaps():
+    import pandas as pd
+    idx = pd.to_datetime(["2012-04-27", "2012-05-04", "2012-09-14", "2012-09-21"])
+    s = pd.Series([1.0, 1.1, 1.3, 1.4], index=idx)
+    r = B.forward_return(s, 1)
+    assert pd.isna(r.loc["2012-05-04"]) and round(r.loc["2012-04-27"], 6) == 0.1

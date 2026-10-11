@@ -55,19 +55,30 @@ def income_row(symbol: str, price: float, as_of: pd.Timestamp, dividends: list[d
     }
 
 
-def distribution_history(corp_actions: list[dict], as_of: pd.Timestamp, years: int = 3) -> dict | None:
+def distribution_history(corp_actions: list[dict], as_of: pd.Timestamp, years: int = 3,
+                         currency: str | None = None) -> dict | None:
     """Cash paid in each of the `years` twelve-month windows before the latest one, from IBKR corporate
-    actions (CashDividends, in the listing currency). None when any window has no payment on record."""
-    pays = [(pd.Timestamp(a["date"]), float(a["value"])) for a in corp_actions
-            if a.get("type") == "CashDividends" and a.get("value") not in (None, "")]
-    prior = []
+    actions (CashDividends in the listing currency; others are left out). Also the usual number of payments
+    a year and the cash of the most recent that-many payments, which does not depend on where an ex-date
+    falls against a 365-day window. None when any window has no payment on record."""
+    events: dict = {}
+    for a in corp_actions:
+        if (a.get("type") == "CashDividends" and a.get("value") not in (None, "")
+                and (currency is None or a.get("currency") in (None, currency)) and pd.Timestamp(a["date"]) <= as_of):
+            d = pd.Timestamp(a["date"])          # REITs split one distribution into components on one ex-date
+            events[d] = events.get(d, 0.0) + float(a["value"])
+    pays = sorted(events.items())
+    prior, counts = [], []
     for k in range(1, years + 1):
         hi, lo = as_of - pd.Timedelta(days=365 * k), as_of - pd.Timedelta(days=365 * (k + 1))
         w = [v for d, v in pays if lo < d <= hi]
         if not w:
             return None
         prior.append(sum(w))
-    return {"prior_12m": prior, "avg_prior": sum(prior) / len(prior)}
+        counts.append(len(w))
+    freq = int(sorted(counts)[len(counts) // 2])
+    return {"prior_12m": prior, "avg_prior": sum(prior) / len(prior), "payments_per_year": freq,
+            "last_n_cash": sum(v for _, v in pays[-freq:])}
 
 
 def sustainable_yield(row: dict, hist: dict | None) -> dict:
@@ -82,5 +93,8 @@ def sustainable_yield(row: dict, hist: dict | None) -> dict:
     flag = ("last 12 months above the prior three-year average: special or timing; using the four-year average"
             if ratio > 1.25 else "distributions falling: last 12 months below the prior three-year average"
             if ratio < 0.8 else "volatile: lowest year under 70% of the highest" if min(all_years) / max(all_years) < 0.7 else "steady")
-    return {"yield_sustainable": min(y, y4), "yield_4y_avg": y4, "ltm_vs_prior": ratio,
+    # The four-year average absorbs payment timing (ex-dates either side of a 365-day edge, advance
+    # distributions around placements) and one-offs; the lower of it and the 12-month yield is the basis.
+    return {"yield_sustainable": min(y, y4), "yield_4y_avg": y4,
+            "payments_per_year": hist.get("payments_per_year"), "ltm_vs_prior": ratio,
             "cash_by_year": [ltm] + hist["prior_12m"], "history_flag": flag}

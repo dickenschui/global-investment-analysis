@@ -18,7 +18,7 @@ SECTIONS = [
         P("This handbook turns weekly market data into decisions you can act on and audit. It covers equities in Hong Kong, "
           "mainland China, Singapore, the UK and the US, plus sectors, gold, commodities, rates and FX."),
         T(["Mandate", "Objective", "Horizon", "Primary tool"],
-          ["Global growth equities", "Compound capital with controlled drawdowns", "6–12 months", "Decision Desk §3"],
+          ["Global growth equities", "Compound capital with controlled drawdowns", "5–10 years (positions reviewed weekly)", "Decision Desk §3"],
           ["Singapore income", "6–8% sustainable cash yield, accepting price volatility", "3+ years", "Decision Desk §4"],
           ["Macro and FX", "Set the risk budget and hedges", "Weekly", "Decision Desk §1, §5"]),
         P("The tool ranks evidence. It does not replace judgement on valuation, accounting quality or personal tax, "
@@ -59,7 +59,7 @@ SECTIONS = [
     ("5. Macro playbook", [
         T(["Reading", "Tilt"],
           ["Long yields rising (TLT down-trend)", "Keep bond duration short"],
-          ["Dollar strengthening (UUP up-trend)", "Hedge non-USD assets for USD investors; HK/EM headwind"],
+          ["Dollar strengthening (UUP up-trend)", "GBP-based: US assets gain in pounds, do not hedge USD now; HK/EM headwind"],
           ["Oil up-trend", "Keep energy exposure"],
           ["Gold down-trend", "Do not add gold until it reclaims its 40w average"],
           ["Defensives leading cyclicals (XLP > XLY)", "Favour quality and defensives"],

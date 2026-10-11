@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 
-from . import html as H
+from . import decisions as D, html as H
 from .monitor import fmt_pct
 from .reports import PRIOR_THESES
 
@@ -92,7 +92,8 @@ def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str
              '<th>Buy zone</th><th>Key level (weekly close)</th><th>Max size</th><th>Amount</th><th>3m</th><th>Momentum</th>'
              '</tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>")
     body += H.section("3 · Action table with position sizing", controls + table,
-                      "Max size risks 0.5% of the portfolio if the exit level is hit (capped at 8% per stock, 20% per ETF), "
+                      "Max size risks 0.5% of the portfolio if the exit level is hit, allowing for the usual 2% gap through the level "
+                      "(capped at 8% per stock, 20% per ETF), "
                       "scaled by this week's risk budget. Amount updates from your portfolio value. Prices are in each "
                       "instrument's quote currency (London in pounds, Hong Kong in HKD, China A in CNY).")
 
@@ -131,8 +132,9 @@ def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str
     # 5. FX desk
     frows = [[H.esc(f["pair"]), H.trend_chip(f["state"]), H.esc(f["view"]), H.pct(f["ret_3m"])] for f in dec["fx"]]
     body += H.section("5 · FX desk", H.table(["Pair", "Trend", "Read", "3m"], frows, numeric={3}),
-                      "Use this to decide whether to hedge. A USD-based investor holding UK or SG assets loses when GBP/USD "
-                      "or SGD weaken; a GBP- or SGD-based investor holding US assets gains when USD strengthens.")
+                      f"Your base currency is {D.BASE_CCY}. Holdings priced in other currencies gain when that currency "
+                      f"strengthens against {D.BASE_CCY} and lose when it weakens: GBP/USD up means US assets are worth less in "
+                      "pounds. Hedge only the part of a currency exposure you could not live with if the trend runs on.")
 
     # 6. Checklist
     body += H.section("6 · Before you act: the five-question checklist", (
@@ -148,7 +150,8 @@ def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str
     flips = [
         "Volatility: VIX above 25 cuts the risk budget to 50%; above 16 cuts it to 75%.",
         "Rates: TLT reclaiming its 40-week average would end the 'yields rising' tilt and reopen duration.",
-        "Dollar: UUP falling below its 40-week average would remove the hedge-non-USD tilt and favour HK/EM.",
+        "Dollar: UUP falling below its 40-week average would end the dollar-strength tilt, cut the currency gain on US assets "
+        "for a GBP-based investor and favour HK/EM.",
         "China/HK: the 3188 or 2800 ETF outperforming SPY over 3 months would end the underweight tilt.",
         "Single names: a weekly close below the exit level flips Accumulate/Hold to Avoid; a reclaim of both averages flips Avoid to Watch.",
     ]

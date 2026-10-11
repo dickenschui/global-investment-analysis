@@ -9,16 +9,16 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 |---|---|---|---|---|
 | Weekly prices, 96 instruments, 5 markets | **Have** (IBKR) | Trend, momentum, risk | IBKR connector | — |
 | Option chains, IV and greeks | **Have** (IBKR, 11 underlyings) | Options sleeve | IBKR connector | — |
-| SG distributions, 1 year | **Partial** | Income stability needs 3–5 years of history | IBKR corporate actions with a longer period | High |
+| SG distributions | **Added 2026-10-11**: 4–5 years per name from IBKR corporate actions (`data/history/sg_distributions_5y.json`) | Sustainable yield and payout record | Refresh quarterly with the same call | — |
 | Earnings dates | **Missing** | An option held through earnings carries a hidden volatility event | Bigdata.com corporate calendar (needs credit) | **Critical** for options |
 | Macro calendar (CPI, payrolls, central banks) | **Missing** | Hourly alerts should know when a release is due | Bigdata.com economic calendar (needs credit) | High |
 | Fundamentals: valuation, margins, FCF, estimates | **Missing** | Trend calls can hide stretched valuations | Financial Datasets (needs credit) or company filings | High |
-| Interest rates and curve (2y/10y, policy rates) | **Proxy only** (TLT/IEF prices) | Rates drive REITs, growth and FX | Financial Datasets interest rates, or FRED (blocked) | Medium |
+| Interest rates and curve (2y/10y, policy rates) | **Partial**: 13-week T-bill from IBKR (cash return in the backtest); curve still proxied by TLT/IEF | Rates drive REITs, growth and FX | Financial Datasets interest rates, or FRED (blocked) | Medium |
 | Credit spreads | **Added 2026-10-11** (HYG vs LQD reading and tilt) | Early warning of risk-off | IBKR | — |
 | Breadth beyond the monitored names | **Partial** | 9–15 names per market is a thin breadth sample | Add equal-weight ETFs (RSP) and advance/decline via IBKR | Medium |
 | News and sentiment | **Missing** | Explains exceptions in hourly alerts | Bigdata.com search/sentiment (needs credit) | Medium |
 | Positioning: short interest, futures positioning (COT), put/call ratios | **Missing** | Crowding risk | IBKR option volumes; CFTC (blocked) | Low |
-| Longer price history | **Added 2026-10-11**: 19 years (2007 on) for 36 instruments; TLT only from 2016 and SHEL from 2016 under current IBKR contracts | Backtest of the decision rules through 2008, 2011, 2018, 2020 and 2022 | IBKR `step_count` weekly bars (1,000 per call); extend to the full universe | Medium |
+| Longer price history | **Full universe 2026-10-11**: all 98 instruments, up to 1,000 weekly bars each, plus the 13-week T-bill (IRX) | Backtest through 2008, 2011, 2018, 2020 and 2022 | IBKR `step_count` weekly bars | — |
 | Total return (dividends in) | **Missing** for equities | Understates income names | IBKR corporate actions for all stocks | Medium |
 | Live and delayed quotes | **Delayed / frozen at weekends** | Option prices must be re-checked live | IBKR market-data subscription | Note only |
 
@@ -55,4 +55,50 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 - **Rule tightened (not loosened):** a rule is adopted only if it beats equal weight on Sharpe in both halves AND all three thirds AND has active t ≥ 2 (`backtest.ADOPTION_T`). MEDIUM confidence now also requires the rule portfolio to beat equal weight risk-adjusted; good cross-sectional ranking alone (+0.2% vs −0.1% per 13 weeks) is not enough. No rule passes, so the live rule is unchanged and confidence stays LOW.
 - **Gap fixed:** the weekly routine never re-ran the backtest, so the confidence note would have disappeared from next week's pack. The routine now runs `backtest` before `monitor`.
 - **Next improvement:** the rules use price trend only and none beats equal weight. The highest-value next input is fundamentals or valuation (Financial Datasets credit), tested on the same walk-forward basis, plus a cash yield so time in cash is not scored at 0%.
+
+### 2026-10-11 (revalidation and blind-spot fixes)
+Two independent reviews: a code and methodology audit of this repo, and a comparison with the ChatGPT/Codex app (`dickenschui/global-investment`, global-investment.streamlit.app).
+- **Proven bugs fixed (each with a test):**
+  - Hourly alerts compared London quotes in pence with exit levels in pounds, so UK exits could never fire and 12 UK names raised false "revisit" alerts every hour. Quotes are now put in the units of the weekly levels.
+  - BA., RR. and NG. were treated as FX pairs; FX now comes from the universe.
+  - Frozen quotes are set aside as stale.
+  - The live trend used a 41-week average while every document and the backtest used 40; live and backtest calls now agree on 99.8% of 24,292 weekly calls (98.8% before).
+  - The 5% options sleeve was not enforced (16 ideas = 15% of the portfolio); now one idea per underlying, within the cap (4.75% this week).
+  - The "significant" flag ignored the sign of t.
+  - Data gaps were booked as one-week returns.
+  - The Brief and Telegram ignored the risk budget.
+  - The UK page mislabelled pounds as pence.
+  - The app ignored the risk budget.
+  - REIT distribution components on one ex-date are one payment.
+- **Data:**
+  - Long history now covers all 98 instruments; every overlapping week matches this week's snapshots exactly.
+  - Four 2007 London unit errors are dropped automatically. Permanent pence/pound level breaks drop earlier history, and the default start is 2007.
+  - The Rolls-Royce October 2020 rights-issue window is excluded as a documented exception.
+- **Model blind spots fixed:**
+  - The backtest now also simulates the Desk as it is run: risk-sized buys on Accumulate, hold to the exit, T-bill cash, 10 bp costs. It is compared with the same exposure spread over everything, at the signal close and a week later, at full and half size.
+  - Exits closed a mean 2.3% beyond the level over 662 exits, so sizing now adds a 2% gap allowance.
+  - The SG income screen uses the lower of the 12-month and four-year-average yields; AJBU leaves the band (6.21% to 4.97%).
+  - Option ideas carry an earnings note and never an invented date. The paid calendars still have no credit.
+  - A portfolio check reports correlated clusters, gross exposure, risk to exits and true volatility.
+  - The base currency is now GBP from the owner's confirmed mandate (`config/investor.json`), and the FX advice was rewritten for it.
+- **Findings (83 rated instruments, 2008–2026):**
+
+  | Version | Return a year | Sharpe | Worst fall |
+  |---|---|---|---|
+  | Desk, full size | 7.3% | 0.62 | −21.4% |
+  | Same exposure, no selection | 7.4% | 0.63 | −22.2% |
+  | Desk, trading a week later | 7.2% | 0.59 | −26.5% |
+  | Desk, half size | 5.9% | 0.67 | −15.7% |
+  | Always-invested equal weight | 9.9% | 0.69 | −43.9% |
+
+  - The exits cut the 2008-style drawdown roughly in half; name selection adds nothing.
+  - At full size the worst fall breaches the owner's 20% tolerance; half size fits it.
+- **Tested and rejected:** capping correlated clusters at 1% risk lowered the Sharpe ratio in both halves (0.57 vs 0.62), so the check reports clusters but does not cut sizes. No entry variant passes the adoption test, so confidence stays LOW.
+- **From the ChatGPT app, adopted:** GBP-primary mandate and drawdown tolerance; stale-quote gating.
+- **From the ChatGPT app, still to adopt:**
+  - A delivery path that does not depend on Claude connectors: its GitHub Actions email already works, while our routines still have no connectors attached.
+  - Hash manifests for snapshot files.
+  - Primary-source RSS headline context for urgent alerts.
+  - A whole-portfolio stress test calibrated from our 19-year history.
+- **Next improvement:** attach the connectors (owner), then add a SHA-256 manifest written at collection time and checked when loading.
 

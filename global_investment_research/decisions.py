@@ -7,7 +7,9 @@ and fully documented in docs/HANDBOOK.md so a human can audit and override them.
 """
 from __future__ import annotations
 
+import json
 import math
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -19,6 +21,10 @@ RISK_PER_POSITION = 0.005      # portfolio fraction lost if the invalidation lev
 MAX_POSITION = 0.08            # single-name cap
 MAX_POSITION_ETF = 0.20        # broad index / sector ETF cap
 STOP_BUFFER = 0.03             # invalidation = 3% below the 40-week average
+INVESTOR = json.loads((Path(__file__).resolve().parents[1] / "config/investor.json").read_text()) \
+    if (Path(__file__).resolve().parents[1] / "config/investor.json").exists() else {}
+BASE_CCY = INVESTOR.get("base_currency", "USD")
+GAP_ALLOWANCE = 0.02           # exits close beyond the level: mean 2.3% over 662 exits 2008-2026 (median 1.5%)
 EXTENDED = 0.20                # >20% above the 40-week average = do not chase
 CLUSTER_CORR = 0.80            # weekly-return correlation that makes two positions one bet
 CLUSTER_RISK = 2 * RISK_PER_POSITION   # most a cluster of correlated positions may lose at its exits
@@ -52,7 +58,8 @@ def equity_call(m: dict, regime_stressed: bool = False, is_fund: bool = False) -
     # Buy zone: from the 10-week average (pullback) up to today's price.
     entry = (min(short_ma, last), last)
     dist = last / stop - 1
-    size = min(RISK_PER_POSITION / dist, MAX_POSITION_ETF if is_fund else MAX_POSITION) if dist > 0 else None
+    # Size so the expected loss at the exit, including the usual gap through the level, is RISK_PER_POSITION.
+    size = min(RISK_PER_POSITION / (dist + GAP_ALLOWANCE), MAX_POSITION_ETF if is_fund else MAX_POSITION) if dist > 0 else None
     return {"stance": stance, "rule": rule, "entry": entry, "stop": stop, "stop_distance": dist, "size": size,
             "trigger": None}
 
@@ -108,7 +115,8 @@ def macro_posture(regime: list[dict]) -> dict:
     if "rising" in r.get("Rates", ""):
         tilt("Keep bond duration short; avoid adding long Treasuries", r["Rates"])
     if "strengthening" in r.get("US dollar", ""):
-        tilt("Hedge or underweight non-USD assets for a USD-based portfolio; strong dollar is a headwind for HK/EM", r["US dollar"])
+        tilt(f"Dollar strengthening: for a {BASE_CCY}-based portfolio unhedged US assets gain from the currency, so do not "
+             "hedge USD exposure now; a strong dollar is a headwind for HK/EM", r["US dollar"])
     if "up-trend" in r.get("Oil", ""):
         tilt("Keep energy exposure (oil up-trend supports XLE/SHEL/XOM)", r["Oil"])
     if "down-trend" in r.get("Gold", ""):
@@ -214,7 +222,8 @@ def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08), prices: pd.DataFra
             row = income_row(sym, price, pd.Timestamp(mon["as_of"]), inst.get("dividends", []),
                              snap.get("dividend_yield_pct"), band)
             if dist_history is not None:
-                hist = distribution_history(dist_history.get(sym, []), pd.Timestamp(mon["as_of"]))
+                hist = distribution_history(dist_history.get(sym, []), pd.Timestamp(mon["as_of"]),
+                                            currency=inst.get("currency"))
                 row.update(sustainable_yield(row, hist))
             ic = income_call(row, m, band)
             c.update(income=row, income_call=ic)

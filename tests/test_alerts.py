@@ -58,3 +58,29 @@ def test_cli_alerts_end_to_end(tmp_path, capsys):
     assert "Exit level breached" in out and "No live quote for" in out
     assert main(["alerts", "--pulse", str(pf), "--reports", str(rep), "--state-dir", str(tmp_path / "s")]) == 0
     assert "No new exceptions" in capsys.readouterr().out
+
+
+def test_london_pence_quotes_and_dotted_tickers():
+    dec = {"as_of": "2026-10-09", "calls": [
+        {"symbol": "SHEL", "stance": "Accumulate", "stop": 31.02, "trigger": None},
+        {"symbol": "HSBA", "stance": "Avoid", "stop": None, "trigger": 13.0},
+        {"symbol": "BA.", "stance": "Hold", "stop": 15.0, "trigger": None}]}
+    mon = {"metrics": {"SHEL": {"vol": 0.25, "last": 37.95}, "HSBA": {"vol": 0.25, "last": 13.96},
+                       "BA.": {"vol": 0.39, "last": 18.574}}}
+    kinds = {"SHEL": "stock", "HSBA": "stock", "BA.": "stock", "GBP.USD": "fx"}
+    p = pulse([{"symbol": "SHEL", "last": 3050, "prior_close": 3100},      # pence: 30.50 GBP is below the 31.02 exit
+               {"symbol": "HSBA", "last": 1396, "prior_close": 1390},      # pence: 13.96 is above 13.0 trigger, genuinely
+               {"symbol": "BA.", "last": 1828, "prior_close": 1857.4}])    # -1.6% stock move is not an FX shock
+    got = {(a["symbol"], a["rule"]) for a in A.evaluate(p, dec, mon, None, kinds)}
+    assert ("SHEL", "Exit level breached") in got
+    assert ("BA.", "FX shock") not in got
+    assert ("HSBA", "Revisit trigger crossed") in got
+    p2 = pulse([{"symbol": "HSBA", "last": 1250, "prior_close": 1260}])    # 12.50 GBP: below trigger, no false alert
+    assert not [a for a in A.evaluate(p2, dec, mon, None, kinds) if a["symbol"] == "HSBA"]
+
+
+def test_frozen_quotes_are_stale_not_alerts():
+    p = pulse([{"symbol": "XOM", "last": 140, "prior_close": 160, "data_status": "FROZEN"}])
+    assert A.evaluate(p, DEC, MON, OPT) == []
+    _, stale = A.normalise_quotes(p, MON)
+    assert stale == ["XOM"]
