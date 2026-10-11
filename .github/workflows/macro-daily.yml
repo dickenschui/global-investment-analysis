@@ -6,6 +6,11 @@ on:
   schedule:
     - cron: '30 6 * * 1-5'
   workflow_dispatch:
+  push:  # also check the live sources whenever the source list or the fetchers change, on any branch
+    paths:
+      - config/macro-sources.json
+      - global_investment_research/macro_sources.py
+      - .github/workflows/macro-daily.yml
 
 permissions:
   contents: write

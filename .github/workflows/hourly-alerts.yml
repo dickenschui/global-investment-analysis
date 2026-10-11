@@ -6,6 +6,15 @@ on:
   schedule:
     - cron: '7 1-21 * * 1-5'
   workflow_dispatch:
+  push:  # also check the live quote and news path whenever the alert code changes, on any branch
+    paths:
+      - global_investment_research/alerts.py
+      - global_investment_research/alert_state.py
+      - global_investment_research/pulse_yahoo.py
+      - global_investment_research/news.py
+      - global_investment_research/mailer.py
+      - config/news-sources.json
+      - .github/workflows/hourly-alerts.yml
 
 permissions:
   contents: write
@@ -81,7 +90,7 @@ jobs:
           if [ -z "$MAIL_USERNAME" ] || [ -z "$MAIL_APP_PASSWORD" ]; then
             echo "email skipped: MAIL_USERNAME/MAIL_APP_PASSWORD secrets not set"
           fi
-          global-research alerts --pulse pulse.json --reports "${{ steps.reports.outputs.dir }}" --state-dir data/state --email
+          global-research alerts --pulse pulse.json --reports "${{ steps.reports.outputs.dir }}" --state-dir data/state --news --email
       - name: Commit alert state to the alert-state branch
         if: always() && steps.reports.outputs.dir != ''
         env:
