@@ -61,7 +61,10 @@ python -m venv .venv && .venv/bin/pip install -e .[test]
 | `macro-daily.yml` | 06:30 UTC weekdays, or by hand | nothing (public sources); commits `data/macro/` |
 | `hourly-alerts.yml` | :07 past each hour 01:00–21:00 UTC weekdays, or by hand | repository secrets `MAIL_USERNAME` (your Gmail address), `MAIL_APP_PASSWORD` (a Gmail app password, not your login password), `MAIL_TO`; optional `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` |
 
-Add secrets under the repository's Settings → Secrets and variables → Actions. Scheduled runs fire only from the default
+Add secrets under the repository's Settings → Secrets and variables → Actions. To check them, run "Hourly alerts" by hand
+(Actions → Hourly alerts → Run workflow) with "Send a test message" ticked: it sends one test email and Telegram message
+and reports each channel in the log. For Telegram, create a bot with @BotFather, send it any message, and use the bot token
+and your chat id as `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`. Scheduled runs fire only from the default
 branch, so they start once this work is merged. Every source in `config/macro-sources.json` and `config/news-sources.json`
 is marked `verified: false` until a run parses it cleanly.
 
