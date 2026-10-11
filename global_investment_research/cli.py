@@ -177,9 +177,17 @@ def main(argv=None) -> int:
         (out / f"alerts-{stamp}.json").write_text(json.dumps({"all": found, "new": fresh, "missing_quotes": stale}, indent=1))
         print(text if fresh else f"No new exceptions ({len(found)} already reported today).")
         if args.telegram and any(a["severity"] in ("URGENT", "WARN") for a in fresh):
-            notify.send_telegram(text)
+            try:
+                notify.send_telegram(text)
+                print("Telegram alert sent.")
+            except Exception as exc:  # delivery failure must not hide the alert itself
+                print(f"Telegram not sent: {exc}")
         return 0
     if args.cmd == "notify":
+        import os
+        if not (os.environ.get("TELEGRAM_BOT_TOKEN") and os.environ.get("TELEGRAM_CHAT_ID")):
+            print("Telegram skipped: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are not set.")
+            return 0
         text = (Path(args.reports) / "telegram.txt").read_text(encoding="utf-8")
         notify.send_telegram(text)
         print("Telegram message sent.")
