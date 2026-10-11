@@ -261,7 +261,7 @@ const pv = () => S.pv ?? 1000000;
 const halfOn = () => S.half ?? (D.evidence?.level === "LOW");
 function sizing(c) {
   if (!c.size) return null;
-  const w = c.size * (halfOn() ? 0.5 : 1);
+  const w = c.size * (D.posture.risk_budget ?? 1) * (halfOn() ? 0.5 : 1);
   const value = pv() * w;
   const price = live[c.symbol]?.price ?? c.last;
   const ccy = tradeCcy(c), rate = ccy && usdPer(ccy);
@@ -472,6 +472,11 @@ function rToday() {
         <button class="btn" id="go-dec">Open all decisions</button>
       </div>
     </div>
+    ${D.portfolio ? `<div class="panel"><header><h2>Portfolio check</h2><span class="mut small">What the per-position rule cannot see</span></header>
+      <div class="kv"><div><span>Gross at max size</span><b>${pct(D.portfolio.gross, false)}</b></div><div><span>Lost if every exit hits</span><b class="neg">${pct(D.portfolio.risk_to_exits, false)}</b></div>
+        <div><span>Portfolio volatility</span><b>${pct(D.portfolio.vol, false)}</b></div><div><span>If independent</span><b>${pct(D.portfolio.vol_if_independent, false)}</b></div></div>
+      ${D.portfolio.clusters.length ? `<div style="display:grid;gap:8px">${D.portfolio.clusters.sort((a, b) => b.risk_before - a.risk_before).map(g => `<div class="flag warn"><b class="mono">${g.members.map(esc).join(" · ")}</b><span>Move together: ${pct(g.risk_before, false)} combined risk at the exits. Treat as one bet.</span></div>`).join("")}</div>` : ""}
+      <p class="note">From the last 52 weekly returns. Capping these clusters was tested on 19 years and lowered the Sharpe ratio, so sizes are unchanged; use this to choose between overlapping names.</p></div>` : ""}
     <div class="grid2">
       <div class="panel"><header><h2>Macro readings</h2>${D.changes?.length ? `<span class="chip info">${D.changes.length} changed</span>` : `<span class="mut small">no flips since last week</span>`}</header>
         <ul class="list">${D.regime.map(r => `<li><span class="t">${esc(r.topic)}</span><span><b>${esc(r.reading)}</b><br><span class="small mut">${esc(r.evidence)}</span></span></li>`).join("")}</ul></div>
@@ -634,6 +639,7 @@ function rOptions() {
           <div><span>Breakeven move</span><b>${pct(i.breakeven_move)}</b></div><div><span>Prob. of profit</span><b>${Math.round(i.prob_profit * 100)}%</b></div>
           <div><span>Reward : risk</span><b>${i.reward_risk == null ? "open" : num(i.reward_risk, 1) + " : 1"}</b></div><div><span>Return at 1σ</span><b class="${cls(i.return_at_1sd)}">${pct(i.return_at_1sd, true, 0)}</b></div></div>
         <div class="bars" aria-label="Return on premium if the underlying moves">${Object.entries(i.scenarios || {}).map(([k, v]) => `<div><i style="height:${Math.max(3, Math.abs(v) / maxBar * 100)}%;background:var(--${v >= 0 ? "up" : "down"})" title="${esc(k)}: ${pct(v, true, 0)}"></i><span>${esc(k)}</span></div>`).join("")}</div>
+        ${i.earnings && ["spans", "unverified"].includes(i.earnings.status) ? `<div class="flag warn small">Earnings: ${esc(i.earnings.text)}</div>` : ""}
         <p class="note">Bars: return on the premium at expiry if ${esc(i.symbol)} moves by the amount shown. The stock's own call is ${esc(i.stance)}.</p></article>`; }).join("")}</div>`;
   bindPv();
 }

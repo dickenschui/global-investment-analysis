@@ -98,9 +98,27 @@ def _nearest(contracts, right, target):
     return min(pool, key=lambda c: abs(c["strike"] - target)) if pool else None
 
 
-def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_000) -> dict:
-    """chains: parsed options.json. Direction from the Decision Desk stance of each underlying."""
+def earnings_note(kind: str | None, days: int, asof: date, expiry: str, earnings: dict | None, sym: str) -> dict:
+    """Earnings risk for an option idea. Funds have no earnings. For a single stock, use a verified date
+    when one is supplied (calendar.json); otherwise say it is unverified, and certain to be spanned when the
+    option outlives a full quarter (every listed company in the universe reports at least quarterly)."""
+    if kind not in (None, "stock"):
+        return {"status": "none", "text": "Fund: no company results date."}
+    d = (earnings or {}).get(sym)
+    if d:
+        inside = asof <= date.fromisoformat(d) <= date.fromisoformat(expiry)
+        return {"status": "spans" if inside else "clear", "date": d,
+                "text": f"Results due {d}: {'inside' if inside else 'after'} this expiry."}
+    if days >= 92:
+        return {"status": "spans", "text": f"Results date not verified; a {days}-day option on a quarterly reporter spans one."}
+    return {"status": "unverified", "text": "Results date not verified: check it before trading; a report inside the expiry moves the price and the volatility."}
+
+
+def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_000, earnings: dict | None = None) -> dict:
+    """chains: parsed options.json. Direction from the Decision Desk stance of each underlying.
+    earnings: optional {symbol: 'YYYY-MM-DD'} of verified next results dates."""
     stance = {c["symbol"]: c["stance"] for c in dec["calls"]}
+    kind = {c["symbol"]: c.get("kind") for c in dec["calls"]}
     ideas, skipped = [], []
     asof = date.fromisoformat(as_of)
     for u in chains["underlyings"]:
@@ -159,6 +177,7 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
                 "price_basis": "; ".join(sorted(set(bases))), "contracts_at_1pct": contracts,
                 "premium_at_risk": contracts * debit * MULTIPLIER, "thin_strikes": thin,
                 "model_check": sum(q * bs_price(S, k, T, iv, r) for q, r, k in legs), **a,
+                "earnings": earnings_note(kind.get(sym), round(T * 365), asof, exp["expiry"], earnings, sym),
             })
     # Rank on a like-for-like test: return on premium if the underlying makes a one-standard-deviation
     # move (from its own implied volatility) in the trade's favour, weighted by the probability of profit.

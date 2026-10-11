@@ -84,3 +84,15 @@ def test_digest_email_and_telegram():
     assert sent["url"].endswith("/botTOKEN/sendMessage") and b"chat_id=123" in sent["data"]
     with pytest.raises(RuntimeError):
         notify.send_telegram("hi", "TOKEN", "123", opener=lambda r, timeout: Resp(False))
+
+
+def test_earnings_note_never_invents_a_date():
+    from datetime import date
+    from global_investment_research.options import earnings_note
+    d0 = date(2026, 10, 9)
+    assert earnings_note("sector_proxy", 70, d0, "2026-12-18", None, "XLE")["status"] == "none"
+    assert earnings_note("stock", 70, d0, "2026-12-18", None, "XOM")["status"] == "unverified"
+    assert earnings_note("stock", 100, d0, "2027-01-17", None, "XOM")["status"] == "spans"
+    n = earnings_note("stock", 70, d0, "2026-12-18", {"XOM": "2026-10-30"}, "XOM")
+    assert n["status"] == "spans" and n["date"] == "2026-10-30"
+    assert earnings_note("stock", 70, d0, "2026-12-18", {"XOM": "2027-01-30"}, "XOM")["status"] == "clear"

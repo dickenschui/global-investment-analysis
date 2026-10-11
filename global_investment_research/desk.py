@@ -96,6 +96,20 @@ def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str
                       "scaled by this week's risk budget. Amount updates from your portfolio value. Prices are in each "
                       "instrument's quote currency (London in pounds, Hong Kong in HKD, China A in CNY).")
 
+    pf = dec.get("portfolio")
+    if pf:
+        cl = [f"<li><b>{H.esc(', '.join(g['members']))}</b> move together (weekly correlation above 0.8): "
+              f"{H.pct(g['risk_before'], signed=False)} combined risk at their exits. Treat them as one bet; pick the "
+              "one that fits best rather than buying all.</li>" for g in sorted(pf["clusters"], key=lambda g: -g["risk_before"])]
+        body += H.section("Portfolio check: what the per-position rule cannot see", H.tiles([
+            ("Gross if every sized name is held", H.pct(pf["gross"], signed=False), "Accumulate and Hold, at max size"),
+            ("Lost if every exit is hit", H.pct(pf["risk_to_exits"], signed=False), "Sum of each position's risk to its exit"),
+            ("Portfolio volatility", H.pct(pf["vol"], signed=False), f"{H.pct(pf['vol_if_independent'], signed=False)} if they were independent"),
+        ]) + (f'<ul class="notes">{"".join(cl)}</ul>' if cl else ""),
+            "From the last 52 weekly returns. The 0.5% risk per position assumes positions move independently; correlated "
+            "names add up. Capping clusters was tested and lowered the Sharpe ratio, so sizes are unchanged: use this to "
+            "choose between overlapping names.")
+
     # 4. Income desk
     inc = [c for c in calls if c.get("income")]
     inc.sort(key=lambda c: (STANCE_ORDER_INC.get(c["income_call"]["stance"], 9), -(c["income"]["yield"] or 0)))

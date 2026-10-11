@@ -21,8 +21,12 @@ HORIZONS = (4, 13, 26)
 WARMUP = 52  # weeks needed for 1-year momentum and 40-week average
 
 
-def stance_panel(prices: pd.DataFrame) -> pd.DataFrame:
-    """Long table: date, symbol, stance, forward returns. Uses only past data for the stance."""
+COST = 0.001  # 10 bp of traded value, charged on turnover (one-way), for every simulated portfolio
+
+
+def stance_panel(prices: pd.DataFrame, funds: set | None = None) -> pd.DataFrame:
+    """Long table: date, symbol, stance, size, levels, forward returns. Uses only past data for the stance."""
+    funds = funds or set()
     rows = []
     for sym in prices.columns:
         s = prices[sym].dropna()
@@ -38,8 +42,10 @@ def stance_panel(prices: pd.DataFrame) -> pd.DataFrame:
             v = vol.iloc[i]
             mom = (0.5 * r13.iloc[i] + 0.5 * r52.iloc[i]) / v if v and v > 0 else None
             call = D.equity_call({"last": last, "momentum_score": mom,
-                                  "trend": {"state": state, "short_ma": sh, "long_ma": lo, "pct_vs_long_ma": last / lo - 1}})
-            rows.append({"date": s.index[i], "symbol": sym, "stance": call["stance"],
+                                  "trend": {"state": state, "short_ma": sh, "long_ma": lo, "pct_vs_long_ma": last / lo - 1}},
+                                 is_fund=sym in funds)
+            rows.append({"date": s.index[i], "symbol": sym, "stance": call["stance"], "size": call["size"],
+                         "last": last, "ma40": lo,
                          **{f"fwd{h}": fwd[h].iloc[i] for h in HORIZONS}})
     df = pd.DataFrame(rows)
     if df.empty:
@@ -94,6 +100,81 @@ def strategy(df: pd.DataFrame) -> dict:
                       "benchmark": [float(v) for v in (1 + bench).cumprod()]}}
 
 
+def _cash_weekly(index: pd.DatetimeIndex, cash: pd.Series | None) -> pd.Series:
+    """Weekly cash return from an annual T-bill yield series (decimal), last value known at each date."""
+    if cash is None or cash.empty:
+        return pd.Series(0.0, index=index)
+    return (cash.sort_index().reindex(index, method="ffill").fillna(0.0) / 52)
+
+
+def _perf(r: pd.Series, rf: pd.Series) -> dict:
+    w = (1 + r).cumprod()
+    yrs = len(r) / 52
+    ex = r - rf.reindex(r.index).fillna(0.0)
+    sd = r.std(ddof=1)
+    return {"cagr": float(w.iloc[-1] ** (1 / yrs) - 1) if yrs > 0 else None, "vol": float(sd * math.sqrt(52)),
+            "sharpe": float(ex.mean() / sd * math.sqrt(52)) if sd > 0 else None,
+            "max_drawdown": float((w / w.cummax() - 1).min()), "total": float(w.iloc[-1] - 1)}
+
+
+def desk_portfolio(df: pd.DataFrame, cash: pd.Series | None = None, cost: float = COST,
+                   cap_clusters: bool = D.CAP_CLUSTERS) -> dict:
+    """Simulate the Desk as it is meant to be used: buy a name when it turns Accumulate at the rule's
+    risk-based size (0.5% risk to the exit level, capped), hold it until the weekly close falls below the
+    exit level (40-week average x 0.97, re-set every week), keep the rest in cash. Weights are reset to
+    target each week; if targets add up to more than 100% they are scaled down pro rata. Costs are charged
+    on turnover. The comparison holds the same exposure each week spread equally over every instrument,
+    so the difference is the value of the selection, not of holding less."""
+    d = df.dropna(subset=["next1"])
+    dates = sorted(d["date"].unique())
+    piv = {k: d.pivot(index="date", columns="symbol", values=k) for k in ("stance", "size", "last", "ma40", "next1")}
+    rf = _cash_weekly(pd.DatetimeIndex(dates), cash)
+    rets = piv["last"].pct_change(fill_method=None)
+    held, prev = {}, {}
+    rows = []
+    for i, dt in enumerate(dates):
+        st, sz, last, ma40, nx = (piv[k].loc[dt] for k in ("stance", "size", "last", "ma40", "next1"))
+        for sym in list(held):
+            if pd.isna(last.get(sym)) or last[sym] < ma40[sym] * (1 - D.STOP_BUFFER):
+                held.pop(sym)                                   # exit level broken (or no data)
+        for sym, stance in st.items():
+            if sym not in held and stance == "Accumulate" and sz.get(sym) and sz[sym] > 0:
+                held[sym] = float(sz[sym])
+        if len(held) > 1:
+            # same portfolio caps as the live Desk (gross, and clusters when switched on), trailing 52 weeks only
+            dist = {k: last[k] / (ma40[k] * (1 - D.STOP_BUFFER)) - 1 for k in held}
+            f, _ = D.cluster_factors(held, dist, rets[list(held)].iloc[max(0, i - 51): i + 1], cap_clusters)
+            target = {k: v * f[k] for k, v in held.items()}
+        else:
+            target = dict(held)
+        tot = sum(target.values())
+        w = {k: v / tot for k, v in target.items()} if tot > 1 else target
+        expo = sum(w.values())
+        turn = sum(abs(w.get(k, 0.0) - prev.get(k, 0.0)) for k in set(w) | set(prev))
+        bench_eq = nx.dropna().mean()
+        r = sum(v * nx[k] for k, v in w.items()) + (1 - expo) * rf[dt] - turn * cost
+        rows.append((dt, r, expo, len(w), turn, expo * bench_eq + (1 - expo) * rf[dt]))
+        prev = w
+    out = pd.DataFrame(rows, columns=["date", "r", "expo", "names", "turn", "matched"]).set_index("date")
+    mid = out.index[len(out) // 2]
+    halves = {}
+    for lab, m in (("first", out.index < mid), ("second", out.index >= mid)):
+        a, b = _perf(out["r"][m], rf), _perf(out["matched"][m], rf)
+        halves[lab] = {"desk": a["sharpe"], "matched": b["sharpe"]}
+    act = (out["r"] - out["matched"])
+    t = float(act.mean() / act.std(ddof=1) * math.sqrt(len(act))) if act.std(ddof=1) > 0 else None
+    return {"desk": _perf(out["r"], rf), "matched": _perf(out["matched"], rf),
+            "avg_exposure": float(out["expo"].mean()), "median_names": float(out["names"].median()),
+            "annual_turnover": float(out["turn"].sum() / (len(out) / 52)), "halves": halves, "active_t": t,
+            "beats_matched_both_halves": bool(all(h["desk"] is not None and h["matched"] is not None
+                                                  and h["desk"] > h["matched"] for h in halves.values())),
+            "cost_per_trade": cost, "cash_yield": cash is not None and not cash.empty,
+            "years": {"desk": calendar_years(out["r"]), "matched": calendar_years(out["matched"])},
+            "curve": {"dates": [x.date().isoformat() for x in out.index],
+                      "desk": [float(v) for v in (1 + out["r"]).cumprod()],
+                      "matched": [float(v) for v in (1 + out["matched"]).cumprod()]}}
+
+
 def drop_bad_prints(prices: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
     """Blank isolated one-week prints that are below 20% or above 5x BOTH neighbours (a unit
     error at the source, e.g. RIO 0.35 between 36.84 and 39.16). Raw files stay as returned."""
@@ -109,9 +190,9 @@ def drop_bad_prints(prices: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
     return out, fixes
 
 
-def run(prices: pd.DataFrame) -> dict:
+def run(prices: pd.DataFrame, cash: pd.Series | None = None, funds: set | None = None) -> dict:
     prices, fixes = drop_bad_prints(prices)
-    df = stance_panel(prices)
+    df = stance_panel(prices, funds)
     if df.empty:
         raise ValueError("not enough history to backtest")
     dates = sorted(df["date"].unique())
@@ -140,7 +221,8 @@ def run(prices: pd.DataFrame) -> dict:
                         "significant": t_acc_avoid is not None and abs(t_acc_avoid) >= 2,
                         "strategy_beats_benchmark_risk_adjusted": (strat["strategy"]["sharpe"] or 0) > (strat["benchmark"]["sharpe"] or 0),
                         "drawdown_reduced": strat["strategy"]["max_drawdown"] > strat["benchmark"]["max_drawdown"]},
-            "strategy": strat, "variants": compare_variants(prices), "data_fixes": fixes}
+            "strategy": strat, "variants": compare_variants(prices), "data_fixes": fixes,
+            "desk": desk_portfolio(df, cash), "desk_cluster_cap": desk_portfolio(df, cash, cap_clusters=True)}
 
 
 # --- Rule variants -------------------------------------------------------------------

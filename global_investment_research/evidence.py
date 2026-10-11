@@ -59,6 +59,26 @@ def evidence_page(res: dict, standalone=True) -> str:
     ]) + curve_svg(st["curve"]),
         "Each week, hold equal weights in every instrument rated Accumulate or Hold (price above both averages), cash otherwise. "
         f"Benchmark holds every instrument equally. {st['weeks']} weeks from {st['start']} to {st['end']}.")
+    dk = res.get("desk")
+    if dk:
+        cc = res.get("desk_cluster_cap")
+        h = dk["halves"]
+        body += H.section("The Desk as you would run it", H.tiles([
+            ("Return a year", H.pct(dk["desk"]["cagr"]), f"Same exposure, no selection {H.pct(dk['matched']['cagr'])}"),
+            ("Sharpe ratio", H.num(dk["desk"]["sharpe"]), f"Same exposure {H.num(dk['matched']['sharpe'])}"),
+            ("Worst fall", H.pct(dk["desk"]["max_drawdown"]), f"Same exposure {H.pct(dk['matched']['max_drawdown'])}"),
+            ("Average exposure", H.pct(dk["avg_exposure"], signed=False), f"Median {dk['median_names']:.0f} names; turnover {dk['annual_turnover']:.1f}x a year"),
+        ]) + H.notes([
+            f"Beats the same exposure spread over everything in both halves: <b>{'yes' if dk['beats_matched_both_halves'] else 'no'}</b> "
+            f"(Sharpe {H.num(h['first']['desk'])} vs {H.num(h['first']['matched'])}, then {H.num(h['second']['desk'])} vs "
+            f"{H.num(h['second']['matched'])}); active t {H.num(dk['active_t'])}.",
+            (f"Tested and not adopted: capping correlated clusters at 1% risk gives Sharpe {H.num(cc['desk']['sharpe'])} "
+             f"and worst fall {H.pct(cc['desk']['max_drawdown'])}." if cc else ""),
+        ]), "Buy on Accumulate at the rule's size (0.5% risk to the exit, capped), hold until the weekly close breaks the exit "
+            "level (40-week average less 3%), cash otherwise"
+            + (", earning the 13-week T-bill yield" if dk["cash_yield"] else " at 0%")
+            + f", {dk['cost_per_trade']*1e4:.0f} bp cost per trade. The comparison holds the same exposure each week spread "
+            "equally over every instrument, so the gap is the value of the selection rather than of holding less.")
     rows = []
     for name in ("Accumulate", "Hold", "Watch", "Avoid"):
         b = bs[name]
@@ -129,6 +149,8 @@ def confidence_level(res: dict) -> str:
     risk-adjusted; MEDIUM drops the significance requirement; anything else is LOW."""
     v = res["verdict"]
     beats = v.get("strategy_beats_benchmark_risk_adjusted", False)
+    if res.get("desk") and not res["desk"]["beats_matched_both_halves"]:
+        return "LOW"  # the process as actually run (sizes, exits, cash, costs) adds nothing over the same exposure
     if v["supported_both_halves"] and v["significant"] and beats:
         return "HIGH"
     return "MEDIUM" if v["supported_both_halves"] and beats else "LOW"

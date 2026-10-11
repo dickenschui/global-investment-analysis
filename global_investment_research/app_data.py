@@ -94,6 +94,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
         "calls": calls,
         "others": others,
         "data_quality": mon.get("data_quality"),
+        "portfolio": dec.get("portfolio"),
         "links": notify.LINKS,
     }
     if opt:
@@ -108,7 +109,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
             ideas.append({k: i.get(k) for k in ("symbol", "direction", "stance", "structure", "expiry", "days", "underlying",
                                                "legs", "debit", "debit_per_contract", "breakeven", "breakeven_move",
                                                "max_loss", "max_gain", "reward_risk", "prob_profit", "iv", "one_sd_move",
-                                               "return_at_1sd", "scenarios")})
+                                               "return_at_1sd", "scenarios", "earnings")})
         out["options"] = {"ideas": ideas, "policy": opt["policy"]}
     if bt:
         st = bt["strategy"]
@@ -125,5 +126,8 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
             "curve": {"dates": curve["dates"][::step], "strategy": curve["strategy"][::step],
                       "benchmark": curve["benchmark"][::step]},
             "variants": bt.get("variants", []), "data_fixes": bt.get("data_fixes", []),
+            "desk": {k: v for k, v in (bt.get("desk") or {}).items() if k != "curve"} or None,
+            "desk_cluster_cap": {k: v for k, v in (bt.get("desk_cluster_cap") or {}).items() if k not in ("curve", "years")} or None,
+            "universe_note": bt.get("universe_note"),
         }
     return out

@@ -73,6 +73,10 @@ def options_page(res: dict, standalone=True) -> str:
         rr = f"{i['reward_risk']:.1f} : 1" if i["reward_risk"] is not None else "open-ended"
         scen = " · ".join(f"{k} {v*100:+.0f}%" for k, v in i["scenarios"].items())
         thin = f'<span class="warn">Thin open interest at {", ".join(f"{k:g}" for k in i["thin_strikes"])}</span>' if i["thin_strikes"] else ""
+        er = i.get("earnings") or {}
+        if er.get("status") in ("spans", "unverified"):
+            thin += f'<span class="warn">Earnings: {H.esc(er["text"])}</span>'
+
         cards += (
             f'<div class="idea"><h3>{H.esc(i["symbol"])} · {H.esc(i["structure"])} {H.chip(i["direction"], tone)}</h3>'
             f'<span class="mut">{H.esc(legs_text(i))}</span>'

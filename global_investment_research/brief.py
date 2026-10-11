@@ -95,6 +95,12 @@ def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None, c
     if top_sector:
         risks.append(f"Concentration: {H.esc(top_sector)} is {top_w*100:.1f}% of the {total_w*100:.1f}% buy list; "
                      "one sector shock hits several names at once.")
+    pf = dec.get("portfolio")
+    if pf and pf["clusters"]:
+        big = max(pf["clusters"], key=lambda g: g["risk_before"])
+        risks.append(f"Overlapping bets: {H.esc(', '.join(big['members']))} move together; buying all of them is one "
+                     f"position of {big['risk_before']*100:.1f}% risk, not {len(big['members'])} separate ones. Portfolio "
+                     f"volatility is {pf['vol']*100:.1f}%, against {pf['vol_if_independent']*100:.1f}% if the names were independent.")
     if any(c["sector"] == "Energy" for c in acc) and "Oil" in reading:
         risks.append(f"Oil reversal: energy calls rest on the oil trend ({H.esc(reading['Oil']['evidence'])}); "
                      "it can reverse fast on supply news.")

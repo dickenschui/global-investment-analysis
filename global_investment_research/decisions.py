@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
 import pandas as pd
 
 from .income import income_row
@@ -19,6 +20,9 @@ MAX_POSITION = 0.08            # single-name cap
 MAX_POSITION_ETF = 0.20        # broad index / sector ETF cap
 STOP_BUFFER = 0.03             # invalidation = 3% below the 40-week average
 EXTENDED = 0.20                # >20% above the 40-week average = do not chase
+CLUSTER_CORR = 0.80            # weekly-return correlation that makes two positions one bet
+CLUSTER_RISK = 2 * RISK_PER_POSITION   # most a cluster of correlated positions may lose at its exits
+MAX_GROSS = 1.0                # sum of position sizes never exceeds the portfolio
 
 STANCE_ORDER = {"Accumulate": 0, "Hold": 1, "Watch": 2, "Avoid": 3}
 
@@ -121,7 +125,76 @@ def macro_posture(regime: list[dict]) -> dict:
             "risk_note": f"Deploy {risk_budget*100:.0f}% of the normal risk budget ({vol or 'volatility n/a'})."}
 
 
-def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08)) -> dict:
+def correlation_clusters(returns: pd.DataFrame, threshold: float = CLUSTER_CORR) -> list[list[str]]:
+    """Group symbols linked by a chain of pairwise correlations above `threshold` (single linkage)."""
+    corr = returns.corr(min_periods=20)
+    syms = list(returns.columns)
+    parent = {x: x for x in syms}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    for i, a in enumerate(syms):
+        for b in syms[i + 1:]:
+            v = corr.at[a, b]
+            if pd.notna(v) and v > threshold:
+                parent[find(a)] = find(b)
+    groups: dict[str, list[str]] = {}
+    for x in syms:
+        groups.setdefault(find(x), []).append(x)
+    return [sorted(g) for g in groups.values()]
+
+
+CAP_CLUSTERS = False  # tested 2026-10-11: capping clusters lowered the Desk's Sharpe in both halves; report only
+
+
+def cluster_factors(sizes: dict, stop_dist: dict, returns: pd.DataFrame,
+                    cap_clusters: bool = CAP_CLUSTERS) -> tuple[dict, list[dict]]:
+    """Find correlated clusters and their combined risk at the exits. With `cap_clusters`, scale each cluster
+    to risk at most CLUSTER_RISK. Always keep gross exposure within MAX_GROSS. Returns (factors, clusters)."""
+    syms = [x for x in sizes if x in returns.columns]
+    factors = {x: 1.0 for x in sizes}
+    report = []
+    if len(syms) > 1:
+        for g in correlation_clusters(returns[syms]):
+            if len(g) < 2:
+                continue
+            risk = sum(sizes[x] * stop_dist[x] for x in g)
+            f = min(1.0, CLUSTER_RISK / risk) if risk > 0 and cap_clusters else 1.0
+            for x in g:
+                factors[x] = f
+            report.append({"members": g, "risk_before": risk, "factor": f})
+    gross = sum(sizes[x] * factors[x] for x in sizes)
+    if gross > MAX_GROSS:
+        for x in factors:
+            factors[x] *= MAX_GROSS / gross
+    return factors, report
+
+
+def portfolio_overlay(calls: list[dict], prices: pd.DataFrame, window: int = 52) -> dict:
+    """Apply cluster and gross caps to every sized call in place (keeps the stand-alone size) and
+    return the portfolio-level view the per-position rule cannot see."""
+    pos = [c for c in calls if c.get("size")]
+    sizes = {c["symbol"]: c["size"] for c in pos}
+    dist = {c["symbol"]: c["stop_distance"] for c in pos}
+    rets = prices[[x for x in sizes if x in prices]].pct_change(fill_method=None).iloc[-window:]
+    factors, clusters = cluster_factors(sizes, dist, rets)
+    for c in pos:
+        c["size_standalone"] = c["size"]
+        c["size"] = c["size"] * factors[c["symbol"]]
+        c["cluster"] = next((g["members"] for g in clusters if c["symbol"] in g["members"]), None)
+    w = pd.Series({c["symbol"]: c["size"] for c in pos})
+    cov = rets[w.index].cov().fillna(0.0) * 52
+    vol = float(np.sqrt(w.values @ cov.values @ w.values)) if len(w) else 0.0
+    vol_indep = float(np.sqrt((w.values ** 2 * np.diag(cov.values)).sum())) if len(w) else 0.0
+    return {"gross": float(w.sum()), "risk_to_exits": float(sum(c["size"] * c["stop_distance"] for c in pos)),
+            "vol": vol, "vol_if_independent": vol_indep, "clusters": clusters,
+            "gross_before": float(sum(sizes.values()))}
+
+
+def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08), prices: pd.DataFrame | None = None) -> dict:
     posture = macro_posture(mon["regime"])
     calls = []
     for sym, inst in meta.items():
@@ -144,7 +217,8 @@ def build_decisions(mon: dict, meta: dict, band=(0.06, 0.08)) -> dict:
     calls.sort(key=lambda c: (STANCE_ORDER[c["stance"]], -(c["momentum"] or -9)))
     fx = [dict(symbol=s, **fx_view(s, mon["metrics"][s]), ret_3m=mon["metrics"][s]["ret_3m"])
           for s, i in meta.items() if i["kind"] == "fx" and s in mon["metrics"]]
-    return {"as_of": mon["as_of"], "posture": posture, "calls": calls, "fx": fx}
+    overlay = portfolio_overlay(calls, prices) if prices is not None else None
+    return {"as_of": mon["as_of"], "posture": posture, "calls": calls, "fx": fx, "portfolio": overlay}
 
 
 def review_log(log_csv, prices: pd.DataFrame) -> list[dict]:

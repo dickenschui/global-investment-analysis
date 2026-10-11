@@ -108,3 +108,20 @@ def fetch_yahoo(universe: dict, period: str = "1y", interval: str = "1d") -> tup
         meta[inst["symbol"]] = {**inst, "status": "ok", "source": "Yahoo Finance", "currency": currency,
                                 "snapshot": {}, "dividends": dividends}
     return pd.DataFrame(series).sort_index(), meta
+
+
+def load_cash_yield(directory: str | Path) -> pd.Series | None:
+    """13-week US T-bill yield (annual, decimal) from rates.json in a history directory, if collected.
+    IBKR's IRX index is quoted in percent; values above 25 are taken as tenths of a percent (CBOE x10 quote)."""
+    path = Path(directory) / "rates.json"
+    if not path.exists():
+        return None
+    for inst in json.loads(path.read_text())["instruments"]:
+        if inst.get("symbol") == "IRX" and inst.get("status") == "ok":
+            w = inst["weekly"]
+            s = pd.Series(w["close"], index=pd.to_datetime(w["time"]).tz_localize(None), dtype=float)
+            s.index = s.index.to_period("W-FRI").end_time.normalize()
+            s = s[~s.index.duplicated(keep="last")].sort_index()
+            scale = 1000.0 if s.median() > 25 else 100.0
+            return (s / scale).clip(lower=0)
+    return None
