@@ -1,7 +1,7 @@
 name: Daily macro data
 
 # Fetches official macro series (FRED, ECB, BoE, ONS, US Treasury, World Bank) that are
-# blocked inside Claude, and commits data/macro/ to the branch this run is on.
+# blocked inside Claude, and commits data/macro/ to the default branch (other branches only verify).
 on:
   schedule:
     - cron: '30 6 * * 1-5'
@@ -57,8 +57,9 @@ jobs:
                   latest = r.get('latest') or {}
                   out.write(f"| {sid} | {r['status']} | {latest.get('date', '')} {latest.get('value', '')} | {r.get('error', '')} |\n")
           PY
-      - name: Commit data/macro to this branch
-        if: always() && hashFiles('data/macro/latest.json') != ''
+      - name: Commit data/macro to the default branch
+        # Runs on other branches only verify the sources: a bot commit there would hold the pull request's checks.
+        if: always() && hashFiles('data/macro/latest.json') != '' && github.ref_name == github.event.repository.default_branch
         env:
           BRANCH: ${{ github.ref_name }}
         run: |

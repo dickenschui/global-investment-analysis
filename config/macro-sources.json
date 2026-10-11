@@ -321,7 +321,7 @@
       "units": "Percent, annual growth of real GDP (constant prices)",
       "frequency": "annual",
       "purpose": "Singapore real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
-      "verified": false
+      "verified": true
     },
     {
       "id": "WB_GDP_HK",
@@ -334,7 +334,7 @@
       "units": "Percent, annual growth of real GDP (constant prices)",
       "frequency": "annual",
       "purpose": "Hong Kong SAR, China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
-      "verified": false
+      "verified": true
     },
     {
       "id": "WB_GDP_CN",
@@ -360,7 +360,7 @@
       "units": "Percent, annual growth of real GDP (constant prices)",
       "frequency": "annual",
       "purpose": "United Kingdom real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
-      "verified": false
+      "verified": true
     },
     {
       "id": "WB_GDP_US",

@@ -2558,6 +2558,21 @@
    "evidence": "World Bank NY.GDP.MKTP.KD.ZG, China, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
   },
   {
+   "topic": "GDP growth \u2014 United Kingdom",
+   "reading": "Real GDP growth 1.4% in 2025",
+   "evidence": "World Bank NY.GDP.MKTP.KD.ZG, United Kingdom, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "GDP growth \u2014 Hong Kong SAR, China",
+   "reading": "Real GDP growth 3.5% in 2025",
+   "evidence": "World Bank NY.GDP.MKTP.KD.ZG, Hong Kong SAR, China, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "GDP growth \u2014 Singapore",
+   "reading": "Real GDP growth 5.0% in 2025",
+   "evidence": "World Bank NY.GDP.MKTP.KD.ZG, Singapore, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
+  },
+  {
    "topic": "GDP growth \u2014 United States",
    "reading": "Real GDP growth 2.2% in 2025",
    "evidence": "World Bank NY.GDP.MKTP.KD.ZG, United States, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
