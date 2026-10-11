@@ -1,6 +1,8 @@
 <b>Weekly investment brief · week to 2026-10-09</b>
 Deploy 100% of the normal risk budget (Volatility calm).
 
+⚠️ Rule confidence: LOW. On 36 instruments from 2022-10-14 to 2026-10-09, Accumulate calls returned -0.6% versus the average instrument over the next 13 weeks and Avoid calls +1.6%. Following the calls returned 9.9% a year against 18.0% for holding everything equally. Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new positions at half the Max size until a rule passes the test.
+
 <b>Markets (1w / 3m)</b>
 • US: +1.2% / +3.1% (up)
 • UK: +0.8% / +0.3% (mixed)
@@ -35,5 +37,5 @@ Deploy 100% of the normal risk budget (Volatility calm).
 • AAPL Bull call spread: Buy 335C / Sell 370C 2026-12-18, $1,265/contract, PoP 38%
 • ORCL Bear put spread: Buy 140P / Sell 125P 2026-12-18, $655/contract, PoP 44%
 
-<a href="https://claude.ai/artifact/4VjjnbhJUG3a7Bh78RWvLf">Pack (start here)</a> · <a href="https://claude.ai/artifact/Fz1Pc2fafD3y3yA6HKm5jp">Weekly Brief</a> · <a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a> · <a href="https://claude.ai/artifact/556rrpW6C2Zb8Sjya6Z789">Options Sleeve</a> · <a href="https://claude.ai/artifact/BdVG4ieQAZrjassRaoXWTi">Handbook</a>
+<a href="https://claude.ai/artifact/4VjjnbhJUG3a7Bh78RWvLf">Pack (start here)</a> · <a href="https://claude.ai/artifact/Fz1Pc2fafD3y3yA6HKm5jp">Weekly Brief</a> · <a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a> · <a href="https://claude.ai/artifact/556rrpW6C2Zb8Sjya6Z789">Options Sleeve</a> · <a href="https://claude.ai/artifact/2FxetPUFQZ5hfF7LyyiehH">Rule Evidence</a> · <a href="https://claude.ai/artifact/BdVG4ieQAZrjassRaoXWTi">Handbook</a>
 <i>Rule-based research, not personalised advice. Re-price before trading.</i>

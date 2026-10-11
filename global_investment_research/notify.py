@@ -17,6 +17,7 @@ LINKS = {
     "Weekly Brief": "https://claude.ai/artifact/Fz1Pc2fafD3y3yA6HKm5jp",
     "Decision Desk": "https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW",
     "Options Sleeve": "https://claude.ai/artifact/556rrpW6C2Zb8Sjya6Z789",
+    "Rule Evidence": "https://claude.ai/artifact/2FxetPUFQZ5hfF7LyyiehH",
     "Handbook": "https://claude.ai/artifact/BdVG4ieQAZrjassRaoXWTi",
 }
 
@@ -36,7 +37,7 @@ def top_option_ideas(opt, n=5):
     return out
 
 
-def digest(dec: dict, mon: dict, opt: dict | None = None, changes: list | None = None) -> dict:
+def digest(dec: dict, mon: dict, opt: dict | None = None, changes: list | None = None, confidence: str | None = None) -> dict:
     calls = dec["calls"]
     acc = [c for c in calls if c["stance"] == "Accumulate"]
     avoid = [c for c in calls if c["stance"] == "Avoid"]
@@ -54,12 +55,15 @@ def digest(dec: dict, mon: dict, opt: dict | None = None, changes: list | None =
         "options": [(i["symbol"], i["structure"], " / ".join(f"{'Buy' if l['qty'] > 0 else 'Sell'} {l['strike']:g}{l['right']}"
                      for l in i["legs"]), i["expiry"], i["debit_per_contract"], i["prob_profit"]) for i in top_option_ideas(opt)],
         "changes": changes or [],
+        "confidence": confidence,
     }
 
 
 def telegram_text(d: dict) -> str:
     e = html.escape
     lines = [f"<b>Weekly investment brief · week to {d['as_of']}</b>", e(d["risk_note"]), ""]
+    if d.get("confidence"):
+        lines += [f"⚠️ {e(d['confidence'])}", ""]
     if d["changes"]:
         lines += ["<b>Changed since last week</b>"] + [f"• {e(c['topic'])}: {e(c['from'])} → {e(c['to'])}" for c in d["changes"]] + [""]
     lines.append("<b>Markets (1w / 3m)</b>")
@@ -92,6 +96,8 @@ def email_html(d: dict) -> str:
              f'<p style="font:500 11px Arial;letter-spacing:.08em;color:#1d5c8a;margin:0">WEEK TO {d["as_of"]}</p>',
              '<h1 style="font:600 22px Georgia,serif;margin:4px 0 8px">Weekly Investment Brief</h1>',
              f'<p style="margin:0 0 6px">{e(d["risk_note"])}</p>']
+    if d.get("confidence"):
+        parts.append(f'<p style="margin:8px 0;padding:10px 12px;border-left:4px solid #9a6a00;background:#fff8e6">{e(d["confidence"])}</p>')
     if d["changes"]:
         parts += [h2("Changed since last week"), "<ul>" + "".join(f"<li>{e(c['topic'])}: {e(c['from'])} → {e(c['to'])}</li>" for c in d["changes"]) + "</ul>"]
     parts += [h2("Markets"), table(["Market", "Proxy", "1 week", "3 months", "Trend"],

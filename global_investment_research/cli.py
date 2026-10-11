@@ -75,22 +75,25 @@ def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str |
     (out / "uk-fx.html").write_text(reports.uk_fx_report(mon, meta, prices, standalone), encoding="utf-8")
     (out / "sg-income.html").write_text(reports.sg_income_report(mon, meta, prices, standalone=standalone), encoding="utf-8")
     dec = decisions.build_decisions(mon, meta)
+    conf = None
+    if (out / "backtest.json").exists():
+        conf = evidence.confidence_note(json.loads((out / "backtest.json").read_text()))
     (out / "decisions.json").write_text(json.dumps(_clean(dec), indent=1, default=_json_default))
-    (out / "decision-desk.html").write_text(desk.desk_page(dec, mon, meta, standalone), encoding="utf-8")
+    (out / "decision-desk.html").write_text(desk.desk_page(dec, mon, meta, standalone, conf), encoding="utf-8")
     (out / "handbook.html").write_text(handbook.to_html(standalone), encoding="utf-8")
     opt = None
     if chains_path and Path(chains_path).exists():
         opt = options.build_ideas(json.loads(Path(chains_path).read_text()), dec, mon["as_of"])
         (out / "options.json").write_text(json.dumps(_clean(opt), indent=1, default=_json_default))
         (out / "options.html").write_text(options_desk.options_page(opt, standalone), encoding="utf-8")
-    (out / "brief.html").write_text(brief.brief_page(dec, mon, standalone, opt), encoding="utf-8")
+    (out / "brief.html").write_text(brief.brief_page(dec, mon, standalone, opt, conf), encoding="utf-8")
     try:
         from . import workbook
         workbook.build_workbook(dec, out / "decision-book.xlsx", opt=opt)
     except ImportError:
         print("openpyxl not installed: skipped decision-book.xlsx (pip install -e .[excel])")
     (out / "index.html").write_text(index_page(mon["as_of"], out), encoding="utf-8")
-    dg = notify.digest(dec, mon, opt, changes)
+    dg = notify.digest(dec, mon, opt, changes, conf)
     (out / "email.html").write_text(notify.email_html(dg), encoding="utf-8")
     (out / "telegram.txt").write_text(notify.telegram_text(dg), encoding="utf-8")
     return mon

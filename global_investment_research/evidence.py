@@ -26,7 +26,7 @@ def curve_svg(c, w=760, h=240) -> str:
     return (f'<svg class="curve" viewBox="0 0 {w} {h}" role="img" aria-label="Growth of 1 unit: rule strategy vs equal-weight benchmark">'
             f'{ticks}<path class="b" d="{path(b)}"/><path class="s" d="{path(s)}"/>'
             f'<text x="50" y="{h-8}">{d[0]}</text><text x="{w-90}" y="{h-8}">{d[-1]}</text>'
-            f'<text x="{w-200}" y="20">— rule strategy   - - equal weight</text></svg>')
+            f'<text x="60" y="24">— rule strategy · - - equal weight</text></svg>')
 
 
 def evidence_page(res: dict, standalone=True) -> str:
@@ -89,3 +89,17 @@ def evidence_page(res: dict, standalone=True) -> str:
                   "Walk-forward test of the Decision Desk rules on five years of weekly prices, using only data available at each date.",
                   body, "Interactive Brokers weekly closes. Research evidence, not a promise of future results.", standalone)
     return page.replace(f"<style>{H.CSS}</style>", f"<style>{H.CSS}{CSS}</style>", 1)
+
+
+def confidence_note(res: dict) -> str:
+    """One-paragraph rule-confidence statement for the Desk and Brief, from the latest backtest."""
+    v, st = res["verdict"], res["strategy"]
+    bs = res["by_stance"]
+    level = "HIGH" if v["supported_both_halves"] and v["significant"] else "MEDIUM" if v["supported_both_halves"] else "LOW"
+    return (f"Rule confidence: {level}. On {len(res['instruments'])} instruments from {res['first_date']} to {res['last_date']}, "
+            f"Accumulate calls returned {bs['Accumulate']['xs13']['mean']*100:+.1f}% versus the average instrument over the next "
+            f"13 weeks and Avoid calls {bs['Avoid']['xs13']['mean']*100:+.1f}%. Following the calls returned "
+            f"{st['strategy']['cagr']*100:.1f}% a year against {st['benchmark']['cagr']*100:.1f}% for holding everything equally. "
+            + ("Treat Accumulate and Avoid as risk-control levels, not as return forecasts; keep a diversified core and size new "
+               "positions at half the Max size until a rule passes the test." if level == "LOW" else
+               "Use the calls with normal sizing, and keep the checklist."))

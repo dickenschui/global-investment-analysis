@@ -27,7 +27,7 @@ def _sector_concentration(acc):
     return top, top_w, total
 
 
-def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None) -> str:
+def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None, confidence: str | None = None) -> str:
     calls, p = dec["calls"], dec["posture"]
     acc = [c for c in calls if c["stance"] == "Accumulate"]
     counts = Counter(c["stance"] for c in calls)
@@ -57,7 +57,8 @@ def brief_page(dec: dict, mon: dict, standalone=True, opt: dict | None = None) -
             f'<p class="lead">{H.esc(lead)}</p>'
             f'<p>{H.esc(p["risk_note"])} Best market over 3 months: {best[0]} {fmt_pct(best[1])}; '
             f'weakest: {worst[0]} {fmt_pct(worst[1])}. Decisions this week: {counts["Accumulate"]} Accumulate, '
-            f'{counts["Hold"]} Hold, {counts["Watch"]} Watch, {counts["Avoid"]} Avoid.</p></div>')
+            f'{counts["Hold"]} Hold, {counts["Watch"]} Watch, {counts["Avoid"]} Avoid.</p>'
+            + (f'<p class="warn" style="margin-top:6px">{H.esc(confidence)}</p>' if confidence else "") + '</div>')
 
     rows = [[f"<b>{H.esc(c['symbol'])}</b> {H.esc(c['name'])}", H.esc(c["sector"]), H.num(c["last"]),
              f"{c['entry'][0]:,.2f}–{c['entry'][1]:,.2f}", H.num(c["stop"]), H.pct(c["size"], signed=False),

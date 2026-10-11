@@ -39,3 +39,11 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 - **Defects fixed:** misaligned weekly stamps between FX and ETFs (Monday vs Tuesday holidays); a 2-year history for SLV; 1-year returns on 52-bar series; long options ranked on tail moves.
 - **Blind spots:** no earnings dates, macro calendar or fundamentals; Bigdata.com and Financial Datasets both report zero credit.
 - **Next improvement:** fetch 5-year weekly history and backtest the Accumulate/Avoid rules before trusting them further.
+
+### 2026-10-11 (backtest added)
+- **Shipped:** 5-year weekly history for 36 instruments (IBKR), with the last 52 weeks matching the weekly snapshots exactly; walk-forward backtest and Rule Evidence page; HYG/LQD credit reading.
+- **Finding:** the trend rules did not work in Oct 2022 – Oct 2026. Accumulate calls lagged the average instrument by 0.6% over 13 weeks and Avoid calls led it by 1.6%. The rule strategy returned 9.9% a year against 18.0% for always-invested equal weight, with a deeper drawdown (−16.3% vs −9.0%). Up-trend signals helped in only 6 of 36 instruments.
+- **Alternatives:** a contrarian rule (price below its 40-week average) helped in 32 of 36 instruments and halved drawdown, but beat equal weight only in the first half. No rule beats equal weight in both halves, so none is adopted.
+- **Action taken:** rule confidence is shown as LOW on the Desk, Brief and digests: use exit levels for risk control, keep a diversified core, and size new positions at half the Max size.
+- **Open question for the owner:** switch the Accumulate rule to a pullback or contrarian entry? That is not done automatically, because four years of mostly rising markets favour mean reversion and could reverse.
+- **Next improvement:** extend the history to ten years so it covers a trending bear market (2008-style or 2022), then re-test.

@@ -35,15 +35,17 @@ def _rng(e, d=2):
     return f"{e[0]:,.{d}f}–{e[1]:,.{d}f}"
 
 
-def desk_page(dec: dict, mon: dict, meta: dict, standalone=True) -> str:
+def desk_page(dec: dict, mon: dict, meta: dict, standalone=True, confidence: str | None = None) -> str:
     p = dec["posture"]
     calls = dec["calls"]
     counts = {s: sum(c["stance"] == s for c in calls) for s in ("Accumulate", "Hold", "Watch", "Avoid")}
 
+    warn = (f'<div class="card" style="border-left:4px solid var(--warn)"><b>{H.esc(confidence.split(".")[0])}</b>'
+            f'<span class="mut">{H.esc(confidence.split(".", 1)[1].strip())} See the Rule Evidence page.</span></div>') if confidence else ""
     # 1. Posture
     tilts = "".join(f"<li><b>{H.esc(t['action'])}</b><br><span class=\"mut\">Because: {H.esc(t['because'])}</span></li>"
                     for t in p["tilts"])
-    body = H.section("1 · This week's posture", (
+    body = warn + H.section("1 · This week's posture", (
         '<div class="posture"><div class="card"><span class="k mut">Risk budget to deploy</span>'
         f'<span class="big">{p["risk_budget"]*100:.0f}%</span><span class="mut">{H.esc(p["risk_note"])}</span></div>'
         f'<div class="card"><span class="k mut">Portfolio tilts</span><ul class="notes">{tilts or "<li>No tilts triggered.</li>"}</ul></div></div>'),

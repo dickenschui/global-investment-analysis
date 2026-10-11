@@ -2,6 +2,50 @@
  "as_of": "2026-10-09",
  "bars_per_year": 52,
  "metrics": {
+  "HYG": {
+   "ret_1w": 0.004160707320244539,
+   "ret_1m": -0.017430025445292485,
+   "ret_3m": -0.031112783841425018,
+   "ret_6m": -0.034142071035517585,
+   "ret_1y": -0.0340212632895559,
+   "ret_1y_bars": 52,
+   "vol": 0.0382371494911732,
+   "max_drawdown": -0.05213211732807499,
+   "from_high": -0.0481883164900172,
+   "last_move_z": 0.9238672880022216,
+   "last": 77.23,
+   "last_date": "2026-10-09",
+   "bars": 53,
+   "trend": {
+    "state": "down",
+    "short_ma": 78.696,
+    "long_ma": 79.74170731707318,
+    "pct_vs_long_ma": -0.031498037872276674
+   },
+   "momentum_score": -0.8517115945844329
+  },
+  "LQD": {
+   "ret_1w": 0.0056957674555631055,
+   "ret_1m": -0.018309049079754613,
+   "ret_3m": -0.046994230411315785,
+   "ret_6m": -0.06217948717948718,
+   "ret_1y": -0.0802873821284239,
+   "ret_1y_bars": 52,
+   "vol": 0.054400224145328295,
+   "max_drawdown": -0.09661107168204397,
+   "from_high": -0.0914655784244145,
+   "last_move_z": 0.9828838613749846,
+   "last": 102.41,
+   "last_date": "2026-10-09",
+   "bars": 53,
+   "trend": {
+    "state": "down",
+    "short_ma": 104.68900000000001,
+    "long_ma": 108.10073170731708,
+    "pct_vs_long_ma": -0.05264286020491282
+   },
+   "momentum_score": -1.1698629421058202
+  },
   "2800": {
    "ret_1w": 0.01057770545158676,
    "ret_1m": -0.022816679779701143,
@@ -2457,6 +2501,11 @@
    "topic": "China A vs US",
    "reading": "US outperforming China A-shares",
    "evidence": "3m: 3188 -9.4% vs SPY +3.1% (spread -12.6%)"
+  },
+  {
+   "topic": "Credit",
+   "reading": "High-yield keeping pace with investment grade (credit calm)",
+   "evidence": "3m: HYG -3.1% vs LQD -4.7% (spread +1.6%)"
   }
  ],
  "macro_links": [
@@ -2527,6 +2576,17 @@
    "stable": true
   },
   {
+   "market": "US",
+   "proxy": "SPY",
+   "factor": "High-yield credit",
+   "factor_symbol": "HYG",
+   "n": 52,
+   "full": 0.6259265006679618,
+   "first_half": 0.769991839242835,
+   "second_half": 0.5296664735528285,
+   "stable": true
+  },
+  {
    "market": "UK",
    "proxy": "ISF",
    "factor": "US dollar",
@@ -2593,6 +2653,17 @@
    "stable": false
   },
   {
+   "market": "UK",
+   "proxy": "ISF",
+   "factor": "High-yield credit",
+   "factor_symbol": "HYG",
+   "n": 52,
+   "full": 0.47797078605348825,
+   "first_half": 0.5845572891699696,
+   "second_half": 0.33243597523760376,
+   "stable": true
+  },
+  {
    "market": "SG",
    "proxy": "ES3",
    "factor": "US dollar",
@@ -2656,6 +2727,17 @@
    "full": -0.3125879885994646,
    "first_half": -0.5101199213329549,
    "second_half": -0.10848665880122627,
+   "stable": false
+  },
+  {
+   "market": "SG",
+   "proxy": "ES3",
+   "factor": "High-yield credit",
+   "factor_symbol": "HYG",
+   "n": 52,
+   "full": 0.12153963497820315,
+   "first_half": 0.30952717420081327,
+   "second_half": -0.03207253557013769,
    "stable": false
   },
   {
@@ -2725,6 +2807,17 @@
    "stable": false
   },
   {
+   "market": "HK",
+   "proxy": "2800",
+   "factor": "High-yield credit",
+   "factor_symbol": "HYG",
+   "n": 52,
+   "full": 0.2393367446049591,
+   "first_half": 0.2722111738824175,
+   "second_half": 0.20774933108082208,
+   "stable": false
+  },
+  {
    "market": "China",
    "proxy": "3188",
    "factor": "US dollar",
@@ -2789,12 +2882,23 @@
    "first_half": -0.4967684304444293,
    "second_half": -0.5809145175676159,
    "stable": true
+  },
+  {
+   "market": "China",
+   "proxy": "3188",
+   "factor": "High-yield credit",
+   "factor_symbol": "HYG",
+   "n": 52,
+   "full": 0.3696693503020392,
+   "first_half": 0.2666463059318327,
+   "second_half": 0.46896655916097396,
+   "stable": false
   }
  ],
  "events": [],
  "data_quality": {
-  "instruments_configured": 96,
-  "with_prices": 96,
+  "instruments_configured": 98,
+  "with_prices": 98,
   "missing": [],
   "stale_over_10_days": []
  }
