@@ -2510,7 +2510,7 @@
   {
    "topic": "Yield curve",
    "reading": "Curve upward-sloping, steepening",
-   "evidence": "10y 5.24% vs 3m 4.06% (spread +1.19 pts, +0.31 pts over 13 weeks; 43% of weeks since 2009 were at or below this), week to 2026-10-09"
+   "evidence": "CBOE 10y 5.24% vs 3m T-bill (discount basis) 4.06% (spread +1.19 pts, +0.31 pts over 13 weeks; 43% of weeks since 2009 were at or below this), week to 2026-10-09"
   },
   {
    "topic": "Term premium",
@@ -2521,6 +2521,46 @@
    "topic": "Volatility term structure",
    "reading": "Contango: near-term volatility below 3-month (normal)",
    "evidence": "VIX 14.84 / VIX3M 17.77 = 0.84, week to 2026-10-09"
+  },
+  {
+   "topic": "Yield curve (official)",
+   "reading": "Yield curve (10y\u20133m) not inverted, steepening over 3 months",
+   "evidence": "FRED T10Y3M (10y minus 3m) +0.99 pp on 2026-10-09; +0.71 pp on 2026-07-09; change +0.28 pp. 10y\u20132y +0.44 pp on 2026-10-09 [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "US credit spread",
+   "reading": "US high-yield spread tight (3.15 pp), widened 0.45 pp over 3 months",
+   "evidence": "ICE BofA US High Yield OAS (FRED BAMLH0A0HYM2) 3.15 pp on 2026-10-08; 2.70 pp on 2026-07-08; change +0.45 pp. Bands: tight <3.5, moderate <5.0, wide \u22655.0 pp [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "US inflation",
+   "reading": "US CPI inflation 3.4% y/y (Aug 2026)",
+   "evidence": "FRED CPIAUCSL 334.131 (Aug 2026) vs 323.291 (Aug 2025) [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "UK rates and inflation",
+   "reading": "UK Bank Rate 3.75%, CPIH 3.3% y/y (Aug 2026); real Bank Rate +0.45 pp",
+   "evidence": "BoE IUDBEDR 3.75% on 2026-10-08; ONS L55O 3.3% for Aug 2026 [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "US jobless claims",
+   "reading": "US initial jobless claims falling (-9.7% over 13 weeks)",
+   "evidence": "FRED ICSA 4-week average 198,000 (weeks 2026-09-12 to 2026-10-03) vs 219,250 (2026-06-13 to 2026-07-04); trend threshold \u00b15% [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "Financial conditions",
+   "reading": "US financial conditions looser than average",
+   "evidence": "Chicago Fed NFCI -0.49 for week of 2026-10-02 (0 = average; positive = tighter) [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "GDP growth \u2014 China",
+   "reading": "Real GDP growth 5.0% in 2025",
+   "evidence": "World Bank NY.GDP.MKTP.KD.ZG, China, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
+  },
+  {
+   "topic": "GDP growth \u2014 United States",
+   "reading": "Real GDP growth 2.2% in 2025",
+   "evidence": "World Bank NY.GDP.MKTP.KD.ZG, United States, 2025 (latest year with a value) [official source, fetched 2026-10-11]"
   }
  ],
  "macro_links": [

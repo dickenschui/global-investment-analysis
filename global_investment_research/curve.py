@@ -50,7 +50,7 @@ def curve_readings(rates: pd.DataFrame | None, vix: pd.Series | None = None) -> 
             spread = c["10y"] - c["3m"]
             last = float(spread.iloc[-1])
             shape = "inverted" if last < 0 else "flat" if last < FLAT else "upward-sloping"
-            ev = f"10y {c['10y'].iloc[-1]:.2f}% vs 3m {c['3m'].iloc[-1]:.2f}% (spread {last:+.2f} pts"
+            ev = f"CBOE 10y {c['10y'].iloc[-1]:.2f}% vs 3m T-bill (discount basis) {c['3m'].iloc[-1]:.2f}% (spread {last:+.2f} pts"
             if len(spread) > CHANGE_WEEKS:
                 chg = last - float(spread.iloc[-1 - CHANGE_WEEKS])
                 ev += f", {chg:+.2f} pts over 13 weeks"

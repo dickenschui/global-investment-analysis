@@ -127,8 +127,20 @@ Two independent reviews: a code and methodology audit of this repo, and a compar
 
   The SG income sleeve lost 18–25% of capital in GBP in the China/oil and Covid windows. With a 20% payout cut, its income fell 14–18%. A stronger SGD cushioned 2022.
 - **Chain check:** 154 contracts were checked and 1 issue found (FXI 2027-01-15 31P: an ask with no bid). No idea used it.
+- **First live runs on GitHub Actions (same day):**
+  - **Macro:** 27 of 30 official series fetched and parsed: FRED, ECB, Bank of England, ONS, the Treasury par curve and World Bank China and US. These are now `verified: true`.
+  - **World Bank:** Singapore, Hong Kong and UK GDP timed out. The fetcher now retries once.
+  - **Cross-check:** the Treasury par curve agrees with the IBKR indices (10y 5.24% vs 5.244%, 30y 5.60% vs 5.600%). The 3-month rates differ by basis: the IBKR T-bill discount rate is 4.06%, FRED constant maturity 4.23%. The curve reading now names its basis.
+  - **Yahoo:** 69 of 69 quotes returned. On a Sunday all were correctly set aside as stale, so nothing fired. State is kept on the `alert-state` branch. Email was skipped until the mail secrets are added.
+  - **New official readings:**
+    - US high-yield spread tight at 3.15 pp but widening (+0.45 over 3 months).
+    - US CPI 3.4% y/y (Aug).
+    - UK Bank Rate 3.75% with CPIH 3.3%, so the real rate is +0.45 pp.
+    - Jobless claims falling 9.7% over 13 weeks.
+    - Chicago Fed financial conditions looser than average.
+  - The monitor never reads an official observation dated after the snapshot week.
 - **Limits:**
-  - No new source has run live yet: news feeds, Yahoo, FRED, ECB, BoE, ONS, Treasury and World Bank are all unproven until the first Actions run.
+  - News feeds have not run live yet (they are fetched only when an URGENT alert fires); World Bank SG, HK and UK are pending a clean run.
   - HKMA, MAS and SingStat are not configured; the endpoints were not confirmed or need keys.
   - Stress returns are price-only weekly closes with weights held fixed.
 - **Next improvement:** merge, add the mail secrets, run both workflows by hand, and set `verified: true` source by source from the run log.

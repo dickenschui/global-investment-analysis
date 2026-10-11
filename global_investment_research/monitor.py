@@ -150,6 +150,10 @@ def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days
             macro_note = f"official macro snapshot from {macro.get('retrieved_at') or 'unknown date'} is stale: not used"
         else:
             from . import macro_sources
+            as_of = prices.index.max().date().isoformat()   # never read an observation dated after the snapshot week
+            macro = {**macro, "series": {k: {**v, "observations": [o for o in v.get("observations") or []
+                                                                    if str(o["date"]) <= as_of]}
+                                         for k, v in (macro.get("series") or {}).items()}}
             have = {r["topic"] for r in regime}
             for r in macro_sources.readings(macro):
                 if r["reading"] == macro_sources.NA:

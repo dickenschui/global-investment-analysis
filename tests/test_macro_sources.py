@@ -83,7 +83,7 @@ def test_shipped_config_is_complete():
     ids = [s["id"] for s in cfg["series"]]
     assert len(ids) == len(set(ids))
     for s in cfg["series"]:
-        assert s["format"] in M.PARSERS and s["verified"] is False
+        assert s["format"] in M.PARSERS and isinstance(s["verified"], bool)   # true only after a clean live parse
         assert {"source", "url", "units", "frequency", "purpose"} <= set(s)
     assert "resource-center/data-chart-center" in next(s["url"] for s in cfg["series"] if s["id"] == "UST_PAR_10Y")
     for code in ["DGS3MO", "DGS2", "DGS10", "T10Y3M", "T10Y2Y", "BAMLH0A0HYM2", "CPIAUCSL", "UNRATE", "ICSA", "NFCI",
@@ -203,3 +203,16 @@ def test_minus_months_clamps_month_end():
     assert M._minus_months(date(2026, 5, 31), 3) == date(2026, 2, 28)
     assert M._minus_months(date(2026, 1, 15), 12) == date(2025, 1, 15)
     assert M._minus_months(date(2026, 3, 31), 3) == date(2025, 12, 31)
+
+
+def test_fetch_retries_once_after_a_timeout():
+    calls = []
+
+    def opener(url, timeout):
+        calls.append(url)
+        if len(calls) == 1:
+            raise TimeoutError("The read operation timed out")
+        return b'{"x": 1}'
+    cfg = {"series": [{"id": "S", "url": "https://example.org/s", "format": "fredgraph_csv"}]}
+    res = M.fetch_all(cfg, opener=opener)
+    assert len(calls) == 2 and "TimeoutError" not in (res["series"]["S"].get("error") or "")

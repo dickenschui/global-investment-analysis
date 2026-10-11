@@ -67,3 +67,14 @@ def test_monitor_adds_official_macro_readings_and_skips_stale_snapshot():
     mon = monitor.build_monitor(prices, meta, macro={"retrieved_at": "2026-09-01T06:31:00Z", "series": series})
     assert "Financial conditions" not in {r["topic"] for r in mon["regime"]}
     assert "stale" in mon["data_quality"]["macro"]
+
+
+def test_monitor_ignores_official_observations_after_the_snapshot_week():
+    idx = pd.date_range("2026-01-02", periods=41, freq="W-FRI")      # ends 2026-10-09
+    prices = pd.DataFrame({"SPY": range(100, 141)}, index=idx, dtype=float)
+    meta = {"SPY": {"market": "US", "kind": "etf", "sector": "Broad"}}
+    obs = [{"date": "2026-10-02", "value": -0.52}, {"date": "2026-10-16", "value": 0.80}]
+    mon = monitor.build_monitor(prices, meta, macro={"retrieved_at": "2026-10-20T06:31:00Z",
+                                                     "series": {"NFCI": {"status": "ok", "observations": obs}}})
+    fc = next(r for r in mon["regime"] if r["topic"] == "Financial conditions")
+    assert "looser" in fc["reading"]          # -0.52 (2 Oct), not the later +0.80

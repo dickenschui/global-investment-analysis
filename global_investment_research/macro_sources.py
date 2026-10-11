@@ -194,10 +194,12 @@ def fetch_all(config: dict, opener: Opener | None = None, timeout: float = 30.0,
     for entry in config.get("series", []):
         url = resolve_url(entry["url"], run_at, lookback)
         if url not in bodies:
-            try:
-                bodies[url] = (opener(url, timeout), None, _iso(clock()))
-            except Exception as exc:  # network, HTTP or TLS failure: record and continue
-                bodies[url] = (None, f"fetch failed: {type(exc).__name__}: {exc}"[:300], _iso(clock()))
+            for attempt in (1, 2):  # one retry: slow hosts (World Bank) time out intermittently
+                try:
+                    bodies[url] = (opener(url, timeout), None, _iso(clock()))
+                    break
+                except Exception as exc:  # network, HTTP or TLS failure: record and continue
+                    bodies[url] = (None, f"fetch failed: {type(exc).__name__}: {exc}"[:300], _iso(clock()))
         body, error, retrieved_at = bodies[url]
         rec = {k: v for k, v in entry.items() if k != "url"}
         rec.update(url=url, retrieved_at=retrieved_at, status="failed", observations=[], latest=None)
