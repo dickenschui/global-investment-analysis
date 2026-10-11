@@ -32,6 +32,15 @@ def test_trailing_returns_known_answer():
     assert an.trailing_return(s, 60) is None  # not enough history -> None, never a guess
 
 
+def test_one_year_return_tolerates_one_missing_bar_only():
+    m = an.instrument_metrics(series(np.arange(100, 153)), 52)  # 53 points -> full 52 bars
+    assert m["ret_1y_bars"] == 52 and m["ret_1y"] == pytest.approx(152 / 100 - 1)
+    m = an.instrument_metrics(series(np.arange(100, 152)), 52)  # 52 points -> 51 bars, flagged
+    assert m["ret_1y_bars"] == 51 and m["ret_1y"] == pytest.approx(151 / 100 - 1)
+    m = an.instrument_metrics(series(np.arange(100, 151)), 52)  # 51 points -> too short
+    assert m["ret_1y"] is None and m["ret_1y_bars"] is None
+
+
 def test_drawdown_and_trend():
     s = series([100, 120, 90, 95])
     assert an.max_drawdown(s) == pytest.approx(-0.25)

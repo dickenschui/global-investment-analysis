@@ -34,6 +34,12 @@ PRIOR_THESES = {
 }
 
 
+def one_year(m) -> str:
+    """1y return, marked † when the vendor history spans 51 rather than 52 weeks."""
+    mark = "†" if m.get("ret_1y_bars") and m["ret_1y_bars"] < 52 else ""
+    return H.pct(m["ret_1y"]) + mark
+
+
 def _spark(prices: pd.DataFrame, sym: str) -> str:
     return H.sparkline(prices[sym].dropna().tolist()) if sym in prices else ""
 
@@ -51,7 +57,7 @@ def metric_rows(syms, mon, meta, prices):
                         ['<span class="mut">no data</span>'] + [""] * 8)
             continue
         rows.append([f"<b>{H.esc(s)}</b>", H.esc(meta[s]["name"]), H.esc(meta[s]["sector"]),
-                     H.num(m["last"]), H.pct(m["ret_1w"]), H.pct(m["ret_1m"]), H.pct(m["ret_3m"]), H.pct(m["ret_1y"]),
+                     H.num(m["last"]), H.pct(m["ret_1w"]), H.pct(m["ret_1m"]), H.pct(m["ret_3m"]), one_year(m),
                      H.pct(m["from_high"]), H.pct(m["vol"], signed=False), H.trend_chip(m["trend"]["state"]),
                      _spark(prices, s)])
     return rows
@@ -63,6 +69,7 @@ def _footer(mon, meta):
     return (f"Data: {H.esc(', '.join(srcs))}; weekly closes to {mon['as_of']} in each instrument's quote currency "
             f"(price return, dividends excluded unless stated). {dq['with_prices']}/{dq['instruments_configured']} instruments "
             f"have prices. Missing: {H.esc(', '.join(dq['missing']) or 'none')}. Trend = price vs 10- and 40-week averages. "
+            "† 1-year figure spans 51 weeks where the vendor returned 52 weekly bars. "
             "Research screen only, not investment advice; verify against issuer filings before acting.")
 
 
@@ -127,7 +134,7 @@ def us_tech_report(mon, meta, prices, standalone=True) -> str:
             flags.append(H.chip(f"{m['from_high']*100:.0f}% off high", "warn"))
         if m["vol"] is not None and m["vol"] > 0.5:
             flags.append(H.chip("vol > 50%", "warn"))
-        rows.append([f"<b>{H.esc(s)}</b>", H.esc(meta[s]["sector"]), H.pct(m["ret_1m"]), H.pct(m["ret_3m"]), H.pct(m["ret_1y"]),
+        rows.append([f"<b>{H.esc(s)}</b>", H.esc(meta[s]["sector"]), H.pct(m["ret_1m"]), H.pct(m["ret_3m"]), one_year(m),
                      H.num(m["momentum_score"]), H.trend_chip(m["trend"]["state"]), " ".join(flags) or H.chip("none"),
                      H.esc(PRIOR_THESES.get(s, "")), _spark(prices, s)])
     etf = [s for s in ("SPY", "QQQ", "SOXX", "IGV") if s in mon["metrics"]]
@@ -183,7 +190,7 @@ def sg_income_report(mon, meta, prices, band=(0.06, 0.08), standalone=True) -> s
         rows.append([f"<b>{H.esc(s)}</b>", H.esc(meta[s]["name"]), H.num(price, 3),
                      H.pct(inc["yield"], signed=False, digits=2), H.chip(inc["target_fit"], tone),
                      H.pct(inc["yield_after_cut"]["20%"], signed=False, digits=2),
-                     H.pct(m["ret_1y"]) if m else "", H.pct(m["from_high"]) if m else "",
+                     one_year(m) if m else "", H.pct(m["from_high"]) if m else "",
                      H.trend_chip(m["trend"]["state"]) if m else "", H.esc(inc["yield_basis"]),
                      H.esc(PRIOR_THESES.get(s, ""))])
         # Rank: in-band first, then by yield descending.

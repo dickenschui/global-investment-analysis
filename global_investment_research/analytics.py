@@ -93,6 +93,13 @@ def last_move_zscore(s: pd.Series) -> float | None:
 
 def instrument_metrics(s: pd.Series, bars_per_year: int) -> dict:
     out = {f"ret_{k}": trailing_return(s, bars_for(k, bars_per_year)) for k in LOOKBACK_FRACTION}
+    # Vendors often return 52 rather than 53 weekly bars for "one year". Allow a one-bar
+    # shortfall on the 1y figure only, and record the bars actually spanned.
+    n_1y = bars_for("1y", bars_per_year)
+    n_avail = int(s.notna().sum()) - 1
+    out["ret_1y_bars"] = n_1y if out["ret_1y"] is not None else (n_avail if n_avail == n_1y - 1 else None)
+    if out["ret_1y"] is None and out["ret_1y_bars"]:
+        out["ret_1y"] = trailing_return(s, n_avail)
     out.update(
         vol=annualised_vol(s, bars_per_year),
         max_drawdown=max_drawdown(s),

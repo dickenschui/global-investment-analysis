@@ -64,7 +64,8 @@ def regime_readings(metrics: dict) -> list[dict]:
         if m and m["trend"]["state"]:
             st = m["trend"]["state"]
             label = up if st == "up" else down if st == "down" else f"{topic}: no clear trend"
-            add(topic, label, f"{sym} trend={st}, 3m {fmt_pct(m['ret_3m'])}, 1y {fmt_pct(m['ret_1y'])}")
+            add(topic, label, f"{sym} trend={st} (price {fmt_pct(m['trend']['pct_vs_long_ma'])} vs 40-week average), "
+                              f"3m {fmt_pct(m['ret_3m'])}, 1y {fmt_pct(m['ret_1y'])}")
     for topic, a, b, pos, neg in [
         ("Growth vs defensives", "XLY", "XLP", "Cyclicals leading defensives", "Defensives leading cyclicals"),
         ("Copper vs gold", "CPER", "GLD", "Copper outpacing gold (growth-positive)", "Gold outpacing copper (caution)"),
@@ -117,7 +118,10 @@ def fmt_pct(x) -> str:
     return "n/a" if x is None else f"{x * 100:+.1f}%"
 
 
-def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None) -> dict:
+def build_monitor(prices: pd.DataFrame, meta: dict, events_csv=None, window_days: int = 372) -> dict:
+    # One common look-back window, so a source that returns extra history (e.g. 2 years
+    # for one instrument) does not change drawdown or correlation baselines.
+    prices = prices[prices.index > prices.index.max() - pd.Timedelta(days=window_days)]
     bpy = an.infer_bars_per_year(prices.index)
     metrics = {s: an.instrument_metrics(prices[s], bpy) for s in prices.columns if prices[s].notna().sum() >= 2}
     stale_cutoff = prices.index.max() - pd.Timedelta(days=10)

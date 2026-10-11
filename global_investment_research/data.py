@@ -55,6 +55,10 @@ def load_ibkr_snapshot(directory: str | Path, universe: dict) -> tuple[pd.DataFr
             }
             if times:
                 idx = pd.to_datetime(times, utc=True).tz_convert(None).normalize()
+                # IBKR stamps weekly bars with the week's first trading day, which differs by
+                # venue around holidays (Mon vs Tue). Label each bar by its week ending Friday
+                # so instruments line up on one calendar.
+                idx = idx.to_period("W-FRI").end_time.normalize()
                 s = pd.Series(pd.to_numeric(closes, errors="coerce"), index=idx, name=sym)
                 if (s.dropna() <= 0).any():
                     raise ValueError(f"{sym}: non-positive close")
