@@ -90,6 +90,12 @@ def options_page(res: dict, standalone=True) -> str:
             '</div>'
             f'<span class="mut">Return on premium at expiry if the stock moves {H.esc(scen)}</span>'
             f'<span class="mut">Why: Decision Desk says {H.esc(i["stance"])}. Prices: {H.esc(i["price_basis"])}.</span>{thin}</div>')
+    n_fit = int(round(pol["sleeve_cap"] / pol["per_trade"]))
+    body += H.section("This week's sleeve", H.notes([
+        f"The cap fits <b>{n_fit} trades</b> at full size. Take them from the top of the ranking, at most one per underlying.",
+        "Prefer spreads: they cost less, pay a defined amount and need a smaller move than single long options.",
+        "Skip any idea whose underlying has since crossed its Decision Desk exit level.",
+    ]))
     body += H.section("Trade ideas, ranked", controls + f'<div class="ideas">{cards or "<p>No ideas passed the filters.</p>"}</div>',
                       "Ranked by return on premium if the underlying makes a one-standard-deviation move (from its implied "
                       "volatility) in the trade's favour, weighted by the probability of profit. Chart: profit or loss per contract at expiry (y) against the "
