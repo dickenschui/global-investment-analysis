@@ -31,11 +31,11 @@ def payoff_svg(idea, w=300, h=120) -> str:
     ys = [(O.payoff(legs, x) - idea["debit"]) * O.MULTIPLIER for x in xs]
     lo, hi = min(ys + [0]), max(ys + [0])
     rng = (hi - lo) or 1
-    px = lambda x: 30 + (x - xs[0]) / (xs[-1] - xs[0]) * (w - 40)  # noqa: E731
+    px = lambda x: 48 + (x - xs[0]) / (xs[-1] - xs[0]) * (w - 58)  # noqa: E731
     py = lambda y: 8 + (hi - y) / rng * (h - 28)  # noqa: E731
     path = "M" + " L".join(f"{px(x):.1f},{py(y):.1f}" for x, y in zip(xs, ys))
     return (f'<svg class="pay" viewBox="0 0 {w} {h}" role="img" aria-label="Profit or loss per contract at expiry">'
-            f'<line class="zero" x1="30" x2="{w-10}" y1="{py(0):.1f}" y2="{py(0):.1f}"/>'
+            f'<line class="zero" x1="48" x2="{w-10}" y1="{py(0):.1f}" y2="{py(0):.1f}"/>'
             f'<line class="spot" x1="{px(S):.1f}" x2="{px(S):.1f}" y1="8" y2="{h-20}"/>'
             f'<path class="line" d="{path}"/>'
             f'<text x="2" y="{py(hi)+4:.0f}">{hi:+,.0f}</text><text x="2" y="{py(lo)+4:.0f}">{lo:+,.0f}</text>'
@@ -83,6 +83,7 @@ def options_page(res: dict, standalone=True) -> str:
             f'<span>Breakeven at expiry</span><span>{i["breakeven"]:,.2f} ({fmt_pct(i["breakeven_move"])})</span>'
             f'<span>Max gain : max loss</span><span>{rr}</span>'
             f'<span>Probability of profit</span><span>{i["prob_profit"]*100:.0f}%</span>'
+            f'<span>Return if 1σ move ({fmt_pct(i["one_sd_move"])})</span><span>{i["return_at_1sd"]*100:+.0f}%</span>'
             f'<span>Implied volatility</span><span>{i["iv"]*100:.0f}%</span>'
             f'<span>Days to expiry</span><span>{i["days"]}</span>'
             f'<span>Contracts at 1% risk</span><span class="ct" data-debit="{i["debit_per_contract"]:.4f}">{i["contracts_at_1pct"]}</span>'
@@ -90,7 +91,8 @@ def options_page(res: dict, standalone=True) -> str:
             f'<span class="mut">Return on premium at expiry if the stock moves {H.esc(scen)}</span>'
             f'<span class="mut">Why: Decision Desk says {H.esc(i["stance"])}. Prices: {H.esc(i["price_basis"])}.</span>{thin}</div>')
     body += H.section("Trade ideas, ranked", controls + f'<div class="ideas">{cards or "<p>No ideas passed the filters.</p>"}</div>',
-                      "Ranked by probability-weighted payoff. Chart: profit or loss per contract at expiry (y) against the "
+                      "Ranked by return on premium if the underlying makes a one-standard-deviation move (from its implied "
+                      "volatility) in the trade's favour, weighted by the probability of profit. Chart: profit or loss per contract at expiry (y) against the "
                       "underlying price from −25% to +25% (x); the dashed line marks today's price.")
     if res["skipped"]:
         body += H.section("Screened out", H.table(["Underlying", "Reason"],

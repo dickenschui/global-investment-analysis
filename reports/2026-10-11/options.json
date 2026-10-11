@@ -1,0 +1,737 @@
+{
+ "as_of": "2026-10-09",
+ "ideas": [
+  {
+   "symbol": "XOM",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 168.79,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 170
+    },
+    {
+     "qty": -1,
+     "right": "C",
+     "strike": 185
+    }
+   ],
+   "debit": 4.869999999999999,
+   "debit_per_contract": 486.99999999999994,
+   "iv": 0.2810445455354585,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 20,
+   "premium_at_risk": 9739.999999999998,
+   "thin_strikes": [],
+   "model_check": 5.141226560290093,
+   "structure": "Bull call spread",
+   "breakeven": 174.87,
+   "breakeven_move": 0.036021091296877916,
+   "max_loss": 4.869999999999999,
+   "max_gain": 10.13,
+   "reward_risk": 2.0800821355236145,
+   "prob_profit": 0.3871584884160816,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 2.0800821355236145,
+    "+20%": 2.0800821355236145
+   },
+   "one_sd_move": 0.13097177387233105,
+   "return_at_1sd": 2.0800821355236145,
+   "score": 0.1924799437866992
+  },
+  {
+   "symbol": "GLD",
+   "direction": "bear",
+   "stance": "Avoid",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 384.5,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "P",
+     "strike": 385
+    },
+    {
+     "qty": -1,
+     "right": "P",
+     "strike": 345
+    }
+   ],
+   "debit": 10.935,
+   "debit_per_contract": 1093.5,
+   "iv": 0.21186506458851068,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 9,
+   "premium_at_risk": 9841.5,
+   "thin_strikes": [],
+   "model_check": 11.296059069687281,
+   "structure": "Bear put spread",
+   "breakeven": 374.065,
+   "breakeven_move": -0.027139141742522743,
+   "max_loss": 10.935,
+   "max_gain": 29.064999999999998,
+   "reward_risk": 2.6579789666209415,
+   "prob_profit": 0.36962836496655593,
+   "scenarios": {
+    "-20%": 2.657978966620942,
+    "-10%": 2.561957018747141,
+    "+0%": -0.9542752629172382,
+    "+10%": -1.0,
+    "+20%": -1.0
+   },
+   "one_sd_move": -0.08860748888656056,
+   "return_at_1sd": 2.161369865284184,
+   "score": 0.16853197435953415
+  },
+  {
+   "symbol": "GOOGL",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 351.6,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 350
+    },
+    {
+     "qty": -1,
+     "right": "C",
+     "strike": 385
+    }
+   ],
+   "debit": 13.15,
+   "debit_per_contract": 1315.0,
+   "iv": 0.32699792554625895,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 7,
+   "premium_at_risk": 9205.0,
+   "thin_strikes": [],
+   "model_check": 13.027824458733889,
+   "structure": "Bull call spread",
+   "breakeven": 363.15,
+   "breakeven_move": 0.0328498293515358,
+   "max_loss": 13.15,
+   "max_gain": 21.85,
+   "reward_risk": 1.661596958174905,
+   "prob_profit": 0.4037161664047117,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -0.8783269961977169,
+    "+10%": 1.661596958174905,
+    "+20%": 1.661596958174905
+   },
+   "one_sd_move": 0.1539623085658135,
+   "return_at_1sd": 1.661596958174905,
+   "score": 0.07452972046881445
+  },
+  {
+   "symbol": "AAPL",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 336.08,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 335
+    },
+    {
+     "qty": -1,
+     "right": "C",
+     "strike": 370
+    }
+   ],
+   "debit": 12.649999999999999,
+   "debit_per_contract": 1264.9999999999998,
+   "iv": 0.2460641228716788,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 7,
+   "premium_at_risk": 8854.999999999998,
+   "thin_strikes": [],
+   "model_check": 11.876343260515512,
+   "structure": "Bull call spread",
+   "breakeven": 347.65,
+   "breakeven_move": 0.0344263270649845,
+   "max_loss": 12.649999999999999,
+   "max_gain": 22.35,
+   "reward_risk": 1.7667984189723323,
+   "prob_profit": 0.3833130681647903,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -0.914624505928855,
+    "+10%": 1.7421343873517778,
+    "+20%": 1.7667984189723325
+   },
+   "one_sd_move": 0.11377855484312627,
+   "return_at_1sd": 1.7667984189723325,
+   "score": 0.06054999096977576
+  },
+  {
+   "symbol": "ORCL",
+   "direction": "bear",
+   "stance": "Avoid",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 141.55,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "P",
+     "strike": 140
+    },
+    {
+     "qty": -1,
+     "right": "P",
+     "strike": 125
+    }
+   ],
+   "debit": 6.549999999999999,
+   "debit_per_contract": 654.9999999999999,
+   "iv": 0.5684448562830207,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 15,
+   "premium_at_risk": 9824.999999999998,
+   "thin_strikes": [],
+   "model_check": 6.423954719840509,
+   "structure": "Bear put spread",
+   "breakeven": 133.45,
+   "breakeven_move": -0.05722359590250814,
+   "max_loss": 6.549999999999999,
+   "max_gain": 8.450000000000001,
+   "reward_risk": 1.290076335877863,
+   "prob_profit": 0.44312251686841764,
+   "scenarios": {
+    "-20%": 1.2900763358778629,
+    "-10%": 0.9244274809160293,
+    "+0%": -1.0,
+    "+10%": -1.0,
+    "+20%": -1.0
+   },
+   "one_sd_move": -0.22037157172630117,
+   "return_at_1sd": 1.2900763358778629,
+   "score": 0.014784389775002293
+  },
+  {
+   "symbol": "NVDA",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 229.33,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 230
+    },
+    {
+     "qty": -1,
+     "right": "C",
+     "strike": 250
+    }
+   ],
+   "debit": 7.824999999999999,
+   "debit_per_contract": 782.4999999999999,
+   "iv": 0.3409534650609694,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 12,
+   "premium_at_risk": 9390.0,
+   "thin_strikes": [],
+   "model_check": 7.419290118091098,
+   "structure": "Bull call spread",
+   "breakeven": 237.825,
+   "breakeven_move": 0.03704268957397616,
+   "max_loss": 7.824999999999999,
+   "max_gain": 12.175,
+   "reward_risk": 1.5559105431309908,
+   "prob_profit": 0.3947797686731945,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 1.5559105431309908,
+    "+20%": 1.5559105431309908
+   },
+   "one_sd_move": 0.16103636659313225,
+   "return_at_1sd": 1.5559105431309908,
+   "score": 0.009021772966631314
+  },
+  {
+   "symbol": "QQQ",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 751.38,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 751
+    },
+    {
+     "qty": -1,
+     "right": "C",
+     "strike": 825
+    }
+   ],
+   "debit": 25.26,
+   "debit_per_contract": 2526.0,
+   "iv": 0.19479262765383792,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 3,
+   "premium_at_risk": 7578.0,
+   "thin_strikes": [
+    751
+   ],
+   "model_check": 23.125577228311485,
+   "structure": "Bull call spread",
+   "breakeven": 776.26,
+   "breakeven_move": 0.0331124065053634,
+   "max_loss": 25.26,
+   "max_gain": 48.739999999999995,
+   "reward_risk": 1.9295328582739506,
+   "prob_profit": 0.36896273590899187,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -0.9849564528899447,
+    "+10%": 1.9295328582739506,
+    "+20%": 1.9295328582739506
+   },
+   "one_sd_move": 0.08904930792876464,
+   "return_at_1sd": 1.663890300535042,
+   "score": -0.017123746553164287
+  },
+  {
+   "symbol": "SPY",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 778.57,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 779
+    },
+    {
+     "qty": -1,
+     "right": "C",
+     "strike": 855
+    }
+   ],
+   "debit": 20.395000000000003,
+   "debit_per_contract": 2039.5000000000002,
+   "iv": 0.13365025501912528,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 4,
+   "premium_at_risk": 8158.000000000001,
+   "thin_strikes": [],
+   "model_check": 19.511980607470804,
+   "structure": "Bull call spread",
+   "breakeven": 799.395,
+   "breakeven_move": 0.026747755500468706,
+   "max_loss": 20.395000000000003,
+   "max_gain": 55.605,
+   "reward_risk": 2.726403530277028,
+   "prob_profit": 0.3634727889078436,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 2.726403530277028,
+    "+20%": 2.726403530277028
+   },
+   "one_sd_move": 0.06027591550799727,
+   "return_at_1sd": 1.2799225073332425,
+   "score": -0.1713102077658228
+  },
+  {
+   "symbol": "ORCL",
+   "direction": "bear",
+   "stance": "Avoid",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 141.55,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "P",
+     "strike": 135
+    }
+   ],
+   "debit": 10.15,
+   "debit_per_contract": 1015.0,
+   "iv": 0.566607287616487,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 9,
+   "premium_at_risk": 9135.0,
+   "thin_strikes": [],
+   "model_check": 10.142722351817127,
+   "structure": "Long put",
+   "breakeven": 124.85,
+   "breakeven_move": -0.1179795125397387,
+   "max_loss": 10.15,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.3398812261088324,
+   "scenarios": {
+    "-20%": 1.1438423645320186,
+    "-10%": -0.25073891625615863,
+    "+0%": -1.0,
+    "+10%": -1.0,
+    "+20%": -1.0
+   },
+   "one_sd_move": -0.2197439346561706,
+   "return_at_1sd": 1.419187581338024,
+   "score": -0.17776355866757165
+  },
+  {
+   "symbol": "XOM",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 168.79,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 175
+    }
+   ],
+   "debit": 5.65,
+   "debit_per_contract": 565.0,
+   "iv": 0.2781664587120794,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 17,
+   "premium_at_risk": 9605.000000000002,
+   "thin_strikes": [],
+   "model_check": 6.105384382029769,
+   "structure": "Long call",
+   "breakeven": 180.65,
+   "breakeven_move": 0.07026482611529117,
+   "max_loss": 5.65,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.28931761424743574,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 0.8883185840707983,
+    "+20%": 3.8757522123893757
+   },
+   "one_sd_move": 0.12954720128615338,
+   "return_at_1sd": 1.7710216115203203,
+   "score": -0.19829463832685623
+  },
+  {
+   "symbol": "NVDA",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 229.33,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 240
+    }
+   ],
+   "debit": 9.725000000000001,
+   "debit_per_contract": 972.5000000000001,
+   "iv": 0.3352454290544314,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 10,
+   "premium_at_risk": 9725.000000000002,
+   "thin_strikes": [],
+   "model_check": 9.710512420324818,
+   "structure": "Long call",
+   "breakeven": 249.725,
+   "breakeven_move": 0.08893297867701566,
+   "max_loss": 9.725000000000001,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.27376273582215427,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 0.2609768637532166,
+    "+20%": 2.619125964010285
+   },
+   "one_sd_move": 0.15813773899206596,
+   "return_at_1sd": 1.6319514327044193,
+   "score": -0.2794697752317996
+  },
+  {
+   "symbol": "GOOGL",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 351.6,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 370
+    }
+   ],
+   "debit": 13.675,
+   "debit_per_contract": 1367.5,
+   "iv": 0.324467860851498,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 7,
+   "premium_at_risk": 9572.5,
+   "thin_strikes": [],
+   "model_check": 13.506900002985958,
+   "structure": "Long call",
+   "breakeven": 383.675,
+   "breakeven_move": 0.09122582480091013,
+   "max_loss": 13.675,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.2638713896423637,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 0.22559414990859583,
+    "+20%": 2.796709323583182
+   },
+   "one_sd_move": 0.15268444271558734,
+   "return_at_1sd": 1.580171850734955,
+   "score": -0.3191664682304581
+  },
+  {
+   "symbol": "GLD",
+   "direction": "bear",
+   "stance": "Avoid",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 384.5,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "P",
+     "strike": 365
+    }
+   ],
+   "debit": 5.525,
+   "debit_per_contract": 552.5,
+   "iv": 0.2147021250139749,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 18,
+   "premium_at_risk": 9945.0,
+   "thin_strikes": [],
+   "model_check": 5.584213864980114,
+   "structure": "Long put",
+   "breakeven": 359.475,
+   "breakeven_move": -0.06508452535760723,
+   "max_loss": 5.525,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.22652457613957955,
+   "scenarios": {
+    "-20%": 9.389140271493208,
+    "-10%": 2.4298642533936627,
+    "+0%": -1.0,
+    "+10%": -1.0,
+    "+20%": -1.0
+   },
+   "one_sd_move": -0.08973912517955462,
+   "return_at_1sd": 1.7157816527671983,
+   "score": -0.3848087122192636
+  },
+  {
+   "symbol": "AAPL",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 336.08,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 355
+    }
+   ],
+   "debit": 7.75,
+   "debit_per_contract": 775.0,
+   "iv": 0.23617352321523286,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 12,
+   "premium_at_risk": 9300.0,
+   "thin_strikes": [],
+   "model_check": 7.536817742389175,
+   "structure": "Long call",
+   "breakeven": 362.75,
+   "breakeven_move": 0.07935610568912166,
+   "max_loss": 7.75,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.23703062691162458,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 0.8952258064516114,
+    "+20%": 5.23174193548387
+   },
+   "one_sd_move": 0.10896480123526175,
+   "return_at_1sd": 1.283985857954422,
+   "score": -0.4586254002317786
+  },
+  {
+   "symbol": "QQQ",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 751.38,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 789
+    }
+   ],
+   "debit": 11.02,
+   "debit_per_contract": 1102.0,
+   "iv": 0.17474099415332142,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 9,
+   "premium_at_risk": 9918.0,
+   "thin_strikes": [],
+   "model_check": 10.929028882165085,
+   "structure": "Long call",
+   "breakeven": 800.02,
+   "breakeven_move": 0.06473422236418314,
+   "max_loss": 11.02,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.22431632482029829,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 2.4045372050816725,
+    "+20%": 9.222867513611611
+   },
+   "one_sd_move": 0.07952804676344272,
+   "return_at_1sd": 1.0086918128054023,
+   "score": -0.5494176348548696
+  },
+  {
+   "symbol": "SPY",
+   "direction": "bull",
+   "stance": "Accumulate",
+   "expiry": "2026-12-18",
+   "days": 70,
+   "underlying": 778.57,
+   "legs": [
+    {
+     "qty": 1,
+     "right": "C",
+     "strike": 817
+    }
+   ],
+   "debit": 4.66,
+   "debit_per_contract": 466.0,
+   "iv": 0.11440579187311592,
+   "iv_basis": "contract IV",
+   "price_basis": "bid/ask mid",
+   "contracts_at_1pct": 21,
+   "premium_at_risk": 9786.0,
+   "thin_strikes": [],
+   "model_check": 4.712468544801283,
+   "structure": "Long call",
+   "breakeven": 821.66,
+   "breakeven_move": 0.055345055679001165,
+   "max_loss": 4.66,
+   "max_gain": null,
+   "reward_risk": null,
+   "prob_profit": 0.17179131683714366,
+   "scenarios": {
+    "-20%": -1.0,
+    "-10%": -1.0,
+    "+0%": -1.0,
+    "+10%": 7.460729613733934,
+    "+20%": 24.168240343347637
+   },
+   "one_sd_move": 0.05137779013128596,
+   "return_at_1sd": -0.6628313170567961,
+   "score": -0.8282086831628563
+  }
+ ],
+ "skipped": [
+  {
+   "symbol": "XLE",
+   "reason": "Bull call spread: spread 42% of mid: too wide; spread 49% of mid: too wide"
+  },
+  {
+   "symbol": "XLE",
+   "reason": "Long call: spread 93% of mid: too wide"
+  },
+  {
+   "symbol": "FXI",
+   "reason": "Bear put spread: spread 29% of mid: too wide; spread 146% of mid: too wide"
+  },
+  {
+   "symbol": "FXI",
+   "reason": "Long put: spread 136% of mid: too wide"
+  },
+  {
+   "symbol": "KWEB",
+   "reason": "Bear put spread: bid/ask mid; spread 117% of mid: too wide"
+  },
+  {
+   "symbol": "KWEB",
+   "reason": "Long put: spread 57% of mid: too wide"
+  }
+ ],
+ "policy": {
+  "sleeve_cap": 0.05,
+  "per_trade": 0.01,
+  "risk_free": 0.04,
+  "take_profit": 1.0,
+  "stop_loss": 0.5,
+  "time_stop_days": 21
+ }
+}

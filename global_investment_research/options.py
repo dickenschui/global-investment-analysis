@@ -160,10 +160,16 @@ def build_ideas(chains: dict, dec: dict, as_of: str, portfolio: float = 1_000_00
                 "premium_at_risk": contracts * debit * MULTIPLIER, "thin_strikes": thin,
                 "model_check": sum(q * bs_price(S, k, T, iv, r) for q, r, k in legs), **a,
             })
-    # Prefer defined-reward spreads with better odds-adjusted payoff.
+    # Rank on a like-for-like test: return on premium if the underlying makes a one-standard-deviation
+    # move (from its own implied volatility) in the trade's favour, weighted by the probability of profit.
     for i in ideas:
-        rr = i["reward_risk"] if i["reward_risk"] is not None else i["scenarios"]["+20%" if i["direction"] == "bull" else "-20%"]
-        i["score"] = (i["prob_profit"] * rr) - (1 - i["prob_profit"])
+        sgn = 1 if i["direction"] == "bull" else -1
+        T = i["days"] / 365
+        s1 = i["underlying"] * math.exp(sgn * i["iv"] * math.sqrt(T))
+        legs = [(l["qty"], l["right"], l["strike"]) for l in i["legs"]]
+        i["one_sd_move"] = s1 / i["underlying"] - 1
+        i["return_at_1sd"] = payoff(legs, s1) / i["debit"] - 1
+        i["score"] = i["prob_profit"] * max(i["return_at_1sd"], 0) - (1 - i["prob_profit"])
     ideas.sort(key=lambda i: -i["score"])
     return {"as_of": as_of, "ideas": ideas, "skipped": skipped,
             "policy": {"sleeve_cap": SLEEVE_CAP, "per_trade": PER_TRADE_RISK, "risk_free": RISK_FREE,
