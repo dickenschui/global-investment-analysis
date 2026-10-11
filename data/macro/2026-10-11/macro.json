@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "retrieved_at": "2026-10-11T18:12:59Z",
+ "retrieved_at": "2026-10-11T18:17:33Z",
  "series": {
   "DGS3MO": {
    "id": "DGS3MO",
@@ -10,9 +10,9 @@
    "units": "Percent per annum",
    "frequency": "daily",
    "purpose": "US Treasury 3-month constant-maturity yield; short end of the curve and cash return proxy",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:12:59Z",
+   "retrieved_at": "2026-10-11T18:17:34Z",
    "status": "ok",
    "observations": [
     {
@@ -3163,9 +3163,9 @@
    "units": "Percent per annum",
    "frequency": "daily",
    "purpose": "US Treasury 2-year constant-maturity yield; market view of the Fed path",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:00Z",
+   "retrieved_at": "2026-10-11T18:17:34Z",
    "status": "ok",
    "observations": [
     {
@@ -6316,9 +6316,9 @@
    "units": "Percent per annum",
    "frequency": "daily",
    "purpose": "US Treasury 10-year constant-maturity yield; discount rate for long-duration assets",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:01Z",
+   "retrieved_at": "2026-10-11T18:17:34Z",
    "status": "ok",
    "observations": [
     {
@@ -9469,9 +9469,9 @@
    "units": "Percentage points (10-year minus 3-month)",
    "frequency": "daily",
    "purpose": "Yield-curve slope; inversion has preceded past US recessions",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y3M&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:01Z",
+   "retrieved_at": "2026-10-11T18:17:35Z",
    "status": "ok",
    "observations": [
     {
@@ -12626,9 +12626,9 @@
    "units": "Percentage points (10-year minus 2-year)",
    "frequency": "daily",
    "purpose": "Alternative yield-curve slope, cross-check for T10Y3M",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y2Y&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:01Z",
+   "retrieved_at": "2026-10-11T18:17:35Z",
    "status": "ok",
    "observations": [
     {
@@ -15783,9 +15783,9 @@
    "units": "Percentage points (option-adjusted spread over Treasuries)",
    "frequency": "daily",
    "purpose": "US high-yield credit stress; ICE BofA index (FRED only republishes a rolling ~3-year window under ICE licence)",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:01Z",
+   "retrieved_at": "2026-10-11T18:17:36Z",
    "status": "ok",
    "observations": [
     {
@@ -18980,9 +18980,9 @@
    "units": "Index 1982-1984=100, seasonally adjusted",
    "frequency": "monthly",
    "purpose": "US consumer price inflation (year-on-year computed from the index)",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:02Z",
+   "retrieved_at": "2026-10-11T18:17:36Z",
    "status": "ok",
    "observations": [
     {
@@ -19141,9 +19141,9 @@
    "units": "Percent, seasonally adjusted",
    "frequency": "monthly",
    "purpose": "US unemployment rate; labour-market slack",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:02Z",
+   "retrieved_at": "2026-10-11T18:17:36Z",
    "status": "ok",
    "observations": [
     {
@@ -19306,9 +19306,9 @@
    "units": "Number of claims, seasonally adjusted, week ending Saturday",
    "frequency": "weekly",
    "purpose": "US initial jobless claims; earliest labour-market turning signal",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:02Z",
+   "retrieved_at": "2026-10-11T18:17:36Z",
    "status": "ok",
    "observations": [
     {
@@ -19955,9 +19955,9 @@
    "units": "Index; 0 = average conditions, positive = tighter than average",
    "frequency": "weekly",
    "purpose": "Chicago Fed National Financial Conditions Index; financial conditions",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:02Z",
+   "retrieved_at": "2026-10-11T18:17:37Z",
    "status": "ok",
    "observations": [
     {
@@ -20600,9 +20600,9 @@
    "units": "Index Jan 2006=100",
    "frequency": "daily",
    "purpose": "Nominal broad US dollar index; dollar strength drives HK/SG/China and GBP-based returns",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:03Z",
+   "retrieved_at": "2026-10-11T18:17:37Z",
    "status": "ok",
    "observations": [
     {
@@ -23737,9 +23737,9 @@
    "units": "US dollars per barrel",
    "frequency": "daily",
    "purpose": "Brent crude spot price; inflation and energy-sector input",
-   "verified": false,
+   "verified": true,
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU&cosd=2023-10-07",
-   "retrieved_at": "2026-10-11T18:13:03Z",
+   "retrieved_at": "2026-10-11T18:17:37Z",
    "status": "ok",
    "observations": [
     {
@@ -26890,9 +26890,9 @@
    "units": "GBP per 1 EUR; ECB euro reference rate (about 14:10 CET), not an executable quote",
    "frequency": "daily (TARGET business days)",
    "purpose": "GBP purchasing power; base currency of the investor",
-   "verified": false,
+   "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.GBP.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-11T18:13:05Z",
+   "retrieved_at": "2026-10-11T18:17:38Z",
    "status": "ok",
    "observations": [
     {
@@ -28915,9 +28915,9 @@
    "units": "USD per 1 EUR; ECB euro reference rate (about 14:10 CET), not an executable quote",
    "frequency": "daily (TARGET business days)",
    "purpose": "EUR/USD cross for USD exposure and GBP/USD derivation",
-   "verified": false,
+   "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-11T18:13:06Z",
+   "retrieved_at": "2026-10-11T18:17:39Z",
    "status": "ok",
    "observations": [
     {
@@ -30940,9 +30940,9 @@
    "units": "SGD per 1 EUR; ECB euro reference rate (about 14:10 CET), not an executable quote",
    "frequency": "daily (TARGET business days)",
    "purpose": "Singapore dollar for the SG income sleeve",
-   "verified": false,
+   "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.SGD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-11T18:13:08Z",
+   "retrieved_at": "2026-10-11T18:17:40Z",
    "status": "ok",
    "observations": [
     {
@@ -32965,9 +32965,9 @@
    "units": "HKD per 1 EUR; ECB euro reference rate (about 14:10 CET), not an executable quote",
    "frequency": "daily (TARGET business days)",
    "purpose": "Hong Kong dollar (pegged to USD) for HK holdings",
-   "verified": false,
+   "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HKD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-11T18:13:09Z",
+   "retrieved_at": "2026-10-11T18:17:41Z",
    "status": "ok",
    "observations": [
     {
@@ -34990,9 +34990,9 @@
    "units": "CNY per 1 EUR; ECB euro reference rate (about 14:10 CET), not an executable quote",
    "frequency": "daily (TARGET business days)",
    "purpose": "Chinese renminbi for China holdings",
-   "verified": false,
+   "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CNY.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-11T18:13:10Z",
+   "retrieved_at": "2026-10-11T18:17:42Z",
    "status": "ok",
    "observations": [
     {
@@ -37011,9 +37011,9 @@
    "units": "Percent per annum",
    "frequency": "daily",
    "purpose": "UK Bank Rate (official policy rate)",
-   "verified": false,
+   "verified": true,
    "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=07/Oct/2023&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-10-11T18:13:11Z",
+   "retrieved_at": "2026-10-11T18:17:42Z",
    "status": "ok",
    "observations": [
     {
@@ -40072,9 +40072,9 @@
    "units": "Percent per annum",
    "frequency": "daily",
    "purpose": "UK 10-year nominal zero-coupon gilt yield (BoE yield-curve estimate); UK discount rate",
-   "verified": false,
+   "verified": true,
    "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=07/Oct/2023&Dateto=now&SeriesCodes=IUDMNZC&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-10-11T18:13:12Z",
+   "retrieved_at": "2026-10-11T18:17:43Z",
    "status": "ok",
    "observations": [
     {
@@ -43130,9 +43130,9 @@
    "units": "Percent, 12-month rate",
    "frequency": "monthly",
    "purpose": "UK CPIH annual rate (CPI including owner-occupiers' housing costs); headline UK inflation measure",
-   "verified": false,
+   "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23/data",
-   "retrieved_at": "2026-10-11T18:13:12Z",
+   "retrieved_at": "2026-10-11T18:17:43Z",
    "status": "ok",
    "observations": [
     {
@@ -44960,9 +44960,9 @@
    "units": "Percent, 12-month rate",
    "frequency": "monthly",
    "purpose": "UK CPI annual rate (the Bank of England's 2% target measure); cross-check for CPIH",
-   "verified": false,
+   "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data",
-   "retrieved_at": "2026-10-11T18:13:12Z",
+   "retrieved_at": "2026-10-11T18:17:43Z",
    "status": "ok",
    "observations": [
     {
@@ -46790,9 +46790,9 @@
    "units": "Percent per annum (bond-equivalent par yield)",
    "frequency": "daily (current calendar year only)",
    "purpose": "Primary-source 3-month Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
-   "verified": false,
+   "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-11T18:13:33Z",
+   "retrieved_at": "2026-10-11T18:17:59Z",
    "status": "ok",
    "observations": [
     {
@@ -47592,9 +47592,9 @@
    "units": "Percent per annum (bond-equivalent par yield)",
    "frequency": "daily (current calendar year only)",
    "purpose": "Primary-source 2-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
-   "verified": false,
+   "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-11T18:13:33Z",
+   "retrieved_at": "2026-10-11T18:17:59Z",
    "status": "ok",
    "observations": [
     {
@@ -48394,9 +48394,9 @@
    "units": "Percent per annum (bond-equivalent par yield)",
    "frequency": "daily (current calendar year only)",
    "purpose": "Primary-source 10-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
-   "verified": false,
+   "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-11T18:13:33Z",
+   "retrieved_at": "2026-10-11T18:17:59Z",
    "status": "ok",
    "observations": [
     {
@@ -49196,9 +49196,9 @@
    "units": "Percent per annum (bond-equivalent par yield)",
    "frequency": "daily (current calendar year only)",
    "purpose": "Primary-source 30-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
-   "verified": false,
+   "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-11T18:13:33Z",
+   "retrieved_at": "2026-10-11T18:17:59Z",
    "status": "ok",
    "observations": [
     {
@@ -50001,11 +50001,280 @@
    "purpose": "Singapore real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": false,
    "url": "https://api.worldbank.org/v2/country/SG/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-11T18:14:03Z",
-   "status": "failed",
-   "observations": [],
-   "latest": null,
-   "error": "fetch failed: TimeoutError: The read operation timed out"
+   "retrieved_at": "2026-10-11T18:17:59Z",
+   "status": "ok",
+   "observations": [
+    {
+     "date": "1960",
+     "value": null
+    },
+    {
+     "date": "1961",
+     "value": 8.13752950817668
+    },
+    {
+     "date": "1962",
+     "value": 7.55344418052258
+    },
+    {
+     "date": "1963",
+     "value": 10.0401733131415
+    },
+    {
+     "date": "1964",
+     "value": -3.10316815597076
+    },
+    {
+     "date": "1965",
+     "value": 7.83426046474929
+    },
+    {
+     "date": "1966",
+     "value": 10.180095306912
+    },
+    {
+     "date": "1967",
+     "value": 12.508612746034
+    },
+    {
+     "date": "1968",
+     "value": 13.5269942226387
+    },
+    {
+     "date": "1969",
+     "value": 13.8338251160131
+    },
+    {
+     "date": "1970",
+     "value": 13.9420030031916
+    },
+    {
+     "date": "1971",
+     "value": 12.4134371586342
+    },
+    {
+     "date": "1972",
+     "value": 13.3155626083739
+    },
+    {
+     "date": "1973",
+     "value": 10.6030030171787
+    },
+    {
+     "date": "1974",
+     "value": 6.11740437109883
+    },
+    {
+     "date": "1975",
+     "value": 3.98873862550901
+    },
+    {
+     "date": "1976",
+     "value": 7.43716681814959
+    },
+    {
+     "date": "1977",
+     "value": 6.85244239382494
+    },
+    {
+     "date": "1978",
+     "value": 7.77718195422017
+    },
+    {
+     "date": "1979",
+     "value": 9.55444873972347
+    },
+    {
+     "date": "1980",
+     "value": 10.1133721068475
+    },
+    {
+     "date": "1981",
+     "value": 10.8159232986752
+    },
+    {
+     "date": "1982",
+     "value": 7.10214484891354
+    },
+    {
+     "date": "1983",
+     "value": 8.55448210614414
+    },
+    {
+     "date": "1984",
+     "value": 8.79228623912256
+    },
+    {
+     "date": "1985",
+     "value": -0.622701650113157
+    },
+    {
+     "date": "1986",
+     "value": 1.34281041445436
+    },
+    {
+     "date": "1987",
+     "value": 10.7979324702819
+    },
+    {
+     "date": "1988",
+     "value": 11.26359213382
+    },
+    {
+     "date": "1989",
+     "value": 10.1588286387889
+    },
+    {
+     "date": "1990",
+     "value": 9.82089955731777
+    },
+    {
+     "date": "1991",
+     "value": 6.68839753958379
+    },
+    {
+     "date": "1992",
+     "value": 6.63980556949564
+    },
+    {
+     "date": "1993",
+     "value": 11.459650875246
+    },
+    {
+     "date": "1994",
+     "value": 11.0956893100227
+    },
+    {
+     "date": "1995",
+     "value": 7.17540112091071
+    },
+    {
+     "date": "1996",
+     "value": 7.47139086002002
+    },
+    {
+     "date": "1997",
+     "value": 8.31620911124497
+    },
+    {
+     "date": "1998",
+     "value": -2.19101500611274
+    },
+    {
+     "date": "1999",
+     "value": 5.71837175710837
+    },
+    {
+     "date": "2000",
+     "value": 9.03831632555163
+    },
+    {
+     "date": "2001",
+     "value": -1.07086275100448
+    },
+    {
+     "date": "2002",
+     "value": 3.92336076702013
+    },
+    {
+     "date": "2003",
+     "value": 4.54825542643229
+    },
+    {
+     "date": "2004",
+     "value": 9.93998268434957
+    },
+    {
+     "date": "2005",
+     "value": 7.36632239250758
+    },
+    {
+     "date": "2006",
+     "value": 9.00676607871758
+    },
+    {
+     "date": "2007",
+     "value": 9.02151951268893
+    },
+    {
+     "date": "2008",
+     "value": 1.86348345462035
+    },
+    {
+     "date": "2009",
+     "value": 0.127953382778088
+    },
+    {
+     "date": "2010",
+     "value": 14.5197497108994
+    },
+    {
+     "date": "2011",
+     "value": 6.21493416858989
+    },
+    {
+     "date": "2012",
+     "value": 4.43549759378537
+    },
+    {
+     "date": "2013",
+     "value": 4.81763099120676
+    },
+    {
+     "date": "2014",
+     "value": 3.93554027709007
+    },
+    {
+     "date": "2015",
+     "value": 2.97679931634806
+    },
+    {
+     "date": "2016",
+     "value": 3.91095306322606
+    },
+    {
+     "date": "2017",
+     "value": 4.32679370770501
+    },
+    {
+     "date": "2018",
+     "value": 3.18660848474074
+    },
+    {
+     "date": "2019",
+     "value": 1.15877947300108
+    },
+    {
+     "date": "2020",
+     "value": -3.61084281729929
+    },
+    {
+     "date": "2021",
+     "value": 10.1410845197192
+    },
+    {
+     "date": "2022",
+     "value": 4.01027884472296
+    },
+    {
+     "date": "2023",
+     "value": 1.45026775889565
+    },
+    {
+     "date": "2024",
+     "value": 5.3435120192366
+    },
+    {
+     "date": "2025",
+     "value": 5.02588199508003
+    }
+   ],
+   "latest": {
+    "date": "2025",
+    "value": 5.02588199508003
+   },
+   "sha256": "5a6fb505277b6b324e012b75eadbb5e9c153a03a213ccf6e740a7dacdea56040",
+   "bytes": 14337
   },
   "WB_GDP_HK": {
    "id": "WB_GDP_HK",
@@ -50019,11 +50288,280 @@
    "purpose": "Hong Kong SAR, China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": false,
    "url": "https://api.worldbank.org/v2/country/HK/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-11T18:14:33Z",
-   "status": "failed",
-   "observations": [],
-   "latest": null,
-   "error": "fetch failed: TimeoutError: The read operation timed out"
+   "retrieved_at": "2026-10-11T18:17:59Z",
+   "status": "ok",
+   "observations": [
+    {
+     "date": "1960",
+     "value": null
+    },
+    {
+     "date": "1961",
+     "value": null
+    },
+    {
+     "date": "1962",
+     "value": 14.2908554675842
+    },
+    {
+     "date": "1963",
+     "value": 15.7633614168209
+    },
+    {
+     "date": "1964",
+     "value": 8.62789586816336
+    },
+    {
+     "date": "1965",
+     "value": 14.6423838228378
+    },
+    {
+     "date": "1966",
+     "value": 1.79477071258098
+    },
+    {
+     "date": "1967",
+     "value": 1.60350845976313
+    },
+    {
+     "date": "1968",
+     "value": 3.39746066084628
+    },
+    {
+     "date": "1969",
+     "value": 11.3434724346297
+    },
+    {
+     "date": "1970",
+     "value": 9.20666451913097
+    },
+    {
+     "date": "1971",
+     "value": 7.29280183538859
+    },
+    {
+     "date": "1972",
+     "value": 10.6120485240043
+    },
+    {
+     "date": "1973",
+     "value": 12.2796298022321
+    },
+    {
+     "date": "1974",
+     "value": 2.41533565971315
+    },
+    {
+     "date": "1975",
+     "value": 0.492028182797924
+    },
+    {
+     "date": "1976",
+     "value": 16.1643017176998
+    },
+    {
+     "date": "1977",
+     "value": 11.7258139176053
+    },
+    {
+     "date": "1978",
+     "value": 8.26088657795823
+    },
+    {
+     "date": "1979",
+     "value": 11.5567867978322
+    },
+    {
+     "date": "1980",
+     "value": 10.1081752759651
+    },
+    {
+     "date": "1981",
+     "value": 9.2608811545638
+    },
+    {
+     "date": "1982",
+     "value": 2.94988007844803
+    },
+    {
+     "date": "1983",
+     "value": 5.97706915415
+    },
+    {
+     "date": "1984",
+     "value": 9.97386418085986
+    },
+    {
+     "date": "1985",
+     "value": 0.757062639209607
+    },
+    {
+     "date": "1986",
+     "value": 11.056104096916
+    },
+    {
+     "date": "1987",
+     "value": 13.3984575956805
+    },
+    {
+     "date": "1988",
+     "value": 8.51153048557791
+    },
+    {
+     "date": "1989",
+     "value": 2.2770989833746
+    },
+    {
+     "date": "1990",
+     "value": 3.83055083915474
+    },
+    {
+     "date": "1991",
+     "value": 5.70193577048867
+    },
+    {
+     "date": "1992",
+     "value": 6.23502387210803
+    },
+    {
+     "date": "1993",
+     "value": 6.20118510679872
+    },
+    {
+     "date": "1994",
+     "value": 6.03603037436426
+    },
+    {
+     "date": "1995",
+     "value": 2.37382875928816
+    },
+    {
+     "date": "1996",
+     "value": 4.25847572892732
+    },
+    {
+     "date": "1997",
+     "value": 5.09969994681332
+    },
+    {
+     "date": "1998",
+     "value": -5.88263751764842
+    },
+    {
+     "date": "1999",
+     "value": 2.50671604844752
+    },
+    {
+     "date": "2000",
+     "value": 7.66344398397743
+    },
+    {
+     "date": "2001",
+     "value": 0.560867137855524
+    },
+    {
+     "date": "2002",
+     "value": 1.6567016736435
+    },
+    {
+     "date": "2003",
+     "value": 3.05635886663597
+    },
+    {
+     "date": "2004",
+     "value": 8.70006555836002
+    },
+    {
+     "date": "2005",
+     "value": 7.38815395153696
+    },
+    {
+     "date": "2006",
+     "value": 7.03264766297669
+    },
+    {
+     "date": "2007",
+     "value": 6.46482809096842
+    },
+    {
+     "date": "2008",
+     "value": 2.12793685154209
+    },
+    {
+     "date": "2009",
+     "value": -2.45909150468412
+    },
+    {
+     "date": "2010",
+     "value": 6.76770683250318
+    },
+    {
+     "date": "2011",
+     "value": 4.81466801092733
+    },
+    {
+     "date": "2012",
+     "value": 1.70032214482865
+    },
+    {
+     "date": "2013",
+     "value": 3.10155262780289
+    },
+    {
+     "date": "2014",
+     "value": 2.76241378329884
+    },
+    {
+     "date": "2015",
+     "value": 2.38780116013344
+    },
+    {
+     "date": "2016",
+     "value": 2.17544820327555
+    },
+    {
+     "date": "2017",
+     "value": 3.79610937243891
+    },
+    {
+     "date": "2018",
+     "value": 2.84690922660509
+    },
+    {
+     "date": "2019",
+     "value": -1.67242865968056
+    },
+    {
+     "date": "2020",
+     "value": -6.54479640529367
+    },
+    {
+     "date": "2021",
+     "value": 6.45443038333934
+    },
+    {
+     "date": "2022",
+     "value": -3.68528359281325
+    },
+    {
+     "date": "2023",
+     "value": 3.15034461759902
+    },
+    {
+     "date": "2024",
+     "value": 2.62936861207362
+    },
+    {
+     "date": "2025",
+     "value": 3.48764886355949
+    }
+   ],
+   "latest": {
+    "date": "2025",
+    "value": 3.48764886355949
+   },
+   "sha256": "d8909ce2e9f595501cae359b7dd02f127e8a48adfbc55a63ad77af44828dc5c9",
+   "bytes": 15051
   },
   "WB_GDP_CN": {
    "id": "WB_GDP_CN",
@@ -50035,9 +50573,9 @@
    "units": "Percent, annual growth of real GDP (constant prices)",
    "frequency": "annual",
    "purpose": "China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
-   "verified": false,
+   "verified": true,
    "url": "https://api.worldbank.org/v2/country/CN/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-11T18:14:33Z",
+   "retrieved_at": "2026-10-11T18:18:00Z",
    "status": "ok",
    "observations": [
     {
@@ -50324,11 +50862,280 @@
    "purpose": "United Kingdom real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": false,
    "url": "https://api.worldbank.org/v2/country/GB/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-11T18:15:03Z",
-   "status": "failed",
-   "observations": [],
-   "latest": null,
-   "error": "fetch failed: TimeoutError: The read operation timed out"
+   "retrieved_at": "2026-10-11T18:18:00Z",
+   "status": "ok",
+   "observations": [
+    {
+     "date": "1960",
+     "value": null
+    },
+    {
+     "date": "1961",
+     "value": 2.70131421328257
+    },
+    {
+     "date": "1962",
+     "value": 1.0986962362898
+    },
+    {
+     "date": "1963",
+     "value": 4.85954520244742
+    },
+    {
+     "date": "1964",
+     "value": 5.59481105874345
+    },
+    {
+     "date": "1965",
+     "value": 2.13033308666921
+    },
+    {
+     "date": "1966",
+     "value": 1.56744960482462
+    },
+    {
+     "date": "1967",
+     "value": 2.77573771112216
+    },
+    {
+     "date": "1968",
+     "value": 5.47269310050385
+    },
+    {
+     "date": "1969",
+     "value": 1.93913775370176
+    },
+    {
+     "date": "1970",
+     "value": 2.70858148856038
+    },
+    {
+     "date": "1971",
+     "value": 2.00453760135888
+    },
+    {
+     "date": "1972",
+     "value": 3.62637105743457
+    },
+    {
+     "date": "1973",
+     "value": 7.31352424220155
+    },
+    {
+     "date": "1974",
+     "value": -1.67969792645223
+    },
+    {
+     "date": "1975",
+     "value": -0.676870194049812
+    },
+    {
+     "date": "1976",
+     "value": 2.80465599545295
+    },
+    {
+     "date": "1977",
+     "value": 2.36335094409922
+    },
+    {
+     "date": "1978",
+     "value": 3.40337382855367
+    },
+    {
+     "date": "1979",
+     "value": 2.74677219709527
+    },
+    {
+     "date": "1980",
+     "value": -2.17910220206564
+    },
+    {
+     "date": "1981",
+     "value": -1.3234581733779
+    },
+    {
+     "date": "1982",
+     "value": 2.09306886432368
+    },
+    {
+     "date": "1983",
+     "value": 3.62434641923983
+    },
+    {
+     "date": "1984",
+     "value": 2.67092491032817
+    },
+    {
+     "date": "1985",
+     "value": 3.59938143817158
+    },
+    {
+     "date": "1986",
+     "value": 4.01232987098167
+    },
+    {
+     "date": "1987",
+     "value": 4.56208082572655
+    },
+    {
+     "date": "1988",
+     "value": 5.0321018040183
+    },
+    {
+     "date": "1989",
+     "value": 2.28144671930745
+    },
+    {
+     "date": "1990",
+     "value": 0.779266119883417
+    },
+    {
+     "date": "1991",
+     "value": -1.29243974751705
+    },
+    {
+     "date": "1992",
+     "value": 1.29472849604493
+    },
+    {
+     "date": "1993",
+     "value": 3.49048744653493
+    },
+    {
+     "date": "1994",
+     "value": 4.95341092800692
+    },
+    {
+     "date": "1995",
+     "value": 3.53339096338078
+    },
+    {
+     "date": "1996",
+     "value": 2.61491606949487
+    },
+    {
+     "date": "1997",
+     "value": 4.8799853038024
+    },
+    {
+     "date": "1998",
+     "value": 3.24631482881618
+    },
+    {
+     "date": "1999",
+     "value": 2.94445869854798
+    },
+    {
+     "date": "2000",
+     "value": 4.52438074810904
+    },
+    {
+     "date": "2001",
+     "value": 2.39102229602824
+    },
+    {
+     "date": "2002",
+     "value": 1.70902736258567
+    },
+    {
+     "date": "2003",
+     "value": 3.21851612669614
+    },
+    {
+     "date": "2004",
+     "value": 2.32601853325993
+    },
+    {
+     "date": "2005",
+     "value": 2.7906547174688
+    },
+    {
+     "date": "2006",
+     "value": 2.18982132415704
+    },
+    {
+     "date": "2007",
+     "value": 2.93091133582351
+    },
+    {
+     "date": "2008",
+     "value": -0.0494116727402769
+    },
+    {
+     "date": "2009",
+     "value": -4.58740819226323
+    },
+    {
+     "date": "2010",
+     "value": 2.26054460931586
+    },
+    {
+     "date": "2011",
+     "value": 0.851437739020326
+    },
+    {
+     "date": "2012",
+     "value": 1.52826034721852
+    },
+    {
+     "date": "2013",
+     "value": 1.71846961308464
+    },
+    {
+     "date": "2014",
+     "value": 3.16017351468152
+    },
+    {
+     "date": "2015",
+     "value": 2.14040560033371
+    },
+    {
+     "date": "2016",
+     "value": 2.20652020635357
+    },
+    {
+     "date": "2017",
+     "value": 3.02322219840339
+    },
+    {
+     "date": "2018",
+     "value": 1.55133095078786
+    },
+    {
+     "date": "2019",
+     "value": 1.25629899760824
+    },
+    {
+     "date": "2020",
+     "value": -10.047896637362
+    },
+    {
+     "date": "2021",
+     "value": 8.5431118453255
+    },
+    {
+     "date": "2022",
+     "value": 5.14970388522993
+    },
+    {
+     "date": "2023",
+     "value": 0.271650048355255
+    },
+    {
+     "date": "2024",
+     "value": 1.08027716858781
+    },
+    {
+     "date": "2025",
+     "value": 1.38844207858726
+    }
+   ],
+   "latest": {
+    "date": "2025",
+    "value": 1.38844207858726
+   },
+   "sha256": "fa7634a7dfaf7f1d726cd875164d816b2072cd2a7e79e83c2d3fa9d4bd639e5b",
+   "bytes": 14673
   },
   "WB_GDP_US": {
    "id": "WB_GDP_US",
@@ -50340,9 +51147,9 @@
    "units": "Percent, annual growth of real GDP (constant prices)",
    "frequency": "annual",
    "purpose": "United States real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
-   "verified": false,
+   "verified": true,
    "url": "https://api.worldbank.org/v2/country/US/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-11T18:15:03Z",
+   "retrieved_at": "2026-10-11T18:18:00Z",
    "status": "ok",
    "observations": [
     {
@@ -50618,23 +51425,7 @@
    "bytes": 14606
   }
  },
- "failures": [
-  {
-   "id": "WB_GDP_SG",
-   "url": "https://api.worldbank.org/v2/country/SG/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "error": "fetch failed: TimeoutError: The read operation timed out"
-  },
-  {
-   "id": "WB_GDP_HK",
-   "url": "https://api.worldbank.org/v2/country/HK/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "error": "fetch failed: TimeoutError: The read operation timed out"
-  },
-  {
-   "id": "WB_GDP_GB",
-   "url": "https://api.worldbank.org/v2/country/GB/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "error": "fetch failed: TimeoutError: The read operation timed out"
-  }
- ],
+ "failures": [],
  "not_configured": [
   {
    "id": "HKMA_HIBOR",
@@ -50657,8 +51448,8 @@
  ],
  "summary": {
   "configured": 30,
-  "ok": 27,
-  "failed": 3
+  "ok": 30,
+  "failed": 0
  },
  "note": "Current/revised official data, not first-release vintages. Missing values are None, never filled."
 }
