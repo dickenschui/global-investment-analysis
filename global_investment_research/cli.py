@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import data, monitor, portfolio, reports
+from . import data, decisions, desk, handbook, monitor, portfolio, reports
 
 
 def _json_default(o):
@@ -73,6 +73,10 @@ def write_reports(prices, meta, out: Path, state_dir: Path | None, events: str |
     (out / "us-tech.html").write_text(reports.us_tech_report(mon, meta, prices, standalone), encoding="utf-8")
     (out / "uk-fx.html").write_text(reports.uk_fx_report(mon, meta, prices, standalone), encoding="utf-8")
     (out / "sg-income.html").write_text(reports.sg_income_report(mon, meta, prices, standalone=standalone), encoding="utf-8")
+    dec = decisions.build_decisions(mon, meta)
+    (out / "decisions.json").write_text(json.dumps(_clean(dec), indent=1, default=_json_default))
+    (out / "decision-desk.html").write_text(desk.desk_page(dec, mon, meta, standalone), encoding="utf-8")
+    (out / "handbook.html").write_text(handbook.to_html(standalone), encoding="utf-8")
     return mon
 
 
@@ -80,7 +84,7 @@ def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="global-research")
     p.add_argument("--universe", default=str(data.DEFAULT_UNIVERSE))
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name in ("monitor", "portfolio"):
+    for name in ("monitor", "portfolio", "review"):
         s = sub.add_parser(name)
         src = s.add_mutually_exclusive_group()
         src.add_argument("--snapshot", help="directory of IBKR snapshot JSON files")
@@ -94,10 +98,18 @@ def main(argv=None) -> int:
     pf.add_argument("--symbols", nargs="+", required=True)
     pf.add_argument("--max-weight", type=float, default=0.4)
     pf.add_argument("--train-fraction", type=float, default=0.7)
+    sub.choices["review"].add_argument("--log", default="config/decision-log.csv")
     d = sub.add_parser("demo")
     d.add_argument("--out", required=True)
+    hb = sub.add_parser("handbook", help="write docs/HANDBOOK.md from the policy source")
+    hb.add_argument("--out", default="docs/HANDBOOK.md")
     args = p.parse_args(argv)
     universe = data.load_universe(args.universe)
+
+    if args.cmd == "handbook":
+        Path(args.out).write_text(handbook.to_markdown() + "\n", encoding="utf-8")
+        print(f"Handbook written to {args.out}")
+        return 0
 
     if args.cmd == "demo":
         prices, meta = synthetic(universe)
@@ -110,6 +122,16 @@ def main(argv=None) -> int:
         dq = mon["data_quality"]
         print(f"Monitor as of {mon['as_of']}: {dq['with_prices']}/{dq['instruments_configured']} instruments; "
               f"missing {dq['missing'] or 'none'}; reports in {args.out}")
+        return 0
+    if args.cmd == "review":
+        rows = decisions.review_log(args.log, prices)
+        if not rows:
+            print(f"No decisions logged in {args.log} yet.")
+        for r in rows:
+            if "return" in r:
+                print(f"{r['date']} {r['symbol']:8} {r['decision']:10} {r['return']*100:+6.1f}%  {r['verdict']}")
+            else:
+                print(f"{r['date']} {r['symbol']:8} {r['status']}")
         return 0
     missing = [s for s in args.symbols if s not in prices]
     if missing:
