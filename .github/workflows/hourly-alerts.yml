@@ -105,7 +105,7 @@ jobs:
                   notify.send_telegram(text)
                   print("Telegram: sent")
               except Exception as exc:
-                  print("Telegram failed:", type(exc).__name__)
+                  print("Telegram failed:", exc)
           else:
               print("Telegram skipped: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID secrets not set")
           PY
