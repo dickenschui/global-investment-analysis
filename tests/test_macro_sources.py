@@ -216,3 +216,23 @@ def test_fetch_retries_once_after_a_timeout():
     cfg = {"series": [{"id": "S", "url": "https://example.org/s", "format": "fredgraph_csv"}]}
     res = M.fetch_all(cfg, opener=opener)
     assert len(calls) == 2 and "TimeoutError" not in (res["series"]["S"].get("error") or "")
+
+
+def test_failed_refetch_keeps_last_good_copy_for_a_week():
+    good = {"status": "ok", "retrieved_at": "2026-10-12T06:30:00Z", "observations": [{"date": "2026-10-09", "value": 0.99}],
+            "latest": {"date": "2026-10-09", "value": 0.99}}
+    old = {"status": "ok", "retrieved_at": "2026-10-01T06:30:00Z", "observations": [{"date": "2026-09-30", "value": 1.0}]}
+    previous = {"series": {"T10Y3M": good, "NFCI": old}}
+    failed = {"status": "failed", "error": "fetch failed: TimeoutError", "observations": []}
+    results = {"retrieved_at": "2026-10-12T13:40:00Z", "series": {"T10Y3M": failed, "NFCI": failed, "ICSA": failed},
+               "failures": [{"id": i, "error": "fetch failed: TimeoutError"} for i in ("T10Y3M", "NFCI", "ICSA")],
+               "summary": {"configured": 3, "ok": 0, "failed": 3}}
+    out = M.carry_forward(results, previous)
+    t = out["series"]["T10Y3M"]
+    assert t["status"] == "ok" and t["carried_forward"] and t["retrieved_at"] == "2026-10-12T06:30:00Z"
+    assert "TimeoutError" in t["last_error"]
+    assert out["series"]["NFCI"]["status"] == "failed"          # 11 days old: not carried
+    assert out["series"]["ICSA"]["status"] == "failed"          # nothing to carry
+    assert out["summary"] == {"configured": 3, "ok": 1, "failed": 2, "carried_forward": 1}
+    assert [f["id"] for f in out["failures"]] == ["NFCI", "ICSA"]
+    assert M.carry_forward(results, None) is results

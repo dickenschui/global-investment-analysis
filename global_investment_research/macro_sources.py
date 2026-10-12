@@ -240,10 +240,40 @@ def load_config(path: str | Path) -> dict:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+CARRY_FORWARD_DAYS = 7
+
+
+def carry_forward(results: dict, previous: dict | None, max_age_days: int = CARRY_FORWARD_DAYS) -> dict:
+    """Keep the last good copy of a series that failed this run, so a run with transient failures (e.g. a backup
+    run) never overwrites good data. Only copies fetched within max_age_days are kept; each keeps its own
+    retrieved_at and is marked carried_forward with this run's error. Older ones are left as failures."""
+    if not previous:
+        return results
+    run_at = datetime.fromisoformat(results["retrieved_at"].replace("Z", "+00:00"))
+    series, carried = dict(results["series"]), []
+    for sid, rec in results["series"].items():
+        old = (previous.get("series") or {}).get(sid)
+        if rec.get("status") == "ok" or not old or old.get("status") != "ok" or not old.get("retrieved_at"):
+            continue
+        age = run_at - datetime.fromisoformat(old["retrieved_at"].replace("Z", "+00:00"))
+        if age.days < max_age_days:
+            series[sid] = {**old, "carried_forward": True, "last_error": rec.get("error")}
+            carried.append(sid)
+    failures = [f for f in results["failures"] if f["id"] not in carried]
+    summary = {**results["summary"], "ok": results["summary"]["ok"] + len(carried), "failed": len(failures),
+               "carried_forward": len(carried)}
+    return {**results, "series": series, "failures": failures, "summary": summary,
+            "carried_forward": [{"id": c, "error": series[c]["last_error"]} for c in carried]}
+
+
 def run(config_path: str | Path, out_dir: str | Path, opener: Opener | None = None,
         timeout: float = 30.0, now: datetime | None = None) -> dict:
-    """CLI helper: fetch everything, write the snapshot, return a short summary (paths + failures)."""
+    """CLI helper: fetch everything, write the snapshot, return a short summary (paths + failures).
+    Series that fail this run keep their last good copy from latest.json (see carry_forward)."""
     results = fetch_all(load_config(config_path), opener=opener, timeout=timeout, now=now)
+    latest = Path(out_dir) / "latest.json"
+    previous = json.loads(latest.read_text(encoding="utf-8")) if latest.exists() else None
+    results = carry_forward(results, previous)
     paths = write_snapshot(results, out_dir)
     return {**results["summary"], "paths": paths, "failures": results["failures"]}
 
