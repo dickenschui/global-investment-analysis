@@ -1,34 +1,20 @@
 {
  "schema_version": 1,
  "conditions": {
-  "MONITOR|Monitor heartbeat gap": {
-   "severity": "WARN",
-   "first_seen": "2026-10-12T07:14:41Z",
-   "last_seen": "2026-10-12T12:07:08Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "MONITOR",
-    "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-12T07:14:41Z; this check 2026-10-12T12:07:08Z; gap 4.9 hours (limit 2.5)",
-    "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
-   }
-  },
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-12T12:07:08Z",
-   "last_seen": "2026-10-12T12:07:08Z",
+   "last_seen": "2026-10-12T12:08:27Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 88.58 above revisit level 87.24",
+    "evidence": "LSEG 88.54 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   }
  },
- "last_run_utc": "2026-10-12T12:07:08Z"
+ "last_run_utc": "2026-10-12T12:08:27Z"
 }
