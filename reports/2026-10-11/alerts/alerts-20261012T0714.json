@@ -1,0 +1,83 @@
+{
+ "all": [
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-11T18:54:50Z; this check 2026-10-12T07:14:41Z; gap 12.3 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-11T18:54:50Z; this check 2026-10-12T07:14:41Z; gap 12.3 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats.",
+   "key": "MONITOR|Monitor heartbeat gap",
+   "first_seen": "2026-10-12T07:14:41Z",
+   "last_seen": "2026-10-12T07:14:41Z"
+  }
+ ],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "600036",
+  "600900",
+  "AAPL",
+  "AMZN",
+  "ANET",
+  "AVGO",
+  "AZN",
+  "BARC",
+  "CPER",
+  "CRWD",
+  "DBA",
+  "GLD",
+  "GOOGL",
+  "HSBA",
+  "IEF",
+  "IGV",
+  "ISF",
+  "JPM",
+  "LLOY",
+  "LSEG",
+  "META",
+  "MSFT",
+  "NOW",
+  "NVDA",
+  "ORCL",
+  "PANW",
+  "QQQ",
+  "REL",
+  "RIO",
+  "RR.",
+  "SHEL",
+  "SLV",
+  "SOXX",
+  "SPY",
+  "SSE",
+  "TLT",
+  "ULVR",
+  "UNG",
+  "USO",
+  "UUP",
+  "VIX",
+  "XLB",
+  "XLE",
+  "XLF",
+  "XLI",
+  "XLK",
+  "XLV",
+  "XOM"
+ ],
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance"
+}

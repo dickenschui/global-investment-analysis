@@ -1,0 +1,11 @@
+{
+ "schema_version": 1,
+ "sent": {
+  "2026-10-12|Market exceptions 2026-10-12 07:14Z (1)": {
+   "day": "2026-10-12",
+   "recipients": 1,
+   "sent_at": "2026-10-12T07:14:59Z",
+   "subject": "Market exceptions 2026-10-12 07:14Z (1)"
+  }
+ }
+}
