@@ -5,6 +5,9 @@ name: Daily macro data
 on:
   schedule:
     - cron: '30 6 * * 1-5'
+    # Backups in case GitHub drops the 06:30 run (refetching is harmless).
+    - cron: '10 9 * * 1-5'
+    - cron: '40 13 * * 1-5'
   workflow_dispatch:
   push:  # also check the live sources whenever the source list or the fetchers change, on any branch
     paths:

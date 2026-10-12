@@ -67,7 +67,7 @@ HISTORY_DIR = "data/history/weekly_long"   # long weekly history: curve readings
 MACRO_LATEST = "data/macro/latest.json"   # written by the macro-daily GitHub workflow
 
 
-HOURLY_UTC = range(1, 22)      # hourly-alerts.yml cron '7 1-21 * * 1-5'
+HOURLY_UTC = range(1, 22)      # hourly-alerts.yml runs 01:07-21:47 UTC on weekdays
 
 
 def _missed_scheduled_run(last_iso: str | None, now_iso: str, margin_minutes: int = 45) -> bool:

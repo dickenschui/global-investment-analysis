@@ -58,8 +58,8 @@ python -m venv .venv && .venv/bin/pip install -e .[test]
 | Workflow | When | Needs |
 |---|---|---|
 | `tests.yml` | every push and pull request | nothing |
-| `macro-daily.yml` | 06:30 UTC weekdays, or by hand | nothing (public sources); commits `data/macro/` |
-| `hourly-alerts.yml` | :07 past each hour 01:00–21:00 UTC weekdays, or by hand | repository secrets `MAIL_USERNAME` (your Gmail address), `MAIL_APP_PASSWORD` (a Gmail app password, not your login password), `MAIL_TO`; optional `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` |
+| `macro-daily.yml` | 06:30 UTC weekdays with backups at 09:10 and 13:40, or by hand | nothing (public sources); commits `data/macro/` |
+| `hourly-alerts.yml` | every 20 minutes 01:07–21:47 UTC weekdays (GitHub drops some scheduled runs; extra runs never repeat a notice), or by hand | repository secrets `MAIL_USERNAME` (your Gmail address), `MAIL_APP_PASSWORD` (a Gmail app password, not your login password), `MAIL_TO`; optional `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` |
 
 Add secrets under the repository's Settings → Secrets and variables → Actions. To check them, run "Hourly alerts" by hand
 (Actions → Hourly alerts → Run workflow) with "Send a test message" ticked: it sends one test email and Telegram message

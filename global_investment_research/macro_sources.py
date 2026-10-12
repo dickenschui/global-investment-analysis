@@ -21,7 +21,7 @@ from typing import Callable
 
 Opener = Callable[[str, float], bytes]
 MAX_BYTES = 20_000_000
-USER_AGENT = "global-investment-research/0.1 (macro fetch; GitHub Actions)"
+USER_AGENT = "global-investment-research/0.1 (+https://github.com/dickenschui/global-investment-analysis)"
 NA = "not available"
 
 # Judgement thresholds for labels (not model outputs); evidence always shows the raw numbers.

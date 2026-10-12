@@ -4,7 +4,9 @@ name: Hourly alerts
 # optionally emails new ones, and keeps alert state on the alert-state branch (never main).
 on:
   schedule:
-    - cron: '7 1-21 * * 1-5'
+    # Every 20 minutes: GitHub drops some scheduled runs, so a missed slot is covered by the next one.
+    # Alert state dedupes, so extra runs never repeat a notice.
+    - cron: '7,27,47 1-21 * * 1-5'
   workflow_dispatch:
     inputs:
       test_delivery:

@@ -15,7 +15,7 @@ from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse
 
 MAX_FEED_BYTES = 2_000_000
-USER_AGENT = "GlobalInvestmentResearch/0.1 public-source monitoring"
+USER_AGENT = "GlobalInvestmentResearch/0.1 (+https://github.com/dickenschui/global-investment-analysis)"  # BLS refuses requests without contact info
 SEVERITY_ORDER = {"primary": 0, "secondary": 1}
 
 # Words that tie a headline to a market-level instrument (its own ticker or name rarely appears in news).
