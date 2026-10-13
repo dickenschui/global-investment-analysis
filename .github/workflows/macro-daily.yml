@@ -5,6 +5,9 @@ name: Daily macro data
 on:
   schedule:
     - cron: '30 6 * * 1-5'
+    # Backups in case GitHub drops the 06:30 run (refetching is harmless).
+    - cron: '10 9 * * 1-5'
+    - cron: '40 13 * * 1-5'
   workflow_dispatch:
   push:  # also check the live sources whenever the source list or the fetchers change, on any branch
     paths:
@@ -55,7 +58,7 @@ jobs:
               out.write('| id | status | latest | error |\n|---|---|---|---|\n')
               for sid, r in d['series'].items():
                   latest = r.get('latest') or {}
-                  out.write(f"| {sid} | {r['status']} | {latest.get('date', '')} {latest.get('value', '')} | {r.get('error', '')} |\n")
+                  out.write(f"| {sid} | {r['status']}{' (carried forward)' if r.get('carried_forward') else ''} | {latest.get('date', '')} {latest.get('value', '')} | {r.get('error', '')} |\n")
           PY
       - name: Commit data/macro to the default branch
         # Runs on other branches only verify the sources: a bot commit there would hold the pull request's checks.
