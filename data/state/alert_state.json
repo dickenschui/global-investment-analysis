@@ -4,28 +4,28 @@
   "DBA|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-13T13:34:43Z",
+   "last_seen": "2026-10-13T19:57:59Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "DBA",
     "rule": "Revisit trigger crossed",
-    "evidence": "DBA 28.53 above revisit level 28.39",
+    "evidence": "DBA 28.43 above revisit level 28.39",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   },
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-13T13:34:43Z",
+   "last_seen": "2026-10-13T19:57:59Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-13T07:37:18Z; this check 2026-10-13T13:34:43Z; gap 6.0 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-13T13:34:43Z; this check 2026-10-13T19:57:59Z; gap 6.4 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   },
@@ -56,7 +56,21 @@
     "evidence": "SSE 24.98 above revisit level 24.73",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
+  },
+  "UNG|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-13T19:57:59Z",
+   "last_seen": "2026-10-13T19:57:59Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "UNG",
+    "rule": "Revisit trigger crossed",
+    "evidence": "UNG 11.41 above revisit level 11.33",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
+   }
   }
  },
- "last_run_utc": "2026-10-13T13:34:43Z"
+ "last_run_utc": "2026-10-13T19:57:59Z"
 }

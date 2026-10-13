@@ -1,0 +1,74 @@
+{
+ "all": [
+  {
+   "severity": "INFO",
+   "symbol": "DBA",
+   "rule": "Revisit trigger crossed",
+   "evidence": "DBA 28.43 above revisit level 28.39",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "INFO",
+   "symbol": "UNG",
+   "rule": "Revisit trigger crossed",
+   "evidence": "UNG 11.41 above revisit level 11.33",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-13T13:34:43Z; this check 2026-10-13T19:57:59Z; gap 6.4 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "INFO",
+   "symbol": "UNG",
+   "rule": "Revisit trigger crossed",
+   "evidence": "UNG 11.41 above revisit level 11.33",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "key": "UNG|Revisit trigger crossed",
+   "first_seen": "2026-10-13T19:57:59Z",
+   "last_seen": "2026-10-13T19:57:59Z"
+  }
+ ],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance"
+}
