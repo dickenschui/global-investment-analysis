@@ -4,14 +4,14 @@
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-12T12:07:08Z",
-   "last_seen": "2026-10-12T12:08:27Z",
+   "last_seen": "2026-10-13T07:37:18Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 88.54 above revisit level 87.24",
+    "evidence": "LSEG 88.56 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   },
@@ -32,17 +32,59 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-13T00:31:58Z",
+   "last_seen": "2026-10-13T07:37:18Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-12T17:44:34Z; this check 2026-10-13T00:31:58Z; gap 6.8 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-13T00:31:58Z; this check 2026-10-13T07:37:18Z; gap 7.1 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+   }
+  },
+  "857|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-13T07:37:18Z",
+   "last_seen": "2026-10-13T07:37:18Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "857",
+    "rule": "Revisit trigger crossed",
+    "evidence": "857 10.21 above revisit level 9.94",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
+   }
+  },
+  "ISF|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-13T07:37:18Z",
+   "last_seen": "2026-10-13T07:37:18Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "ISF",
+    "rule": "Revisit trigger crossed",
+    "evidence": "ISF 10.47 above revisit level 10.46",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
+   }
+  },
+  "SSE|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-13T07:37:18Z",
+   "last_seen": "2026-10-13T07:37:18Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "SSE",
+    "rule": "Revisit trigger crossed",
+    "evidence": "SSE 25.15 above revisit level 24.73",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   }
  },
- "last_run_utc": "2026-10-13T00:31:58Z"
+ "last_run_utc": "2026-10-13T07:37:18Z"
 }
