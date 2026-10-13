@@ -32,17 +32,17 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-12T17:44:34Z",
+   "last_seen": "2026-10-13T00:31:58Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-12T12:08:27Z; this check 2026-10-12T17:44:34Z; gap 5.6 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-12T17:44:34Z; this check 2026-10-13T00:31:58Z; gap 6.8 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   }
  },
- "last_run_utc": "2026-10-12T17:44:34Z"
+ "last_run_utc": "2026-10-13T00:31:58Z"
 }
