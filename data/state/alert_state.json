@@ -18,14 +18,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-14T06:04:12Z",
+   "last_seen": "2026-10-14T11:44:06Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-13T23:43:07Z; this check 2026-10-14T06:04:12Z; gap 6.4 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-14T06:04:12Z; this check 2026-10-14T11:44:06Z; gap 5.7 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   },
@@ -46,14 +46,14 @@
   "SSE|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-10-13T13:34:43Z",
+   "last_seen": "2026-10-14T11:44:06Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "SSE",
     "rule": "Revisit trigger crossed",
-    "evidence": "SSE 24.98 above revisit level 24.73",
+    "evidence": "SSE 25.40 above revisit level 24.73",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   },
@@ -72,5 +72,5 @@
    }
   }
  },
- "last_run_utc": "2026-10-14T06:04:12Z"
+ "last_run_utc": "2026-10-14T11:44:06Z"
 }
