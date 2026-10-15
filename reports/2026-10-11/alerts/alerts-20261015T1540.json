@@ -1,0 +1,84 @@
+{
+ "all": [
+  {
+   "severity": "WARN",
+   "symbol": "TLT",
+   "rule": "Large daily move",
+   "evidence": "TLT +1.5% vs prior close (+2.7 standard deviations)",
+   "action": "Review position and options on this underlying."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "XLV",
+   "rule": "Large daily move",
+   "evidence": "XLV +2.8% vs prior close (+2.7 standard deviations)",
+   "action": "Review position and options on this underlying."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-15T11:19:57Z; this check 2026-10-15T15:40:39Z; gap 4.3 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "WARN",
+   "symbol": "TLT",
+   "rule": "Large daily move",
+   "evidence": "TLT +1.5% vs prior close (+2.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "key": "TLT|Large daily move",
+   "first_seen": "2026-10-15T15:40:39Z",
+   "last_seen": "2026-10-15T15:40:39Z"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "XLV",
+   "rule": "Large daily move",
+   "evidence": "XLV +2.8% vs prior close (+2.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "key": "XLV|Large daily move",
+   "first_seen": "2026-10-15T15:40:39Z",
+   "last_seen": "2026-10-15T15:40:39Z"
+  }
+ ],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance"
+}

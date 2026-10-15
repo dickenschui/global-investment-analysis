@@ -4,14 +4,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-15T11:19:57Z",
+   "last_seen": "2026-10-15T15:40:39Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-15T05:50:24Z; this check 2026-10-15T11:19:57Z; gap 5.5 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-15T11:19:57Z; this check 2026-10-15T15:40:39Z; gap 4.3 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   },
@@ -56,7 +56,35 @@
     "evidence": "ISF 10.50 above revisit level 10.46",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
+  },
+  "TLT|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-10-15T15:40:39Z",
+   "last_seen": "2026-10-15T15:40:39Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "TLT",
+    "rule": "Large daily move",
+    "evidence": "TLT +1.5% vs prior close (+2.7 standard deviations)",
+    "action": "Review position and options on this underlying."
+   }
+  },
+  "XLV|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-10-15T15:40:39Z",
+   "last_seen": "2026-10-15T15:40:39Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "XLV",
+    "rule": "Large daily move",
+    "evidence": "XLV +2.8% vs prior close (+2.7 standard deviations)",
+    "action": "Review position and options on this underlying."
+   }
   }
  },
- "last_run_utc": "2026-10-15T11:19:57Z"
+ "last_run_utc": "2026-10-15T15:40:39Z"
 }
