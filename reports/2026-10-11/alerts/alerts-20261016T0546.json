@@ -1,0 +1,128 @@
+{
+ "all": [
+  {
+   "severity": "INFO",
+   "symbol": "000333",
+   "rule": "Revisit trigger crossed",
+   "evidence": "000333 84.11 above revisit level 84.05",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "INFO",
+   "symbol": "823",
+   "rule": "Revisit trigger crossed",
+   "evidence": "823 38.26 above revisit level 38.09",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "INFO",
+   "symbol": "857",
+   "rule": "Revisit trigger crossed",
+   "evidence": "857 10.02 above revisit level 9.94",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "INFO",
+   "symbol": "U11",
+   "rule": "Revisit trigger crossed",
+   "evidence": "U11 41.85 above revisit level 41.71",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-15T22:34:51Z; this check 2026-10-16T05:46:33Z; gap 7.2 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "INFO",
+   "symbol": "000333",
+   "rule": "Revisit trigger crossed",
+   "evidence": "000333 84.11 above revisit level 84.05",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "key": "000333|Revisit trigger crossed",
+   "first_seen": "2026-10-16T05:46:33Z",
+   "last_seen": "2026-10-16T05:46:33Z"
+  },
+  {
+   "severity": "INFO",
+   "symbol": "823",
+   "rule": "Revisit trigger crossed",
+   "evidence": "823 38.26 above revisit level 38.09",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "key": "823|Revisit trigger crossed",
+   "first_seen": "2026-10-16T05:46:33Z",
+   "last_seen": "2026-10-16T05:46:33Z"
+  },
+  {
+   "severity": "INFO",
+   "symbol": "U11",
+   "rule": "Revisit trigger crossed",
+   "evidence": "U11 41.85 above revisit level 41.71",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "key": "U11|Revisit trigger crossed",
+   "first_seen": "2026-10-16T05:46:33Z",
+   "last_seen": "2026-10-16T05:46:33Z"
+  }
+ ],
+ "cleared": [],
+ "missing_quotes": [
+  "AAPL",
+  "AMZN",
+  "ANET",
+  "AVGO",
+  "AZN",
+  "BARC",
+  "CPER",
+  "CRWD",
+  "DBA",
+  "GLD",
+  "GOOGL",
+  "HSBA",
+  "IEF",
+  "IGV",
+  "ISF",
+  "JPM",
+  "LLOY",
+  "LSEG",
+  "META",
+  "MSFT",
+  "NOW",
+  "NVDA",
+  "ORCL",
+  "PANW",
+  "QQQ",
+  "REL",
+  "RIO",
+  "RR.",
+  "SHEL",
+  "SLV",
+  "SOXX",
+  "SPY",
+  "SSE",
+  "TLT",
+  "ULVR",
+  "UNG",
+  "USO",
+  "UUP",
+  "VIX",
+  "XLB",
+  "XLE",
+  "XLF",
+  "XLI",
+  "XLK",
+  "XLV",
+  "XOM"
+ ],
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance"
+}

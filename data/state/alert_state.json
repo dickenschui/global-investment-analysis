@@ -4,28 +4,28 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-15T22:34:51Z",
+   "last_seen": "2026-10-16T05:46:33Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-15T19:25:51Z; this check 2026-10-15T22:34:51Z; gap 3.1 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-15T22:34:51Z; this check 2026-10-16T05:46:33Z; gap 7.2 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   },
   "857|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-10-15T05:50:24Z",
+   "last_seen": "2026-10-16T05:46:33Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "857",
     "rule": "Revisit trigger crossed",
-    "evidence": "857 10.05 above revisit level 9.94",
+    "evidence": "857 10.02 above revisit level 9.94",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   },
@@ -70,7 +70,49 @@
     "evidence": "TLT +1.4% vs prior close (+2.5 standard deviations)",
     "action": "Review position and options on this underlying."
    }
+  },
+  "000333|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-16T05:46:33Z",
+   "last_seen": "2026-10-16T05:46:33Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "000333",
+    "rule": "Revisit trigger crossed",
+    "evidence": "000333 84.11 above revisit level 84.05",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
+   }
+  },
+  "823|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-16T05:46:33Z",
+   "last_seen": "2026-10-16T05:46:33Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "823",
+    "rule": "Revisit trigger crossed",
+    "evidence": "823 38.26 above revisit level 38.09",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
+   }
+  },
+  "U11|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-10-16T05:46:33Z",
+   "last_seen": "2026-10-16T05:46:33Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "U11",
+    "rule": "Revisit trigger crossed",
+    "evidence": "U11 41.85 above revisit level 41.71",
+    "action": "Opportunity: confirm on the weekly close before upgrading."
+   }
   }
  },
- "last_run_utc": "2026-10-15T22:34:51Z"
+ "last_run_utc": "2026-10-16T05:46:33Z"
 }
