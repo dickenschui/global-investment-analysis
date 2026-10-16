@@ -1,0 +1,102 @@
+{
+ "all": [
+  {
+   "severity": "INFO",
+   "symbol": "ISF",
+   "rule": "Revisit trigger crossed",
+   "evidence": "ISF 10.55 above revisit level 10.46",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "INFO",
+   "symbol": "LSEG",
+   "rule": "Revisit trigger crossed",
+   "evidence": "LSEG 87.86 above revisit level 87.24",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "INFO",
+   "symbol": "SSE",
+   "rule": "Revisit trigger crossed",
+   "evidence": "SSE 25.43 above revisit level 24.73",
+   "action": "Opportunity: confirm on the weekly close before upgrading."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-16T05:46:33Z; this check 2026-10-16T10:09:50Z; gap 4.4 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "INFO",
+   "symbol": "LSEG",
+   "rule": "Revisit trigger crossed",
+   "evidence": "LSEG 87.86 above revisit level 87.24",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "key": "LSEG|Revisit trigger crossed",
+   "first_seen": "2026-10-16T10:09:50Z",
+   "last_seen": "2026-10-16T10:09:50Z"
+  }
+ ],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AAPL",
+  "AMZN",
+  "ANET",
+  "AVGO",
+  "C2PU",
+  "CPER",
+  "CRWD",
+  "D05",
+  "DBA",
+  "ES3",
+  "GLD",
+  "GOOGL",
+  "IEF",
+  "IGV",
+  "JPM",
+  "META",
+  "MSFT",
+  "NOW",
+  "NVDA",
+  "O39",
+  "ORCL",
+  "PANW",
+  "QQQ",
+  "S63",
+  "SLV",
+  "SOXX",
+  "SPY",
+  "TLT",
+  "U11",
+  "UNG",
+  "USO",
+  "UUP",
+  "XLB",
+  "XLE",
+  "XLF",
+  "XLI",
+  "XLK",
+  "XLV",
+  "XOM"
+ ],
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance"
+}
