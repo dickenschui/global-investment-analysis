@@ -4,14 +4,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-16T10:09:50Z",
+   "last_seen": "2026-10-16T14:57:21Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-16T05:46:33Z; this check 2026-10-16T10:09:50Z; gap 4.4 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-16T10:09:50Z; this check 2026-10-16T14:57:21Z; gap 4.8 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   },
@@ -32,43 +32,29 @@
   "SSE|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-10-16T10:09:50Z",
+   "last_seen": "2026-10-16T14:57:21Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "SSE",
     "rule": "Revisit trigger crossed",
-    "evidence": "SSE 25.43 above revisit level 24.73",
+    "evidence": "SSE 25.76 above revisit level 24.73",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   },
   "ISF|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-15T11:19:57Z",
-   "last_seen": "2026-10-16T10:09:50Z",
+   "last_seen": "2026-10-16T14:57:21Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "ISF",
     "rule": "Revisit trigger crossed",
-    "evidence": "ISF 10.55 above revisit level 10.46",
+    "evidence": "ISF 10.58 above revisit level 10.46",
     "action": "Opportunity: confirm on the weekly close before upgrading."
-   }
-  },
-  "TLT|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-10-15T15:40:39Z",
-   "last_seen": "2026-10-15T19:25:51Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "TLT",
-    "rule": "Large daily move",
-    "evidence": "TLT +1.4% vs prior close (+2.5 standard deviations)",
-    "action": "Review position and options on this underlying."
    }
   },
   "000333|Revisit trigger crossed": {
@@ -116,17 +102,17 @@
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-16T10:09:50Z",
-   "last_seen": "2026-10-16T10:09:50Z",
+   "last_seen": "2026-10-16T14:57:21Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 87.86 above revisit level 87.24",
+    "evidence": "LSEG 87.60 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
   }
  },
- "last_run_utc": "2026-10-16T10:09:50Z"
+ "last_run_utc": "2026-10-16T14:57:21Z"
 }
