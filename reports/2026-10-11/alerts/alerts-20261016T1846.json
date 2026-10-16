@@ -1,0 +1,67 @@
+{
+ "all": [
+  {
+   "severity": "WARN",
+   "symbol": "VIX",
+   "rule": "Volatility spike",
+   "evidence": "VIX 21.5, +31% on the day",
+   "action": "Tighten: no new risk until the close."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-16T14:57:21Z; this check 2026-10-16T18:46:11Z; gap 3.8 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "WARN",
+   "symbol": "VIX",
+   "rule": "Volatility spike",
+   "evidence": "VIX 21.5, +31% on the day",
+   "action": "Tighten: no new risk until the close.",
+   "key": "VIX|Volatility spike",
+   "first_seen": "2026-10-16T18:46:11Z",
+   "last_seen": "2026-10-16T18:46:11Z"
+  }
+ ],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance"
+}

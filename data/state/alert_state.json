@@ -4,14 +4,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-12T17:44:34Z",
-   "last_seen": "2026-10-16T14:57:21Z",
+   "last_seen": "2026-10-16T18:46:11Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-16T10:09:50Z; this check 2026-10-16T14:57:21Z; gap 4.8 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-16T14:57:21Z; this check 2026-10-16T18:46:11Z; gap 3.8 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    }
   },
@@ -112,7 +112,21 @@
     "evidence": "LSEG 87.60 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading."
    }
+  },
+  "VIX|Volatility spike": {
+   "severity": "WARN",
+   "first_seen": "2026-10-16T18:46:11Z",
+   "last_seen": "2026-10-16T18:46:11Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "VIX",
+    "rule": "Volatility spike",
+    "evidence": "VIX 21.5, +31% on the day",
+    "action": "Tighten: no new risk until the close."
+   }
   }
  },
- "last_run_utc": "2026-10-16T14:57:21Z"
+ "last_run_utc": "2026-10-16T18:46:11Z"
 }
