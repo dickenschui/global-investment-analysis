@@ -35,7 +35,7 @@ Read-only against markets: never place orders, create alerts or watchlists, or t
        --state-dir data/state --daily data/daily/<session date>.json --out app/data.json
    ```
 
-   It prints how many names were priced, the exceptions, and any lines missing, stale (no session that day) or
+   It prints how many names were priced, the exceptions, and any lines missing, stale (no bar for that session: a holiday, or IBKR not yet updated) or
    to check (further from the weekly close than 25%, or five weekly standard deviations if wider). Investigate every name listed as to check before publishing.
 
 4. **Publish** with the Artifact tool, as `docs/APP_UPDATE.md` step 2 describes: read the artifact, then publish

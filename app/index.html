@@ -467,12 +467,12 @@ function dailyPanel(d) {   // official closes after the session, against this we
                  in_zone: ["good", "Closed inside the buy zone"]};
   const grouped = Object.entries(GROUP).map(([rule, [kind, text]]) => [kind, text, d.exceptions.filter(x => x.rule === rule)])
     .filter(([, , l]) => l.length);
-  const gaps = [[d.missing, "no close"], [d.stale, "no session that day"], [d.check, "too far from the weekly close: verify"]]
+  const gaps = [[d.missing, "no close"], [d.stale, "no bar for that session yet"], [d.check, "too far from the weekly close: verify"]]
     .filter(([l]) => l.length).map(([l, why]) => `${esc(l.join(", "))} (${why})`);
   return `<div class="panel"><header><h2>Close ${esc(d.session_date)}</h2><span class="mut small">${n} official closes · levels from the week to ${esc(D.as_of)}</span></header>
     ${one.length || grouped.length ? `<div style="display:grid;gap:8px">${one.map(x => `<div class="flag ${x.kind}"><b class="mono">${esc(x.symbol)}</b><span>${esc(x.text)}</span></div>`).join("")}
       ${grouped.map(([kind, text, l]) => `<div class="flag ${kind}"><span>${esc(text)}: <b class="mono">${l.map(x => `<span title="${esc(x.text)}">${esc(x.symbol)}</span>`).join(" · ")}</b></span></div>`).join("")}</div>`
-      : `<div class="flag good">No exceptions: every name closed inside its plan.</div>`}
+      : `<div class="flag good">${gaps.length ? `No exceptions among the ${n - d.stale.length - d.check.length} names checked; see below for those not checked.` : "No exceptions: every name closed inside its plan."}</div>`}
     <p class="note">Interactive Brokers daily closes, retrieved ${esc((d.retrieved_at_utc || "").replace("T", " ").slice(0, 16))} UTC. Stances and levels change only at the weekly refresh; an exit acts on Friday's close.${gaps.length ? ` Not checked: ${gaps.join("; ")}.` : ""}</p></div>`;
 }
 function rToday() {

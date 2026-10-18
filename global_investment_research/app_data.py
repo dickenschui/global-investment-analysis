@@ -18,7 +18,8 @@ from . import data, decisions as D, evidence, monitor, notify
 
 SPARK_WEEKS = 53
 TOP_OPTIONS = 12
-STALE_HOURS = 36       # a bar ending this long before the end of the session date is not that session's close
+BAR_SHIFT_HOURS = 4    # a daily bar belongs to the session dated (bar time + 4h): FX bars start 21:15 UTC the evening
+                       # before, every other line's bar starts on the session date itself
 DAILY_CHECK = 0.25     # a close this far from the weekly close (or 5 weekly standard deviations, if wider) is held
                        # back for checking: it is more likely a unit or contract error than a move
 
@@ -66,12 +67,11 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
 
     `doc` is a data/daily/<date>.json file: {"session_date", "source", "retrieved_at_utc",
     "closes": {symbol: {"close", "prior_close", "bar_time"}}, "missing": {symbol: reason}}. A close about 100x the
-    weekly close (a London line in pence) is divided by 100; a bar that ended more than STALE_HOURS before the end of
-    the session date (a holiday) is marked stale and not checked; a close further from the weekly close than
+    weekly close (a London line in pence) is divided by 100; a bar that does not belong to the session date (a
+    holiday, or IBKR not yet updated) is marked stale and not checked; a close further from the weekly close than
     DAILY_CHECK, or five weekly standard deviations of the instrument's own volatility if wider (VIX moves 35% in a
     normal week), is flagged for checking instead of being used."""
     session = dt.date.fromisoformat(doc["session_date"])
-    end = dt.datetime.combine(session, dt.time(23, 59), dt.timezone.utc)
     rows, exceptions, stale, check = {}, [], [], []
     for r in calls + others:
         q = doc["closes"].get(r["symbol"])
@@ -83,7 +83,7 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
         bar = dt.datetime.fromisoformat(q["bar_time"].replace("Z", "+00:00")) if q.get("bar_time") else None
         row = {"close": close, "prior_close": prior, "bar_time": q.get("bar_time"),
                "chg_1d": close / prior - 1 if prior else None, "vs_week": close / last - 1 if last else None}
-        if bar is not None and (end - bar).total_seconds() / 3600 > STALE_HOURS:
+        if bar is not None and (bar + dt.timedelta(hours=BAR_SHIFT_HOURS)).date() != session:
             row["stale"] = True
             stale.append(r["symbol"])
         elif last and abs(close / last - 1) > max(DAILY_CHECK, 5 * (r.get("vol") or 0) / 52 ** 0.5):
