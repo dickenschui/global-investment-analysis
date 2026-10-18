@@ -19,7 +19,8 @@ from . import data, decisions as D, evidence, monitor, notify
 SPARK_WEEKS = 53
 TOP_OPTIONS = 12
 STALE_HOURS = 36       # a bar ending this long before the end of the session date is not that session's close
-DAILY_CHECK = 0.25     # a close this far from the weekly close is flagged for checking, not used silently
+DAILY_CHECK = 0.25     # a close this far from the weekly close (or 5 weekly standard deviations, if wider) is held
+                       # back for checking: it is more likely a unit or contract error than a move
 
 
 def _contracts(snapshot_dir: Path) -> dict:
@@ -37,25 +38,26 @@ def _contracts(snapshot_dir: Path) -> dict:
 
 
 def _flags(row: dict, close: float) -> list[list[str]]:
-    """The app's live-check rules (index.html flagsFor) applied to an official close: [[kind, text], ...]."""
+    """The app's live-check rules (index.html flagsFor) applied to an official close: [[kind, text, rule], ...]."""
     out, stop, entry, trig, last = [], row.get("stop"), row.get("entry"), row.get("trigger"), row.get("last")
     if stop is not None and close < stop:
-        out.append(["crit", f"Closed below the exit level {stop:,.4g}. The exit acts on Friday's weekly close."])
+        out.append(["crit", f"Closed below the exit level {stop:,.4g}. The exit acts on Friday's weekly close.", "exit"])
     if entry and row.get("stance") == "Accumulate":
         if entry[0] <= close <= entry[1]:
-            out.append(["good", f"Closed inside the buy zone {entry[0]:,.4g}–{entry[1]:,.4g}."])
+            out.append(["good", f"Closed inside the buy zone {entry[0]:,.4g}–{entry[1]:,.4g}.", "in_zone"])
         elif close > entry[1]:
-            out.append(["warn", f"Closed above the buy zone ({entry[1]:,.4g}): wait rather than chase."])
+            out.append(["warn", f"Closed above the buy zone ({entry[1]:,.4g}): wait rather than chase.", "above_zone"])
         elif stop is None or close >= stop:
-            out.append(["info", "Closed below the buy zone but above the exit: re-check the trend before adding."])
+            out.append(["info", "Closed below the buy zone but above the exit: re-check the trend before adding.", "below_zone"])
     if trig is not None and row.get("stance") in ("Watch", "Avoid") and close > trig:
-        out.append(["info", f"Closed above the revisit trigger {trig:,.4g}: confirm on Friday's close."])
+        out.append(["info", f"Closed above the revisit trigger {trig:,.4g}: confirm on Friday's close.", "trigger"])
     vol = row.get("vol")
     if vol and last:
         z = (close / last - 1) / (vol / 52 ** 0.5)
         if abs(z) >= 2.5:
             out.append(["crit" if abs(z) >= 4 else "warn",
-                        f"{(close / last - 1) * 100:+.1f}% since the weekly close: {abs(z):.1f} weekly standard deviations."])
+                        f"{(close / last - 1) * 100:+.1f}% since the weekly close: {abs(z):.1f} weekly standard deviations.",
+                        "move"])
     return out
 
 
@@ -65,8 +67,9 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
     `doc` is a data/daily/<date>.json file: {"session_date", "source", "retrieved_at_utc",
     "closes": {symbol: {"close", "prior_close", "bar_time"}}, "missing": {symbol: reason}}. A close about 100x the
     weekly close (a London line in pence) is divided by 100; a bar that ended more than STALE_HOURS before the end of
-    the session date (a holiday) is marked stale and not checked; a close more than DAILY_CHECK from the weekly close
-    is flagged for checking instead of being used."""
+    the session date (a holiday) is marked stale and not checked; a close further from the weekly close than
+    DAILY_CHECK, or five weekly standard deviations of the instrument's own volatility if wider (VIX moves 35% in a
+    normal week), is flagged for checking instead of being used."""
     session = dt.date.fromisoformat(doc["session_date"])
     end = dt.datetime.combine(session, dt.time(23, 59), dt.timezone.utc)
     rows, exceptions, stale, check = {}, [], [], []
@@ -83,12 +86,12 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
         if bar is not None and (end - bar).total_seconds() / 3600 > STALE_HOURS:
             row["stale"] = True
             stale.append(r["symbol"])
-        elif last and abs(close / last - 1) > DAILY_CHECK:
+        elif last and abs(close / last - 1) > max(DAILY_CHECK, 5 * (r.get("vol") or 0) / 52 ** 0.5):
             row["check"] = True
             check.append(r["symbol"])
         elif "stance" in r:
             row["flags"] = _flags(r, close)
-            exceptions += [{"symbol": r["symbol"], "kind": k, "text": t} for k, t in row["flags"]]
+            exceptions += [{"symbol": r["symbol"], "kind": k, "text": t, "rule": rule} for k, t, rule in row["flags"]]
         rows[r["symbol"]] = row
     order = {"crit": 0, "warn": 1, "info": 2, "good": 3}
     return {"session_date": doc["session_date"], "source": doc.get("source"), "retrieved_at_utc": doc.get("retrieved_at_utc"),
@@ -136,7 +139,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
             continue
         m = mon["metrics"][s]
         others.append({"symbol": s, "name": inst["name"], "kind": inst["kind"], "market": inst["market"],
-                       "last": m["last"], "ret_1w": m["ret_1w"], "ret_3m": m["ret_3m"], "ret_1y": m.get("ret_1y"),
+                       "last": m["last"], "vol": m.get("vol"), "ret_1w": m["ret_1w"], "ret_3m": m["ret_3m"], "ret_1y": m.get("ret_1y"),
                        "trend": (m.get("trend") or {}).get("state"), "move_z": m.get("last_move_z"),
                        "contract": contracts.get(s), "spark": spark(s)})
 

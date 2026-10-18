@@ -181,6 +181,8 @@ footer.foot{font-size:.78rem;color:var(--muted);padding-block:0 40px}
 @media (max-width:640px){
   .wrap{padding-inline:16px}
   .brand h1{font-size:1.15rem}
+  .brand{flex-wrap:wrap}
+  .brand .asof{white-space:normal}
   .pv input{width:120px}
   .sheet{width:100%}
 }
@@ -457,14 +459,20 @@ function rerender() { if (!D) return; ({today: rToday, decisions: rDecisions, in
 
 /* ---------- Today ---------- */
 function dailyPanel(d) {   // official closes after the session, against this week's levels (docs/DAILY_UPDATE.md)
-  const n = Object.keys(d.rows).length, ex = d.exceptions.filter(x => x.kind !== "good");
-  const inZone = d.exceptions.filter(x => x.kind === "good").map(x => x.symbol);
-  const gaps = [[d.missing, "no close"], [d.stale, "no session that day"], [d.check, "more than 25% from the weekly close: verify"]]
+  const n = Object.keys(d.rows).length;
+  const one = d.exceptions.filter(x => x.rule === "exit" || x.rule === "move");   // each needs its own look
+  const GROUP = {above_zone: ["warn", "Closed above the buy zone: wait rather than chase"],
+                 trigger: ["info", "Closed above the revisit trigger: confirm on Friday's close"],
+                 below_zone: ["info", "Closed below the buy zone but above the exit: re-check the trend before adding"],
+                 in_zone: ["good", "Closed inside the buy zone"]};
+  const grouped = Object.entries(GROUP).map(([rule, [kind, text]]) => [kind, text, d.exceptions.filter(x => x.rule === rule)])
+    .filter(([, , l]) => l.length);
+  const gaps = [[d.missing, "no close"], [d.stale, "no session that day"], [d.check, "too far from the weekly close: verify"]]
     .filter(([l]) => l.length).map(([l, why]) => `${esc(l.join(", "))} (${why})`);
   return `<div class="panel"><header><h2>Close ${esc(d.session_date)}</h2><span class="mut small">${n} official closes · levels from the week to ${esc(D.as_of)}</span></header>
-    ${ex.length ? `<div style="display:grid;gap:8px">${ex.map(x => `<div class="flag ${x.kind}"><b class="mono">${esc(x.symbol)}</b><span>${esc(x.text)}</span></div>`).join("")}</div>`
+    ${one.length || grouped.length ? `<div style="display:grid;gap:8px">${one.map(x => `<div class="flag ${x.kind}"><b class="mono">${esc(x.symbol)}</b><span>${esc(x.text)}</span></div>`).join("")}
+      ${grouped.map(([kind, text, l]) => `<div class="flag ${kind}"><span>${esc(text)}: <b class="mono">${l.map(x => `<span title="${esc(x.text)}">${esc(x.symbol)}</span>`).join(" · ")}</b></span></div>`).join("")}</div>`
       : `<div class="flag good">No exceptions: every name closed inside its plan.</div>`}
-    ${inZone.length ? `<p class="small">Inside the buy zone at the close: <span class="mono">${esc(inZone.join(" · "))}</span></p>` : ""}
     <p class="note">Interactive Brokers daily closes, retrieved ${esc((d.retrieved_at_utc || "").replace("T", " ").slice(0, 16))} UTC. Stances and levels change only at the weekly refresh; an exit acts on Friday's close.${gaps.length ? ` Not checked: ${gaps.join("; ")}.` : ""}</p></div>`;
 }
 function rToday() {

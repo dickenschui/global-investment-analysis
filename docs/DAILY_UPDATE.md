@@ -36,7 +36,7 @@ Read-only against markets: never place orders, create alerts or watchlists, or t
    ```
 
    It prints how many names were priced, the exceptions, and any lines missing, stale (no session that day) or
-   to check (more than 25% from the weekly close). Investigate every name listed as to check before publishing.
+   to check (further from the weekly close than 25%, or five weekly standard deviations if wider). Investigate every name listed as to check before publishing.
 
 4. **Publish** with the Artifact tool, as `docs/APP_UPDATE.md` step 2 describes: read the artifact, then publish
    `app/index.html` to its URL with `files: {"data.json": "app/data.json"}`, omitting `capabilities`.

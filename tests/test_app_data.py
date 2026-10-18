@@ -36,20 +36,22 @@ def test_daily_closes_are_checked_against_this_weeks_levels():
         {"symbol": "ODD", "stance": "Hold", "last": 10.0, "entry": None, "stop": 8.0, "trigger": None, "vol": 0.2},
         {"symbol": "GONE", "stance": "Hold", "last": 10.0, "entry": None, "stop": 8.0, "trigger": None, "vol": 0.2},
     ]
-    others = [{"symbol": "USD.SGD", "last": 1.28}]
+    others = [{"symbol": "USD.SGD", "last": 1.28}, {"symbol": "VIX", "last": 14.84, "vol": 1.07}]
     doc = {"session_date": "2026-10-16", "source": "IBKR", "retrieved_at_utc": "2026-10-16T20:25:00Z", "closes": {
         "XOM": {"close": 89.0, "prior_close": 92.0, "bar_time": "2026-10-16T13:30:00Z"},      # below the exit
         "JPM": {"close": 312.0, "prior_close": 305.0, "bar_time": "2026-10-16T13:30:00Z"},    # above the trigger
         "BARC": {"close": 410.0, "prior_close": 400.0, "bar_time": "2026-10-16T07:00:00Z"},   # pence
         "2800": {"close": 25.1, "prior_close": 25.0, "bar_time": "2026-10-15T01:30:00Z"},     # holiday: stale
         "ODD": {"close": 14.0, "prior_close": 10.0, "bar_time": "2026-10-16T13:30:00Z"},      # +40%: verify
-        "USD.SGD": {"close": 1.2798, "prior_close": 1.282, "bar_time": "2026-10-15T21:15:00Z"}}}  # FX: next session
+        "USD.SGD": {"close": 1.2798, "prior_close": 1.282, "bar_time": "2026-10-15T21:15:00Z"},  # FX: next session
+        "VIX": {"close": 19.99, "prior_close": 16.46, "bar_time": "2026-10-16T07:15:00Z"}}}      # +35%: normal for VIX
     d = app_data.daily_view(calls, others, doc)
     ex = {(x["symbol"], x["kind"]) for x in d["exceptions"]}
     assert ("XOM", "crit") in ex and ("JPM", "info") in ex
     assert d["rows"]["BARC"]["close"] == 4.1 and d["rows"]["BARC"]["chg_1d"] == 4.1 / 4.0 - 1
     assert d["stale"] == ["2800"] and d["check"] == ["ODD"] and d["missing"] == ["GONE"]
     assert "stale" not in d["rows"]["USD.SGD"] and d["exceptions"][0]["symbol"] == "XOM"
+    assert "check" not in d["rows"]["VIX"] and d["rows"]["VIX"]["close"] == 19.99
 
 
 def test_cli_app_data_with_daily_closes(tmp_path):
@@ -64,5 +66,5 @@ def test_cli_app_data_with_daily_closes(tmp_path):
     assert main(["app-data", "--reports", str(REP), "--snapshot", str(SNAP), "--daily", str(daily), "--out", str(out)]) == 0
     res = json.loads(out.read_text())
     assert res["as_of"] == dec["as_of"]                                     # levels stay the week's
-    assert res["daily"]["exceptions"][0] == {"symbol": c["symbol"], "kind": "crit",
+    assert res["daily"]["exceptions"][0] == {"symbol": c["symbol"], "kind": "crit", "rule": "exit",
                                              "text": res["daily"]["rows"][c["symbol"]]["flags"][0][1]}
