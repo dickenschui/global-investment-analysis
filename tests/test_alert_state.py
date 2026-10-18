@@ -126,3 +126,27 @@ def test_levels_stale():
     w = S.levels_stale("2026-10-09", "2026-10-19T07:00:00Z")                   # Monday, no refresh
     assert w["severity"] == "WARN" and w["symbol"] == S.HEARTBEAT_SYMBOL and "10 days old" in w["evidence"]
     assert S.levels_stale(None, "2026-10-19T07:00:00Z") is None
+
+
+def test_condition_still_active_into_a_new_scope_is_announced_again(tmp_path):
+    p = tmp_path / "state.json"
+    exit_k, move_k = "XOM|Exit level breached", "NVDA|Large daily move"
+    S.mark_delivered(keys(S.update([al("XOM", "Exit level breached", "URGENT"), al("NVDA", "Large daily move", "WARN")],
+                                   {"XOM", "NVDA"}, p, "2026-10-16T19:47:00Z", levels_as_of="2026-10-09")["new"]), p)
+    # same day, same levels: quiet
+    r = S.update([al("XOM", "Exit level breached", "URGENT"), al("NVDA", "Large daily move", "WARN")],
+                 {"XOM", "NVDA"}, p, "2026-10-16T20:07:00Z", levels_as_of="2026-10-09")
+    assert r["new"] == []
+    # never cleared over the weekend (markets closed); Monday brings new levels and a new day
+    r = S.update([al("XOM", "Exit level breached", "URGENT"), al("NVDA", "Large daily move", "WARN")],
+                 {"XOM", "NVDA"}, p, "2026-10-19T14:07:00Z", levels_as_of="2026-10-16")
+    assert keys(r["new"]) == [exit_k, move_k] and r["repeats"] == []
+
+
+def test_conditions_stored_before_levels_were_recorded_are_not_reset(tmp_path):
+    p = tmp_path / "state.json"
+    S.mark_delivered(keys(S.update([al("JPM", "Revisit trigger crossed", "INFO")], {"JPM"}, p, T1)["new"]), p)
+    r = S.update([al("JPM", "Revisit trigger crossed", "INFO")], {"JPM"}, p, T2, levels_as_of="2026-10-09")
+    assert r["new"] == []                                                   # no burst on upgrade
+    r = S.update([al("JPM", "Revisit trigger crossed", "INFO")], {"JPM"}, p, T3, levels_as_of="2026-10-16")
+    assert keys(r["new"]) == ["JPM|Revisit trigger crossed"]               # but next week's levels do reset it

@@ -102,7 +102,7 @@ policy constants the engine uses. Log decisions in `config/decision-log.csv`, th
   volatility, VIX ≥ 25 or a +20% spike, FX moves ≥ 1.5%, USD/HKD outside 7.75–7.85, and option ideas moving
   against. Each condition is notified once, again only if its severity rises. A condition that clears and fires again
   is logged under `repeats` and not re-sent: within the same desk week for level rules, the same UTC day for one-day
-  moves. Each run writes `alerts/alerts-<time>.json` with what was sent, what was actually pushed (INFO-only runs are
+  moves. A condition still active into a new day (moves) or new weekly levels (level rules) is announced again. Each run writes `alerts/alerts-<time>.json` with what was sent, what was actually pushed (INFO-only runs are
   logged, not pushed), repeats, `no_quote` (the vendor returned nothing: a coverage gap), `not_live` (market closed)
   and news failures with their HTTP status.
 - Alert messages group each symbol once under "Act now" (URGENT), "Review today" (WARN) or "For the weekly close"

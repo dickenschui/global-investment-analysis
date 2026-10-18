@@ -9,7 +9,8 @@ hosting/hourly_rules.py `condition()` logic.
 Repeats are not re-sent: a delivered condition that clears and fires again at the same or lower severity within its
 scope is reactivated silently and reported under "repeats". The scope is the same UTC day for one-day moves and
 monitor notices (DAY_SCOPED_RULES), and the same desk week (`levels_as_of`) for level rules, which act on the weekly
-close anyway. A higher severity is always sent.
+close anyway. A higher severity is always sent, and a condition still active into a new scope (a new day, new weekly
+levels) is announced again as a fresh activation.
 
 State file: {"schema_version": 1, "last_run_utc": iso, "conditions": {"symbol|rule": {severity, first_seen,
 last_seen, notified_severity, delivered, alert, levels_as_of, [cleared_at], [repeat_of]}},
@@ -83,6 +84,15 @@ def _is_repeat(key: str, severity: str, prior: dict | None, now_iso: str, levels
     return levels_as_of is not None and prior.get("levels_as_of") == levels_as_of
 
 
+def _scope_rolled(key: str, c: dict, now_iso: str, levels_as_of: str | None) -> bool:
+    """True when a still-active condition has outlived its scope (a new UTC day for day-scoped rules, new weekly levels
+    for level rules), so it is announced again as a fresh activation. Conditions stored before levels were recorded
+    are not reset; they take this week's levels instead."""
+    if key.split("|", 1)[1] in DAY_SCOPED_RULES:
+        return c["first_seen"][:10] != now_iso[:10]
+    return None not in (c.get("levels_as_of"), levels_as_of) and c["levels_as_of"] != levels_as_of
+
+
 def update(alerts: list[dict], quoted_symbols, state_path: str | Path, now_iso: str,
            levels_as_of: str | None = None) -> dict:
     """Fold this run's alerts into the ledger and say what to send.
@@ -110,7 +120,8 @@ def update(alerts: list[dict], quoted_symbols, state_path: str | Path, now_iso: 
                         "notified_severity": prior["notified_severity"], "delivered": True, "alert": a,
                         "levels_as_of": levels_as_of, "repeat_of": prior["first_seen"]}
             repeats.append({**_out(k, conds[k]), "repeat_of": prior["first_seen"]})
-        elif c is None or c.get("cleared_at"):  # first activation, or reactivated before a cleared retry went out
+        elif c is None or c.get("cleared_at") or _scope_rolled(k, c, now_iso, levels_as_of):
+            # first activation, reactivated before a cleared retry went out, or still active into a new day or week
             s["recent"].pop(k, None)
             conds[k] = {"severity": a["severity"], "first_seen": now_iso, "last_seen": now_iso,
                         "notified_severity": a["severity"], "delivered": False, "alert": a,
@@ -121,6 +132,8 @@ def update(alerts: list[dict], quoted_symbols, state_path: str | Path, now_iso: 
             escalated.append(_out(k, c))
         else:  # still active at or below the notified severity: stay quiet, keep the evidence current
             c.update(severity=a["severity"], last_seen=now_iso)
+            if c.get("levels_as_of") is None:
+                c["levels_as_of"] = levels_as_of
             if c["delivered"]:
                 c["alert"] = a
     sent_now = {x["key"] for x in new + escalated}
