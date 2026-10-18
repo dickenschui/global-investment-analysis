@@ -440,7 +440,7 @@ ${context({position: {...c, spark: undefined, contract: undefined, weekly_closes
 const TABS = [{id: "today", t: "Today"}, {id: "decisions", t: "Decisions"}, {id: "income", t: "SG income"},
               {id: "options", t: "Options sleeve"}, {id: "evidence", t: "Rule evidence"}, {id: "journal", t: "Journal"}];
 function renderChrome() {
-  $("#asof").textContent = "week to " + D.as_of;
+  $("#asof").textContent = "week to " + D.as_of + (D.daily ? " · close " + D.daily.session_date : "");
   const ev = D.evidence;
   $("#verdict").innerHTML = `<span class="chip ${D.posture.stressed ? "down" : "acc"}"><span class="dot"></span>Risk budget ${Math.round(D.posture.risk_budget * 100)}%</span>`
     + (ev ? `<span class="chip ${ev.level === "LOW" ? "warn" : ev.level === "HIGH" ? "up" : "info"}">Rule confidence ${esc(ev.level)}</span>` : "");
@@ -456,12 +456,24 @@ function show(id) {
 function rerender() { if (!D) return; ({today: rToday, decisions: rDecisions, income: rIncome, options: rOptions, evidence: rEvidence, journal: rJournal})[S.tab](); }
 
 /* ---------- Today ---------- */
+function dailyPanel(d) {   // official closes after the session, against this week's levels (docs/DAILY_UPDATE.md)
+  const n = Object.keys(d.rows).length, ex = d.exceptions.filter(x => x.kind !== "good");
+  const inZone = d.exceptions.filter(x => x.kind === "good").map(x => x.symbol);
+  const gaps = [[d.missing, "no close"], [d.stale, "no session that day"], [d.check, "more than 25% from the weekly close: verify"]]
+    .filter(([l]) => l.length).map(([l, why]) => `${esc(l.join(", "))} (${why})`);
+  return `<div class="panel"><header><h2>Close ${esc(d.session_date)}</h2><span class="mut small">${n} official closes · levels from the week to ${esc(D.as_of)}</span></header>
+    ${ex.length ? `<div style="display:grid;gap:8px">${ex.map(x => `<div class="flag ${x.kind}"><b class="mono">${esc(x.symbol)}</b><span>${esc(x.text)}</span></div>`).join("")}</div>`
+      : `<div class="flag good">No exceptions: every name closed inside its plan.</div>`}
+    ${inZone.length ? `<p class="small">Inside the buy zone at the close: <span class="mono">${esc(inZone.join(" · "))}</span></p>` : ""}
+    <p class="note">Interactive Brokers daily closes, retrieved ${esc((d.retrieved_at_utc || "").replace("T", " ").slice(0, 16))} UTC. Stances and levels change only at the weekly refresh; an exit acts on Friday's close.${gaps.length ? ` Not checked: ${gaps.join("; ")}.` : ""}</p></div>`;
+}
 function rToday() {
   const ev = D.evidence, acc = D.calls.filter(c => c.stance === "Accumulate");
   const watchSet = liveSet();
   const priced = watchSet.filter(c => live[c.symbol]);
   const flags = priced.flatMap(c => flagsFor(c).map(f => [f[0], c, f[1]])).sort((a, b) => ({crit: 0, warn: 1, info: 2, good: 3})[a[0]] - ({crit: 0, warn: 1, info: 2, good: 3})[b[0]]);
   $("#v-today").innerHTML = `
+    ${D.daily ? dailyPanel(D.daily) : ""}
     ${ev ? `<div class="banner ${ev.level === "LOW" ? "low" : "ok"}"><p class="lead">${ev.level === "LOW" ? "Treat this week's calls as risk-control levels, not forecasts." : "The rules have earned normal sizing on the evidence."}</p><p class="mut small">${esc(ev.note)}</p></div>` : ""}
     <div class="tiles">${D.markets.map(m => `<div class="tile"><div class="k"><h3>${esc(m.market)}</h3>${trendChip(m.trend)}</div>
       <div class="big">${pct(m.ret_3m)}</div><div class="sub"><span>3 months · ${esc(m.proxy)}</span><span class="${cls(m.ret_1w)}">1w ${pct(m.ret_1w)}</span></div>
@@ -527,10 +539,10 @@ function rDecisions() {
       ${pvControl()}
     </div>
     <div class="tw"><table><thead><tr><th>Instrument</th><th>Market</th><th>Call</th><th class="n">Last</th><th class="n">3m</th><th class="n">1y</th><th>Trend</th><th class="n">Buy zone</th><th class="n">Exit / trigger</th><th class="n">Max weight</th><th class="n">Position</th><th>52 weeks</th></tr></thead>
-    <tbody>${rows.map(c => { const s = sizing(c), q = live[c.symbol], fl = flagsFor(c);
+    <tbody>${rows.map(c => { const s = sizing(c), q = live[c.symbol], dc = D.daily?.rows[c.symbol], fl = q ? flagsFor(c) : (dc?.flags || []);
       return `<tr class="click" data-sym="${esc(c.symbol)}" tabindex="0"><td><b class="mono">${esc(c.symbol)}</b>${fl.length ? ` <span class="dot" style="color:var(--${fl[0][0] === "crit" ? "down" : fl[0][0] === "warn" ? "warn" : fl[0][0] === "good" ? "up" : "info"})" title="${esc(fl[0][1])}"></span>` : ""}<span class="nm">${esc(c.name)}</span></td>
       <td>${esc(c.market)}</td><td>${stanceChip(c.stance)}</td>
-      <td class="n">${px(q?.price ?? c.last)}${q ? `<span class="nm ${cls(q.chg)}">live ${pct(q.chg)}</span>` : ""}</td>
+      <td class="n">${px(q?.price ?? (dc && !dc.stale && !dc.check ? dc.close : c.last))}${q ? `<span class="nm ${cls(q.chg)}">live ${pct(q.chg)}</span>` : dc && !dc.stale && !dc.check ? `<span class="nm ${cls(dc.vs_week)}">close ${pct(dc.vs_week)} wk</span>` : ""}</td>
       <td class="n ${cls(c.ret_3m)}">${pct(c.ret_3m)}</td><td class="n ${cls(c.ret_1y)}">${pct(c.ret_1y)}</td><td>${trendChip(c.trend)}</td>
       <td class="n">${c.entry ? px(c.entry[0]) + "–" + px(c.entry[1]) : "—"}</td>
       <td class="n">${c.stop != null ? px(c.stop) : c.trigger != null ? `<span class="mut">↑ ${px(c.trigger)}</span>` : "—"}</td>

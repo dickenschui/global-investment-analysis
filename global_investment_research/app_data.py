@@ -3,6 +3,10 @@
 Everything comes from engine output already written by `backtest` and `monitor`, plus the IBKR
 contract ids in the snapshot so the app can ask for live quotes. Numbers are copied, not recomputed,
 except the London pence factor, which is measured from the data (snapshot last vs weekly close).
+
+The daily after-hours publish (docs/DAILY_UPDATE.md) adds `daily`: each session's official IBKR closes checked
+against this week's levels. Levels and stances do not change between weekly refreshes; the Handbook acts on the
+weekly close, so a daily close below an exit is a warning for Friday, not a new decision.
 """
 from __future__ import annotations
 
@@ -14,6 +18,8 @@ from . import data, decisions as D, evidence, monitor, notify
 
 SPARK_WEEKS = 53
 TOP_OPTIONS = 12
+STALE_HOURS = 36       # a bar ending this long before the end of the session date is not that session's close
+DAILY_CHECK = 0.25     # a close this far from the weekly close is flagged for checking, not used silently
 
 
 def _contracts(snapshot_dir: Path) -> dict:
@@ -30,8 +36,69 @@ def _contracts(snapshot_dir: Path) -> dict:
     return out
 
 
+def _flags(row: dict, close: float) -> list[list[str]]:
+    """The app's live-check rules (index.html flagsFor) applied to an official close: [[kind, text], ...]."""
+    out, stop, entry, trig, last = [], row.get("stop"), row.get("entry"), row.get("trigger"), row.get("last")
+    if stop is not None and close < stop:
+        out.append(["crit", f"Closed below the exit level {stop:,.4g}. The exit acts on Friday's weekly close."])
+    if entry and row.get("stance") == "Accumulate":
+        if entry[0] <= close <= entry[1]:
+            out.append(["good", f"Closed inside the buy zone {entry[0]:,.4g}–{entry[1]:,.4g}."])
+        elif close > entry[1]:
+            out.append(["warn", f"Closed above the buy zone ({entry[1]:,.4g}): wait rather than chase."])
+        elif stop is None or close >= stop:
+            out.append(["info", "Closed below the buy zone but above the exit: re-check the trend before adding."])
+    if trig is not None and row.get("stance") in ("Watch", "Avoid") and close > trig:
+        out.append(["info", f"Closed above the revisit trigger {trig:,.4g}: confirm on Friday's close."])
+    vol = row.get("vol")
+    if vol and last:
+        z = (close / last - 1) / (vol / 52 ** 0.5)
+        if abs(z) >= 2.5:
+            out.append(["crit" if abs(z) >= 4 else "warn",
+                        f"{(close / last - 1) * 100:+.1f}% since the weekly close: {abs(z):.1f} weekly standard deviations."])
+    return out
+
+
+def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
+    """Official closes for one session against this week's levels.
+
+    `doc` is a data/daily/<date>.json file: {"session_date", "source", "retrieved_at_utc",
+    "closes": {symbol: {"close", "prior_close", "bar_time"}}, "missing": {symbol: reason}}. A close about 100x the
+    weekly close (a London line in pence) is divided by 100; a bar that ended more than STALE_HOURS before the end of
+    the session date (a holiday) is marked stale and not checked; a close more than DAILY_CHECK from the weekly close
+    is flagged for checking instead of being used."""
+    session = dt.date.fromisoformat(doc["session_date"])
+    end = dt.datetime.combine(session, dt.time(23, 59), dt.timezone.utc)
+    rows, exceptions, stale, check = {}, [], [], []
+    for r in calls + others:
+        q = doc["closes"].get(r["symbol"])
+        if not q or not q.get("close"):
+            continue
+        close, prior, last = q["close"], q.get("prior_close"), r.get("last")
+        if last and close / last > 50:
+            close, prior = close / 100, prior / 100 if prior else prior
+        bar = dt.datetime.fromisoformat(q["bar_time"].replace("Z", "+00:00")) if q.get("bar_time") else None
+        row = {"close": close, "prior_close": prior, "bar_time": q.get("bar_time"),
+               "chg_1d": close / prior - 1 if prior else None, "vs_week": close / last - 1 if last else None}
+        if bar is not None and (end - bar).total_seconds() / 3600 > STALE_HOURS:
+            row["stale"] = True
+            stale.append(r["symbol"])
+        elif last and abs(close / last - 1) > DAILY_CHECK:
+            row["check"] = True
+            check.append(r["symbol"])
+        elif "stance" in r:
+            row["flags"] = _flags(r, close)
+            exceptions += [{"symbol": r["symbol"], "kind": k, "text": t} for k, t in row["flags"]]
+        rows[r["symbol"]] = row
+    order = {"crit": 0, "warn": 1, "info": 2, "good": 3}
+    return {"session_date": doc["session_date"], "source": doc.get("source"), "retrieved_at_utc": doc.get("retrieved_at_utc"),
+            "rows": rows, "exceptions": sorted(exceptions, key=lambda x: (order[x["kind"]], x["symbol"])),
+            "missing": sorted(set(doc.get("missing") or {}) | {r["symbol"] for r in calls + others} - set(rows)),
+            "stale": sorted(stale), "check": sorted(check)}
+
+
 def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
-          state_dir: str | Path | None = None) -> dict:
+          state_dir: str | Path | None = None, daily: str | Path | None = None) -> dict:
     rep, snap = Path(reports_dir), Path(snapshot_dir)
     dec = json.loads((rep / "decisions.json").read_text())
     mon = json.loads((rep / "monitor.json").read_text())
@@ -99,6 +166,8 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
         "investor": D.INVESTOR,
         "links": notify.LINKS,
     }
+    if daily:
+        out["daily"] = daily_view(calls, others, json.loads(Path(daily).read_text()))
     if opt:
         seen, ideas = set(), []
         for i in opt["ideas"]:

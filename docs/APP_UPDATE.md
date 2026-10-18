@@ -2,6 +2,7 @@
 
 The app is the page in `app/index.html`, published at https://claude.ai/artifact/G7LaSQYJscDLYKNAFNu4Fn.
 It reads its numbers from `data.json` published beside it, so a weekly refresh replaces only that file.
+Each weekday after the US close the same file is rebuilt with that session's closes (`docs/DAILY_UPDATE.md`).
 
 1. After `backtest` and `monitor` have run for the week:
 
