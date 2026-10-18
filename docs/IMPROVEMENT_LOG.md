@@ -26,7 +26,7 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 
 1. **Accuracy:** did any price, yield or option mid fail a cross-check (snapshot vs weekly close, Black-Scholes vs mid, vendor yield vs computed)?
 2. **Calls vs outcomes:** in `global-research review`, which calls worked or failed, and did a rule misfire more than twice?
-3. **Blind spots:** which exception or market move this week did the system miss, and what input would have caught it?
+3. **Blind spots and alert value:** which exception or market move did the system miss? Run `global-research alert-review` on last week's alerts (first `git fetch origin alert-state && git checkout origin/alert-state -- reports/<last week>/alerts`): how many alerts were verified at the close, how many were acted on, how many were duplicates, and which coverage gap ranks first?
 4. **Concentration:** is the Accumulate list over 30% in one sector or one driver (oil, AI capex, rates)?
 5. **Options:** did any idea span an earnings date, or have quotes too wide to trade?
 6. **Coverage:** which instruments had no data or stale data, and why?
@@ -144,3 +144,37 @@ Two independent reviews: a code and methodology audit of this repo, and a compar
   - HKMA, MAS and SingStat are not configured; the endpoints were not confirmed or need keys.
   - Stress returns are price-only weekly closes with weights held fixed.
 - **Next improvement:** merge, add the mail secrets, run both workflows by hand, and set `verified: true` source by source from the run log.
+
+### 2026-10-18 (alert value, duplicates, provenance and coverage)
+
+- **Measured** (`reports/2026-10-11/alert-review/`, levels of 9 October, week to 16 October; closes from IBKR):
+  - 25 of 315 scheduled checks ran (8%). Yahoo returned every quote it was asked for (69 of 69 when markets were
+    open); the long "No live quote" lists were closed markets, not data gaps.
+  - 13 market conditions produced 15 notices: 2 duplicates (LSEG and ISF crossed their revisit levels, fell back and
+    were re-sent later in the week). The heartbeat gap was sent twice on 12 October.
+  - At the Friday close 9 of 13 were verified and 4 refuted. Revisit triggers: 6 of 9 verified (LSEG, ISF, SSE, 857,
+    000333, 823); DBA, UNG and U11 fell back. One-day moves: TLT, XLV and the VIX spike held; USD/SGD fully reversed.
+  - Only 5 market alerts were pushed (3 verified). The 8 INFO revisit alerts were logged but never pushed, by design,
+    and 6 of them were verified. Nothing was acted on: the decision log is empty, and the weekly refresh that would
+    act on confirmed revisit levels did not run on 17 October (the routine still has no repository attached).
+  - No alert carried a headline: context was attached to URGENT alerts only, and none fired. The BLS feed failed 11 of
+    11 fetches; the reason did not record the HTTP status.
+- **Shipped:**
+  - `global-research alert-review`: verifies each alert at the official close, counts duplicates, pushes and
+    decisions logged, and ranks coverage gaps.
+  - Repeats within the desk week (one-day moves: the same day) are logged, not re-sent; a higher severity still is.
+  - One message per run: each symbol once, grouped by what to do, monitor notices apart, closed markets counted not
+    listed. Prices are labelled as delayed vendor quotes and headlines as unverified keyword matches.
+  - Headline context now goes on WARN alerts too. News failures record the HTTP status.
+  - Run records hold `pushed`, `repeats`, `no_quote`, `not_live` and each alert's quote and reference, so next week's
+    one-day moves are scored automatically.
+  - A "Weekly levels stale" monitor notice fires once levels are more than 9 days old.
+- **Coverage gaps, in priority order:**
+  1. Checks that did not run (92% of slots). Fix: external scheduler calling workflow_dispatch (owner action).
+  2. Weekly refresh not running, so from 19 October every level is a week old. Fix: attach the repository to the
+     routine (owner action).
+  3. No headline context on review alerts. Fixed in code; measure again next week.
+  4. BLS feed. Next week's runs will name the HTTP status; then fix or replace it.
+  5. No official source for MAS, SORA, HIBOR or SingStat CPI.
+- **Limits:** "acted" can only be measured if decisions are written to `config/decision-log.csv`; the app's journal
+  stays in the browser. The one-day moves above were reconciled by hand from the rounded % in the alert text.

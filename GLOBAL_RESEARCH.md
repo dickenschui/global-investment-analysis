@@ -21,7 +21,8 @@ It sits next to the original Taiwan three-dimension analysis skill (`SKILL.md`, 
 | Curve and volatility term structure: 3m/5y/10y/30y Treasury yields and VIX3M from IBKR (weekly since 2009); curve shape, term premium, VIX/VIX3M | `curve.py` | in `monitor.html` macro readings |
 | Official macro data: FRED, ECB, Bank of England, ONS, US Treasury, World Bank, fetched daily on GitHub Actions (blocked inside Claude); readings join the monitor when the snapshot is under 10 days old | `macro_sources.py`, `.github/workflows/macro-daily.yml` | `data/macro/latest.json` |
 | Stress test: this week's Accumulate+Hold book at full and half size through the GFC, euro crisis, China/oil, Covid and 2022 in GBP against the 20% mandate limit; SG income sleeve under measured ES3 and SGD shocks | `stress.py` | Desk, app |
-| Hourly alerts without Claude: Yahoo pulse, condition state (notify on new or escalated, re-arm only when quoted, retry undelivered), 90-minute freshness gate, heartbeat gap, official headlines on URGENT alerts, Telegram and Gmail | `alerts.py`, `alert_state.py`, `pulse_yahoo.py`, `news.py`, `mailer.py`, `.github/workflows/hourly-alerts.yml` | state on the `alert-state` branch |
+| Hourly alerts without Claude: Yahoo pulse, condition state (notify on new or escalated, re-arm only when quoted, retry undelivered), 90-minute freshness gate, heartbeat gap and stale-levels warning, repeats within the desk week not re-sent, one consolidated message per run with every line labelled (delayed vendor quote, unverified headline), official headlines on URGENT and WARN alerts, Telegram and Gmail | `alerts.py`, `alert_state.py`, `pulse_yahoo.py`, `news.py`, `mailer.py`, `.github/workflows/hourly-alerts.yml` | state on the `alert-state` branch |
+| Weekly alert scorecard: each alert verified or refuted at the official close, duplicates, pushes, decisions logged, and coverage gaps ranked | `alert_review.py` (`global-research alert-review`) | `reports/<date>/alert-review/` |
 | Data integrity: SHA-256 manifests (loader refuses changed files), contract identity (venue, currency, type, contract id), weekly quality review | `integrity.py`, `identity.py`, `quality.py` | `quality.md` for the Improvement Log |
 | Option chain check (crossed or one-sided quotes, bad IV, expired, duplicates) and exact expiry payoff cross-check before an idea is shown | `payoff.py` | Options page, app |
 | Company fundamentals: margins, FCF, cash conversion, ROE on average equity, accounting-equation check, P/E withheld on currency mismatch | `company.py` | library |
@@ -99,5 +100,18 @@ policy constants the engine uses. Log decisions in `config/decision-log.csv`, th
 - `global-research alerts --pulse pulse.json --reports <dir> [--telegram]` reports new exceptions only:
   exit breaches, revisit triggers, moves of 2.5σ (WARN) and 4σ (URGENT) against each instrument's own
   volatility, VIX ≥ 25 or a +20% spike, FX moves ≥ 1.5%, USD/HKD outside 7.75–7.85, and option ideas moving
-  against. Same-day duplicates are suppressed via `data/state/alerts_seen.json`.
+  against. Each condition is notified once, again only if its severity rises. A condition that clears and fires again
+  is logged under `repeats` and not re-sent: within the same desk week for level rules, the same UTC day for one-day
+  moves. A condition still active into a new day (moves) or new weekly levels (level rules) is announced again. Each run writes `alerts/alerts-<time>.json` with what was sent, what was actually pushed (INFO-only runs are
+  logged, not pushed), repeats, `no_quote` (the vendor returned nothing: a coverage gap), `not_live` (market closed)
+  and news failures with their HTTP status.
+- Alert messages group each symbol once under "Act now" (URGENT), "Review today" (WARN) or "For the weekly close"
+  (INFO), with monitor notices apart. Prices are labelled as delayed vendor quotes, unconfirmed until the official
+  close; headlines as unverified keyword matches on official feeds.
+- `global-research alert-review --reports reports/<last week> --snapshot data/snapshots/<this week> --out
+  reports/<this week>/alert-review` scores last week's alerts. An alert is verified when the official week-end close
+  is still past its level (or kept at least half of a one-day move), and acted on only when `config/decision-log.csv`
+  records a decision on the name within 7 days. It also counts duplicates and pushes, and ranks coverage gaps:
+  checks that did not run, stale levels, missing quotes, failing feeds, review alerts without headline context, and
+  markets with no official source.
 - `docs/IMPROVEMENT_LOG.md` holds the input scorecard and the weekly self-review questions.

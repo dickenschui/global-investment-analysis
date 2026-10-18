@@ -1,7 +1,7 @@
 """Primary-source headline triage for the hourly check (standard library only).
 
 Reads official RSS 2.0 / Atom feeds (central banks, statistics offices), flags headlines that match configured
-keywords, and attaches the most recent relevant ones to URGENT price alerts as context. Keyword matches triage a
+keywords, and attaches the most recent relevant ones to URGENT and WARN price alerts as context. Keyword matches triage a
 headline for review; they do not verify the release, its magnitude, a surprise or any causal link to a price move.
 Ported from the reference hosting/hourly_monitor.py (parse_feed, fetch_source) and config/hourly-monitor.json.
 """
@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 MAX_FEED_BYTES = 2_000_000
 USER_AGENT = "GlobalInvestmentResearch/0.1 (+https://github.com/dickenschui/global-investment-analysis)"  # BLS refuses requests without contact info
 SEVERITY_ORDER = {"primary": 0, "secondary": 1}
+CONTEXT_SEVERITIES = ("URGENT", "WARN")  # alerts that ask the owner to review now get headline context
 
 # Words that tie a headline to a market-level instrument (its own ticker or name rarely appears in news).
 MARKET_WORDS = {
@@ -118,7 +119,7 @@ def fetch(sources: list[dict], opener=None, timeout: float = 15) -> tuple[list[d
     """Fetch and parse each enabled source. One bad feed is recorded in `failures`, never raised.
 
     `opener(url, timeout) -> bytes` is injectable for tests; the default uses urllib. Items carry the source's
-    id, market and authority. Failure reasons name the error type only (no transport text)."""
+    id, market and authority. Failure reasons name the error type and any HTTP status only (no transport text)."""
     opener = opener or _urlopen
     items, failures = [], []
     for src in sources:
@@ -129,8 +130,10 @@ def fetch(sources: list[dict], opener=None, timeout: float = 15) -> tuple[list[d
                 raise ValueError("HTTPS source required")
             parsed = parse_feed(opener(src["url"], timeout))
         except Exception as exc:  # noqa: BLE001 - any failure of one feed must not stop the others
+            status = getattr(exc, "code", None)  # urllib HTTPError carries the server's status
+            status = f" {status}" if isinstance(status, int) else ""
             failures.append({"source": src.get("id"), "url": src.get("url"),
-                             "reason": f"{type(exc).__name__}: unavailable or not a valid feed"})
+                             "reason": f"{type(exc).__name__}{status}: unavailable or not a valid feed"})
             continue
         for it in parsed:
             items.append({**it, "source": src.get("id"), "market": src.get("market"),
@@ -179,7 +182,8 @@ def _terms(symbol: str, symbol_names: dict) -> list[re.Pattern]:
 
 def headline_context(alerts: list[dict], items: list[dict], symbol_names: dict, *, now_iso: str | None = None,
                      max_age_hours: float = 48, per_alert: int = 2) -> list[dict]:
-    """Copy of `alerts` with up to `per_alert` recent matching headlines attached to each URGENT alert as `context`.
+    """Copy of `alerts` with up to `per_alert` recent matching headlines attached to each URGENT or WARN alert as
+    `context`.
 
     A headline matches on the alert's ticker (3-5 capital letters, case-sensitive), its company name, or the market
     words for index/FX/macro lines. Undated headlines and those older than max_age_hours are not used, since their
@@ -198,7 +202,7 @@ def headline_context(alerts: list[dict], items: list[dict], symbol_names: dict, 
     out = []
     for a in alerts:
         a = dict(a)
-        if a.get("severity") == "URGENT":
+        if a.get("severity") in CONTEXT_SEVERITIES:
             pats = _terms(a["symbol"], symbol_names)
             text = lambda it: f"{it['title']} {it.get('summary') or ''}"
             hits = [it for it in recent if any(p.search(text(it)) for p in pats)][:per_alert]

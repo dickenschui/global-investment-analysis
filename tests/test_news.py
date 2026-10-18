@@ -97,7 +97,16 @@ def test_fetch_never_raises_on_one_bad_feed():
     assert failures[1]["reason"].startswith("OSError")
 
 
-def test_headline_context_attaches_recent_matches_to_urgent_only():
+def test_fetch_failure_names_the_http_status():
+    from urllib.error import HTTPError
+
+    def opener(url, timeout):
+        raise HTTPError(url, 403, "Forbidden: secret transport text", {}, None)
+    _, failures = N.fetch([{"id": "bls", "url": "https://bls.example/rss"}], opener)
+    assert failures[0]["reason"] == "HTTPError 403: unavailable or not a valid feed"
+
+
+def test_headline_context_attaches_recent_matches_to_urgent_and_warn():
     now = "2026-10-12T20:00:00Z"
     items = [
         {"title": "Nvidia supplier issues profit warning", "link": "https://x/1", "published": "2026-10-12T19:00:00+00:00", "source": "s"},
@@ -111,11 +120,14 @@ def test_headline_context_attaches_recent_matches_to_urgent_only():
     alerts = [{"symbol": "NVDA", "rule": "Extreme daily move", "severity": "URGENT"},
               {"symbol": "USD.HKD", "rule": "HKD peg band breached", "severity": "URGENT"},
               {"symbol": "MSFT", "rule": "Large daily move", "severity": "WARN"},
-              {"symbol": "XOM", "rule": "Exit level breached", "severity": "URGENT"}]
+              {"symbol": "XOM", "rule": "Exit level breached", "severity": "URGENT"},
+              {"symbol": "NVDA", "rule": "Large daily move", "severity": "WARN"},
+              {"symbol": "NVDA", "rule": "Revisit trigger crossed", "severity": "INFO"}]
     out = N.headline_context(alerts, items, {"NVDA": "Nvidia", "MSFT": "Microsoft Corp"}, now_iso=now)
     assert [h["link"] for h in out[0]["context"]] == ["https://x/1", "https://x/2"]   # 2 newest, recent, dated
     assert out[1]["context"][0]["source"] == "hkma_press"                            # market words
-    assert "context" not in out[2] and "context" not in out[3]                       # WARN; no match
+    assert "context" not in out[2] and "context" not in out[3]                       # no match
+    assert len(out[4]["context"]) == 2 and "context" not in out[5]                   # WARN yes; INFO waits
     assert "context" not in alerts[0]                                                 # input not mutated
 
 

@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import alert_state, alerts, app_data, backtest, brief, curve, data, evidence, decisions, desk, handbook, monitor, notify, options, options_desk, portfolio, reports
+from . import alert_review, alert_state, alerts, app_data, backtest, brief, curve, data, evidence, decisions, desk, handbook, monitor, news, notify, options, options_desk, portfolio, reports
 
 
 def _json_default(o):
@@ -220,6 +220,12 @@ def main(argv=None) -> int:
     qa.add_argument("--snapshot", required=True)
     qa.add_argument("--previous", help="last week's snapshot directory, for contract and dividend changes")
     qa.add_argument("--out", help="directory for quality.json and quality.md")
+    ar = sub.add_parser("alert-review", help="weekly scorecard: which alerts were verified at the close and acted "
+                                             "on, duplicates, and coverage gaps ranked")
+    ar.add_argument("--reports", required=True, help="the reports/<date> directory whose alerts/ the week produced")
+    ar.add_argument("--snapshot", required=True, help="the next weekly snapshot, for the official week-end closes")
+    ar.add_argument("--decision-log", default="config/decision-log.csv")
+    ar.add_argument("--out", help="directory for alert-review.json and alert-review.md")
     hb = sub.add_parser("handbook", help="write docs/HANDBOOK.md from the policy source")
     hb.add_argument("--out", default="docs/HANDBOOK.md")
     args = p.parse_args(argv)
@@ -253,6 +259,26 @@ def main(argv=None) -> int:
             (out / "quality.md").write_text(md + "\n", encoding="utf-8")
         print(md)
         return 1 if rev["manifest"]["status"] == "failed" or rev["identity"] else 0
+    if args.cmd == "alert-review":
+        rep = Path(args.reports)
+        dec = json.loads((rep / "decisions.json").read_text())
+        prices, _ = data.load_ibkr_snapshot(args.snapshot, universe)
+        end = alert_review.week_end(dec["as_of"])
+        row = prices.loc[prices.index.normalize() == pd.Timestamp(end)]
+        closes = {} if row.empty else {k: float(v) for k, v in row.iloc[-1].dropna().items()}
+        rev = alert_review.review(alert_review.load_runs(rep / "alerts"), dec, closes,
+                                  decision_log=alert_review.load_decision_log(args.decision_log),
+                                  structural=alert_review.structural_gaps(Path(args.universe).parent))
+        md = alert_review.to_markdown(rev)
+        if not closes:
+            md += f"\n\nNo official close dated {end} in {args.snapshot}: conditions are unscored."
+        if args.out:
+            out = Path(args.out)
+            out.mkdir(parents=True, exist_ok=True)
+            (out / "alert-review.json").write_text(json.dumps(_clean(rev), indent=1, default=_json_default))
+            (out / "alert-review.md").write_text(md + "\n", encoding="utf-8")
+        print(md)
+        return 0
     if args.cmd == "app-data":
         res = app_data.build(args.reports, args.snapshot, universe, args.state_dir)
         Path(args.out).write_text(json.dumps(_clean(res), separators=(",", ":"), default=_json_default))
@@ -302,34 +328,39 @@ def main(argv=None) -> int:
         usable, frozen = alerts.normalise_quotes(pulse, mon, max_age_minutes=args.max_age_minutes)
         state = Path(args.state_dir) / "alert_state.json"
         hb = alert_state.heartbeat_gap(state, now, weekday=_missed_scheduled_run(alert_state.load(state).get("last_run_utc"), now))
-        if hb:
-            found.append(hb)
-        res = alert_state.update(found, set(usable), state, now)  # only quoted symbols can clear a condition
+        found += [a for a in (hb, alert_state.levels_stale(dec.get("as_of"), now)) if a]
+        # only quoted symbols can clear a condition; repeats within the desk week (or day, for moves) stay quiet
+        res = alert_state.update(found, set(usable), state, now, levels_as_of=dec.get("as_of"))
         to_send = res["escalated"] + res["new"] + res["pending"]
         failures = []
-        if args.news and to_send:
-            from . import news
+        news_fetched = bool(args.news and any(a["severity"] in news.CONTEXT_SEVERITIES for a in to_send))
+        if news_fetched:
             sources = json.loads((Path(args.universe).parent / "news-sources.json").read_text())["sources"]
             items, failures = news.fetch(sources)
             to_send = news.headline_context(to_send, items, {i["symbol"]: i["name"] for i in universe["instruments"]},
                                             now_iso=now)
-        stale = sorted((set(alerts.watch_list(dec, opt, kinds)) - set(usable)) | set(frozen))
-        text = alerts.alert_text(to_send, now, stale)
+        watched = set(alerts.watch_list(dec, opt, kinds))
+        not_live = sorted(set(frozen) & watched)
+        no_quote = sorted(watched - set(usable) - set(frozen))  # nothing usable from the vendor: a coverage gap
+        text = alerts.alert_text(to_send, now, not_live, no_quote)
         out = rep / "alerts"
         out.mkdir(exist_ok=True)
         stamp = now.replace(":", "").replace("-", "")[:13]
-        (out / f"alerts-{stamp}.json").write_text(json.dumps(
-            {"all": found, "sent": to_send, "cleared": res["cleared"], "missing_quotes": stale,
-             "news_failures": failures, "pulse_source": pulse.get("source")}, indent=1))
+        record = {"retrieved_at_utc": now, "levels_as_of": dec.get("as_of"), "all": found, "sent": to_send,
+                  "repeats": res["repeats"], "cleared": res["cleared"], "missing_quotes": sorted(set(not_live) | set(no_quote)),
+                  "not_live": not_live, "no_quote": no_quote,
+                  "no_quote_reasons": {s: (pulse.get("missing_reasons") or {}).get(s) for s in no_quote},
+                  "news_fetched": news_fetched, "news_failures": failures, "pulse_source": pulse.get("source")}
         print(text if to_send else f"No new or escalated exceptions ({len(found)} conditions active, "
-                                   f"{len(res['cleared'])} cleared).")
+                                   f"{len(res['cleared'])} cleared, {len(res['repeats'])} repeats not re-sent).")
         # Without a channel flag the printed text is the delivery (the Claude routine relays it). With channels, a
         # notice counts as delivered only once a channel confirms; otherwise it stays pending and is offered again.
-        delivered = True
+        delivered, pushed = True, False
         material = any(a["severity"] in ("URGENT", "WARN") for a in to_send)
         if args.telegram and material:
             try:
                 notify.send_telegram(text)
+                pushed = True
                 print("Telegram alert sent.")
             except Exception as exc:  # delivery failure must not hide the alert itself
                 delivered = False
@@ -342,12 +373,18 @@ def main(argv=None) -> int:
             try:
                 r = mailer.send_if_configured(subject, body, re.sub(r"<[^>]+>", "", text),
                                               ledger=Path(args.state_dir) / "mail_ledger.json", day=now[:10])
+                pushed |= r["status"] in ("sent", "already sent")
                 print(r.get("reason") or f"Email {r['status']}.")
             except Exception as exc:  # MailError carries no secret
                 delivered = False
                 print(f"Email not sent: {exc}")
         if delivered and to_send:
             alert_state.mark_delivered([a["key"] for a in to_send], state)
+        # Without channel flags the printed text is the delivery (a relay); with them, only a confirmed send pushes.
+        # INFO-only runs are logged, not pushed: they wait for the weekly close.
+        relay = not (args.telegram or args.email)
+        record["pushed"] = [a["key"] for a in to_send] if (relay and delivered) or pushed else []
+        (out / f"alerts-{stamp}.json").write_text(json.dumps(record, indent=1))
         return 0
     if args.cmd == "notify":
         import os

@@ -17,6 +17,8 @@ import math
 from datetime import date, datetime, timezone
 from pathlib import Path
 
+from .alert_state import HEARTBEAT_SYMBOL
+
 DAILY_WARN_SD = 2.5      # daily move in standard deviations of the instrument's own volatility
 DAILY_URGENT_SD = 4.0
 VIX_STRESS = 25.0
@@ -38,8 +40,14 @@ def watch_list(dec: dict, opt: dict | None, meta_kinds: dict) -> list[str]:
     return sorted(syms)
 
 
-def _alert(sev, sym, rule, evidence, action):
-    return {"severity": sev, "symbol": sym, "rule": rule, "evidence": evidence, "action": action}
+def _alert(sev, sym, rule, evidence, action, *, observed=None, reference=None, kind=None):
+    """An exception, with the numbers alert_review needs to score it at the official close: `observed` (the vendor
+    quote), `reference` (the level, band or prior close it was judged against) and `kind` ("above", "below", "band"
+    or "move")."""
+    a = {"severity": sev, "symbol": sym, "rule": rule, "evidence": evidence, "action": action}
+    if kind:
+        a.update(observed=observed, reference=reference, kind=kind)
+    return a
 
 
 def _is_fx(sym: str, kinds: dict | None) -> bool:
@@ -108,11 +116,13 @@ def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None, kinds: 
             out.append(_alert("URGENT", sym, "Exit level breached",
                               f"{sym} {last:,.2f} below exit {c['stop']:,.2f} ({c['stance']}), intraday",
                               "Handbook §3: the exit acts on the weekly close. Cancel any add orders now; if Friday's "
-                              "close is still below the exit, close the position or write down why you hold."))
+                              "close is still below the exit, close the position or write down why you hold.",
+                              observed=last, reference=c["stop"], kind="below"))
         if c and c.get("trigger") and c["stance"] in ("Watch", "Avoid") and last > c["trigger"]:
             out.append(_alert("INFO", sym, "Revisit trigger crossed",
                               f"{sym} {last:,.2f} above revisit level {c['trigger']:,.2f}",
-                              "Opportunity: confirm on the weekly close before upgrading."))
+                              "Opportunity: confirm on the weekly close before upgrading.",
+                              observed=last, reference=c["trigger"], kind="above"))
         # 2. Abnormal move versus the instrument's own volatility
         vol = m.get("vol")
         if prev and vol and sym != "VIX":
@@ -122,27 +132,31 @@ def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None, kinds: 
             if abs(z) >= DAILY_URGENT_SD:
                 out.append(_alert("URGENT", sym, "Extreme daily move",
                                   f"{sym} {move*100:+.1f}% vs prior close ({z:+.1f} standard deviations)",
-                                  "Check news before acting; re-run the Decision Desk for this name."))
+                                  "Check news before acting; re-run the Decision Desk for this name.",
+                                  observed=last, reference=prev, kind="move"))
             elif abs(z) >= DAILY_WARN_SD:
                 out.append(_alert("WARN", sym, "Large daily move",
                                   f"{sym} {move*100:+.1f}% vs prior close ({z:+.1f} standard deviations)",
-                                  "Review position and options on this underlying."))
+                                  "Review position and options on this underlying.",
+                                  observed=last, reference=prev, kind="move"))
         # 3. Macro regime: volatility
         if sym == "VIX":
             if last >= VIX_STRESS:
                 out.append(_alert("URGENT", sym, "Volatility stress",
                                   f"VIX {last:.1f} at or above {VIX_STRESS:.0f}",
-                                  "Handbook §4: risk budget to 50%; no new Accumulate in high-volatility names."))
+                                  "Handbook §4: risk budget to 50%; no new Accumulate in high-volatility names.",
+                                  observed=last, reference=VIX_STRESS, kind="above"))
             if prev and last / prev - 1 >= VIX_JUMP:
                 out.append(_alert("WARN", sym, "Volatility spike", f"VIX {last:.1f}, {100*(last/prev-1):+.0f}% on the day",
-                                  "Tighten: no new risk until the close."))
+                                  "Tighten: no new risk until the close.", observed=last, reference=prev, kind="move"))
         # 4. FX shocks and the HKD peg
         if sym == "USD.HKD" and not (HKD_PEG_BAND[0] <= last <= HKD_PEG_BAND[1]):
             out.append(_alert("URGENT", sym, "HKD peg band breached", f"USD/HKD {last:.4f} outside 7.75–7.85",
-                              "Systemic Hong Kong risk: review all HK exposure immediately."))
+                              "Systemic Hong Kong risk: review all HK exposure immediately.",
+                              observed=last, reference=list(HKD_PEG_BAND), kind="band"))
         if _is_fx(sym, kinds) and prev and abs(last / prev - 1) >= FX_URGENT_MOVE:
             out.append(_alert("URGENT", sym, "FX shock", f"{sym.replace('.', '/')} {100*(last/prev-1):+.2f}% on the day",
-                               "Check hedges and non-base-currency positions."))
+                               "Check hedges and non-base-currency positions.", observed=last, reference=prev, kind="move"))
     # 5. Options: underlying through breakeven against us, or desk exit hit on the underlying
     for i in (opt or {}).get("ideas", []):
         x = q.get(i["symbol"])  # already in the units of the weekly levels
@@ -154,7 +168,9 @@ def evaluate(pulse: dict, dec: dict, mon: dict, opt: dict | None = None, kinds: 
         if wrong_way:
             out.append(_alert("WARN", i["symbol"], "Option idea moving against",
                               f"{i['symbol']} {last:,.2f} vs {i['underlying']:,.2f} when the {i['structure']} was priced",
-                              f"Handbook §9: check the −{int(50)}% premium stop on any open {i['structure']}."))
+                              f"Handbook §9: check the −{int(50)}% premium stop on any open {i['structure']}.",
+                              observed=last, kind="below" if i["direction"] == "bull" else "above",
+                              reference=i["underlying"] * (0.95 if i["direction"] == "bull" else 1.05)))
     order = {"URGENT": 0, "WARN": 1, "INFO": 2}
     # one alert per (symbol, rule)
     uniq = {(a["symbol"], a["rule"]): a for a in out}
@@ -178,23 +194,70 @@ def new_since_last(alerts: list[dict], state_dir: str | Path, today: str | None 
     return fresh
 
 
-def alert_text(alerts: list[dict], as_of: str, stale: list[str] | None = None) -> str:
+SECTIONS = (("URGENT", "Act now"), ("WARN", "Review today"), ("INFO", "For the weekly close"))
+PROVENANCE = ("<i>Prices: Yahoo Finance, a delayed vendor feed, unconfirmed until the official close. "
+              "Headlines: keyword matches on official feeds, not checked against the release.</i>")
+
+
+def _headline(h: dict) -> str:
+    e = html.escape
+    when = f" ({e(h['published'][:16].replace('T', ' '))})" if h.get("published") else ""
+    title = e(h["title"])
+    link = f'<a href="{e(h["link"], quote=True)}">{title}</a>' if h.get("link") else title
+    src = f" · {e(h['source'])}" if h.get("source") else ""
+    return f"📰 Unverified headline: {link}{when}{src}"
+
+
+def alert_text(alerts: list[dict], as_of: str, not_live: list[str] | None = None,
+               no_quote: list[str] | None = None) -> str:
+    """One consolidated message. Each symbol appears once, in the section of its most severe exception, with every
+    rule it broke; INFO lines share one action line; monitor-health notices sit apart from market exceptions.
+    `not_live` (market closed or quote too old) is counted, not listed; `no_quote` (the vendor returned nothing
+    usable while the market may be open) is listed, since it is a coverage gap."""
     e = html.escape
     icon = {"URGENT": "🔴", "WARN": "🟠", "INFO": "🔵"}
-    urgent = sum(a["severity"] == "URGENT" for a in alerts)
-    lines = [f"<b>{'URGENT: ' if urgent else ''}Market exceptions · {e(as_of)}</b>"]
+    rank = {"URGENT": 0, "WARN": 1, "INFO": 2}
+    system = [a for a in alerts if a["symbol"] == HEARTBEAT_SYMBOL]
+    groups: dict[str, list[dict]] = {}
     for a in alerts:
-        lines += [f"{icon[a['severity']]} <b>{e(a['symbol'])}: {e(a['rule'])}</b>", e(a["evidence"]), f"→ {e(a['action'])}"]
-        if a.get("cleared_at"):
-            lines.append(f"<i>Condition cleared at {e(a['cleared_at'])}; resent because this notice was not delivered earlier.</i>")
-        for h in a.get("context") or []:  # headline context from news.headline_context: unverified, for review
-            when = f" ({e(h['published'][:16].replace('T', ' '))})" if h.get("published") else ""
-            title = e(h["title"])
-            link = f'<a href="{e(h["link"], quote=True)}">{title}</a>' if h.get("link") else title
-            src = f" · {e(h['source'])}" if h.get("source") else ""
-            lines.append(f"📰 {link}{when}{src}")
-        lines.append("")
-    if stale:
-        lines.append(f"<i>No live quote for: {e(', '.join(stale))}</i>")
-    lines.append('<a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a>')
+        if a["symbol"] != HEARTBEAT_SYMBOL:
+            groups.setdefault(a["symbol"], []).append(a)
+    top = {sym: min(grp, key=lambda a: rank[a["severity"]])["severity"] for sym, grp in groups.items()}
+    urgent = any(v == "URGENT" for v in top.values())
+    lines = [f"<b>{'URGENT: ' if urgent else ''}Market exceptions · {e(as_of)}</b>"]
+    for sev, title in SECTIONS:
+        syms = sorted(s for s in groups if top[s] == sev)
+        if not syms:
+            continue
+        lines += ["", f"<b>{title}</b>"]
+        actions = []
+        for sym in syms:
+            grp = sorted(groups[sym], key=lambda a: (rank[a["severity"]], a["rule"]))
+            if sev != "INFO":
+                lines.append(f"<b>{e(sym)}</b>")
+            for a in grp:
+                if sev == "INFO":  # weekly-close items: one line each, actions listed once below
+                    lines.append(f"{icon[a['severity']]} <b>{e(sym)}</b> {e(a['rule'])}: {e(a['evidence'])}")
+                    actions += [a["action"]] if a["action"] not in actions else []
+                else:
+                    lines += [f"{icon[a['severity']]} {e(a['rule'])}: {e(a['evidence'])}", f"→ {e(a['action'])}"]
+                if a.get("cleared_at"):
+                    lines.append(f"<i>Condition cleared at {e(a['cleared_at'])}; resent because this notice was not "
+                                 f"delivered earlier.</i>")
+            seen = set()
+            for h in (h for a in grp for h in a.get("context") or []):  # news.headline_context, for review only
+                if h.get("link") not in seen:
+                    seen.add(h.get("link"))
+                    lines.append(_headline(h))
+        lines += [f"→ {e(x)}" for x in actions]
+    if system:
+        lines += ["", "<b>Monitor health</b>"]
+        for a in system:
+            lines += [f"⚙️ {e(a['rule'])}: {e(a['evidence'])}", f"→ {e(a['action'])}"]
+    lines.append("")
+    if no_quote:
+        lines.append(f"<i>No usable vendor quote: {e(', '.join(no_quote))}</i>")
+    if not_live:
+        lines.append(f"<i>{len(not_live)} watched lines not live (market closed or quote too old).</i>")
+    lines += [PROVENANCE, '<a href="https://claude.ai/artifact/SSQ1VK33aGvevMkNsappyW">Decision Desk</a>']
     return "\n".join(lines)
