@@ -26,7 +26,7 @@ below, appends an entry here and ships **one** improvement (code, data or rule) 
 
 1. **Accuracy:** did any price, yield or option mid fail a cross-check (snapshot vs weekly close, Black-Scholes vs mid, vendor yield vs computed)?
 2. **Calls vs outcomes:** in `global-research review`, which calls worked or failed, and did a rule misfire more than twice?
-3. **Blind spots and alert value:** which exception or market move did the system miss? Run `global-research alert-review` on last week's alerts (first `git fetch origin alert-state && git checkout origin/alert-state -- reports/<last week>/alerts`): how many alerts were verified at the close, how many were acted on, how many were duplicates, and which coverage gap ranks first?
+3. **Blind spots and alert value:** which exception or market move did the system miss? Run `global-research alert-review` on last week's alerts (first `git fetch origin alert-state && git checkout origin/alert-state -- reports/<last week>/alerts`): how many alerts were verified at the close, how many were acted on (`config/decision-log.csv` plus the app's `journal` collection), how many were duplicates, and which coverage gap ranks first?
 4. **Concentration:** is the Accumulate list over 30% in one sector or one driver (oil, AI capex, rates)?
 5. **Options:** did any idea span an earnings date, or have quotes too wide to trade?
 6. **Coverage:** which instruments had no data or stale data, and why?
@@ -176,5 +176,7 @@ Two independent reviews: a code and methodology audit of this repo, and a compar
   3. No headline context on review alerts. Fixed in code; measure again next week.
   4. BLS feed. Next week's runs will name the HTTP status; then fix or replace it.
   5. No official source for MAS, SORA, HIBOR or SingStat CPI.
-- **Limits:** "acted" can only be measured if decisions are written to `config/decision-log.csv`; the app's journal
-  stays in the browser. The one-day moves above were reconciled by hand from the rounded % in the alert text.
+- **Limits:** "acted" is measured from `config/decision-log.csv`. The app's journal is a shared store on the Desk
+  artifact (read with ArtifactData, collection `journal`); it was also empty on 18 October, so the count of 0 stands.
+  Journal entries should be counted as decisions in question 3. The one-day moves above were reconciled by hand from
+  the rounded % in the alert text.
