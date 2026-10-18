@@ -21,7 +21,7 @@ def test_first_activation_then_quiet_then_escalation(tmp_path):
     S.mark_delivered(keys(r["new"]), p)
     # still active at the same severity: nothing to send
     r = S.update([al("XOM", "Large daily move", "WARN")], {"XOM"}, p, T2)
-    assert r == {"new": [], "escalated": [], "cleared": [], "pending": []}
+    assert r == {"new": [], "escalated": [], "cleared": [], "pending": [], "repeats": []}
     # severity rises: notify once as an escalation
     r = S.update([al("XOM", "Large daily move", "URGENT")], {"XOM"}, p, T3)
     assert keys(r["escalated"]) == ["XOM|Large daily move"] and r["escalated"][0]["severity"] == "URGENT"
@@ -85,3 +85,44 @@ def test_heartbeat_gap(tmp_path):
     assert keys(S.update([w], set(), p, "2026-10-12T12:00:00Z")["new"]) == ["MONITOR|Monitor heartbeat gap"]
     S.mark_delivered(["MONITOR|Monitor heartbeat gap"], p)
     assert keys(S.update([], set(), p, "2026-10-12T13:00:00Z")["cleared"]) == ["MONITOR|Monitor heartbeat gap"]
+
+
+def test_repeat_within_desk_week_is_logged_not_resent(tmp_path):
+    p = tmp_path / "state.json"
+    k = "LSEG|Revisit trigger crossed"
+    S.mark_delivered(keys(S.update([al("LSEG", "Revisit trigger crossed", "INFO")], {"LSEG"}, p, T1,
+                                   levels_as_of="2026-10-09")["new"]), p)
+    assert keys(S.update([], {"LSEG"}, p, "2026-10-13T13:34:00Z", levels_as_of="2026-10-09")["cleared"]) == [k]
+    # crosses again later in the same desk week: the owner already has this notice
+    r = S.update([al("LSEG", "Revisit trigger crossed", "INFO")], {"LSEG"}, p, "2026-10-16T10:09:00Z",
+                 levels_as_of="2026-10-09")
+    assert r["new"] == [] and r["pending"] == [] and keys(r["repeats"]) == [k]
+    assert r["repeats"][0]["repeat_of"] == T1
+    # a higher severity is always sent
+    S.update([], {"LSEG"}, p, "2026-10-16T11:00:00Z", levels_as_of="2026-10-09")
+    r = S.update([al("LSEG", "Revisit trigger crossed", "WARN")], {"LSEG"}, p, "2026-10-16T12:00:00Z",
+                 levels_as_of="2026-10-09")
+    assert keys(r["new"]) == [k]
+
+
+def test_repeat_scope_is_new_levels_for_level_rules_and_a_new_day_for_moves(tmp_path):
+    p = tmp_path / "state.json"
+    S.mark_delivered(keys(S.update([al("JPM", "Revisit trigger crossed", "INFO"), al("XOM", "Large daily move", "WARN")],
+                                   {"JPM", "XOM"}, p, T1, levels_as_of="2026-10-09")["new"]), p)
+    S.update([], {"JPM", "XOM"}, p, T2, levels_as_of="2026-10-09")
+    # same day: the move repeat is quiet; next week's levels: the level rule is a fresh notice
+    r = S.update([al("XOM", "Large daily move", "WARN")], {"XOM"}, p, T3, levels_as_of="2026-10-09")
+    assert keys(r["repeats"]) == ["XOM|Large daily move"]
+    r = S.update([al("JPM", "Revisit trigger crossed", "INFO")], {"JPM"}, p, T4, levels_as_of="2026-10-16")
+    assert keys(r["new"]) == ["JPM|Revisit trigger crossed"]
+    S.update([], {"XOM"}, p, T4)
+    r = S.update([al("XOM", "Large daily move", "WARN")], {"XOM"}, p, "2026-10-13T10:00:00Z")
+    assert keys(r["new"]) == ["XOM|Large daily move"]                   # a new day is a new move
+
+
+def test_levels_stale():
+    assert S.levels_stale("2026-10-09", "2026-10-16T14:00:00Z") is None        # the desk week itself
+    assert S.levels_stale("2026-10-09", "2026-10-18T14:00:00Z") is None        # 9 days: refresh may still land
+    w = S.levels_stale("2026-10-09", "2026-10-19T07:00:00Z")                   # Monday, no refresh
+    assert w["severity"] == "WARN" and w["symbol"] == S.HEARTBEAT_SYMBOL and "10 days old" in w["evidence"]
+    assert S.levels_stale(None, "2026-10-19T07:00:00Z") is None

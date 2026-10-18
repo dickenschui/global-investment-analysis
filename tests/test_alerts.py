@@ -55,7 +55,7 @@ def test_cli_alerts_end_to_end(tmp_path, capsys):
     pf.write_text(json.dumps(pulse([{"symbol": acc["symbol"], "last": acc["stop"] * 0.9, "prior_close": acc["last"]}])))
     assert main(["alerts", "--pulse", str(pf), "--reports", str(rep), "--state-dir", str(tmp_path / "s")]) == 0
     out = capsys.readouterr().out
-    assert "Exit level breached" in out and "No live quote for" in out
+    assert "Exit level breached" in out and "No usable vendor quote" in out
     assert main(["alerts", "--pulse", str(pf), "--reports", str(rep), "--state-dir", str(tmp_path / "s")]) == 0
     assert "No new or escalated exceptions" in capsys.readouterr().out
 
@@ -147,3 +147,59 @@ def test_heartbeat_only_judged_when_a_scheduled_run_was_missed():
     assert not missed("2026-10-09T21:07:00Z", "2026-10-12T01:07:00Z")    # Friday to Monday: weekend
     assert missed("2026-10-12T21:07:00Z", "2026-10-14T09:07:00Z")        # all of Tuesday missing
     assert not missed(None, "2026-10-12T12:00:00Z")
+
+
+def test_alerts_carry_the_numbers_needed_to_score_them():
+    p = pulse([{"symbol": "XOM", "last": 140, "prior_close": 160}, {"symbol": "JPM", "last": 325, "prior_close": 324}])
+    got = {(a["symbol"], a["rule"]): a for a in A.evaluate(p, DEC, MON, OPT)}
+    assert {k: got[("XOM", "Exit level breached")][k] for k in ("observed", "reference", "kind")} == \
+        {"observed": 140, "reference": 146.0, "kind": "below"}
+    assert got[("JPM", "Revisit trigger crossed")]["kind"] == "above"
+    assert got[("XOM", "Extreme daily move")]["reference"] == 160 and got[("XOM", "Extreme daily move")]["kind"] == "move"
+    assert got[("XOM", "Option idea moving against")]["reference"] == 168.0 * 0.95
+
+
+def test_alert_text_consolidates_and_labels_provenance():
+    ctx = {"title": "Fed statement", "link": "https://x/1", "published": "2026-10-12T13:05:00+00:00", "source": "fed_press"}
+    a = [{"symbol": "XOM", "rule": "Exit level breached", "severity": "URGENT", "evidence": "below exit", "action": "act",
+          "context": [ctx]},
+         {"symbol": "XOM", "rule": "Extreme daily move", "severity": "URGENT", "evidence": "-12%", "action": "check",
+          "context": [ctx]},
+         {"symbol": "JPM", "rule": "Revisit trigger crossed", "severity": "INFO", "evidence": "J", "action": "confirm"},
+         {"symbol": "LSEG", "rule": "Revisit trigger crossed", "severity": "INFO", "evidence": "L", "action": "confirm"},
+         {"symbol": "MONITOR", "rule": "Monitor heartbeat gap", "severity": "WARN", "evidence": "gap", "action": "look"}]
+    t = A.alert_text(a, "2026-10-12T16:00:00Z", not_live=["2800", "ES3"], no_quote=["BARC"])
+    assert t.count("<b>XOM</b>") == 1 and t.count("📰 Unverified headline:") == 1   # one block, headline once
+    assert t.count("→ confirm") == 1                                                # shared INFO action once
+    assert t.index("<b>Act now</b>") < t.index("<b>For the weekly close</b>") < t.index("<b>Monitor health</b>")
+    assert "No usable vendor quote: BARC" in t and "2 watched lines not live" in t and "2800" not in t
+    assert "unconfirmed until the official close" in t
+
+
+def test_cli_alerts_record_pushes_quote_gaps_and_repeats(tmp_path, capsys, monkeypatch):
+    from global_investment_research import notify
+    rep = tmp_path / "rep"
+    assert main(["demo", "--out", str(rep)]) == 0
+    dec = json.loads((rep / "decisions.json").read_text())
+    acc, watch = dec["calls"][0], next(c for c in dec["calls"] if c["stance"] == "Watch")
+    acc.update(stance="Accumulate", stop=100.0, last=110.0)
+    watch.update(trigger=50.0)
+    (rep / "decisions.json").write_text(json.dumps(dec))
+    sent = []
+    monkeypatch.setattr(notify, "send_telegram", sent.append)
+    pf = tmp_path / "pulse.json"
+    args = ["alerts", "--pulse", str(pf), "--reports", str(rep), "--state-dir", str(tmp_path / "s"), "--telegram"]
+
+    def run(quotes, at):
+        pf.write_text(json.dumps({"retrieved_at_utc": at, "quotes": quotes, "missing": [], "missing_reasons": {}}))
+        assert main(args) == 0
+        return json.loads(sorted((rep / "alerts").glob("alerts-*.json"))[-1].read_text())
+    info = {"symbol": watch["symbol"], "last": 55.0, "prior_close": 55.0}
+    r = run([info], "2026-10-12T09:07:00Z")                     # INFO only: logged, not pushed
+    assert r["pushed"] == [] and sent == [] and r["news_fetched"] is False
+    assert acc["symbol"] in r["no_quote"] and r["retrieved_at_utc"] == "2026-10-12T09:07:00Z"
+    r = run([{**info, "last": 45.0, "prior_close": 45.0}], "2026-10-12T09:27:00Z")  # cleared
+    r = run([info], "2026-10-12T09:47:00Z")                     # crosses again in the same desk week
+    assert r["sent"] == [] and [x["key"] for x in r["repeats"]] == [f"{watch['symbol']}|Revisit trigger crossed"]
+    r = run([{"symbol": acc["symbol"], "last": 90.0, "prior_close": 110.0}], "2026-10-12T10:07:00Z")
+    assert f"{acc['symbol']}|Exit level breached" in r["pushed"] and len(sent) == 1
