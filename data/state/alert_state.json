@@ -18,30 +18,38 @@
   "SSE|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-10-16T14:57:21Z",
+   "last_seen": "2026-10-19T12:59:45Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "SSE",
     "rule": "Revisit trigger crossed",
-    "evidence": "SSE 25.76 above revisit level 24.73",
-    "action": "Opportunity: confirm on the weekly close before upgrading."
-   }
+    "evidence": "SSE 25.29 above revisit level 24.73",
+    "action": "Opportunity: confirm on the weekly close before upgrading.",
+    "observed": 25.29,
+    "reference": 24.726499999999998,
+    "kind": "above"
+   },
+   "levels_as_of": "2026-10-09"
   },
   "ISF|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-15T11:19:57Z",
-   "last_seen": "2026-10-16T14:57:21Z",
+   "last_seen": "2026-10-19T12:59:45Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "ISF",
     "rule": "Revisit trigger crossed",
-    "evidence": "ISF 10.58 above revisit level 10.46",
-    "action": "Opportunity: confirm on the weekly close before upgrading."
-   }
+    "evidence": "ISF 10.46 above revisit level 10.46",
+    "action": "Opportunity: confirm on the weekly close before upgrading.",
+    "observed": 10.464,
+    "reference": 10.4624,
+    "kind": "above"
+   },
+   "levels_as_of": "2026-10-09"
   },
   "000333|Revisit trigger crossed": {
    "severity": "INFO",
@@ -78,30 +86,20 @@
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-16T10:09:50Z",
-   "last_seen": "2026-10-16T14:57:21Z",
+   "last_seen": "2026-10-19T12:59:45Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 87.60 above revisit level 87.24",
-    "action": "Opportunity: confirm on the weekly close before upgrading."
-   }
-  },
-  "VIX|Volatility spike": {
-   "severity": "WARN",
-   "first_seen": "2026-10-16T18:46:11Z",
-   "last_seen": "2026-10-16T18:46:11Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "VIX",
-    "rule": "Volatility spike",
-    "evidence": "VIX 21.5, +31% on the day",
-    "action": "Tighten: no new risk until the close."
-   }
+    "evidence": "LSEG 87.58 above revisit level 87.24",
+    "action": "Opportunity: confirm on the weekly close before upgrading.",
+    "observed": 87.58,
+    "reference": 87.236,
+    "kind": "above"
+   },
+   "levels_as_of": "2026-10-09"
   },
   "000333|Large daily move": {
    "severity": "WARN",
@@ -124,14 +122,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-19T06:04:02Z",
-   "last_seen": "2026-10-19T06:04:02Z",
+   "last_seen": "2026-10-19T12:59:45Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-18T15:31:33Z; this check 2026-10-19T06:04:02Z; gap 14.5 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-19T06:04:02Z; this check 2026-10-19T12:59:45Z; gap 6.9 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -139,7 +137,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-19T06:04:02Z",
-   "last_seen": "2026-10-19T06:04:02Z",
+   "last_seen": "2026-10-19T12:59:45Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -152,12 +150,18 @@
    "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-19T06:04:02Z",
+ "last_run_utc": "2026-10-19T12:59:45Z",
  "recent": {
   "U11|Revisit trigger crossed": {
    "cleared_at": "2026-10-19T06:04:02Z",
    "first_seen": "2026-10-16T05:46:33Z",
    "notified_severity": "INFO",
+   "levels_as_of": null
+  },
+  "VIX|Volatility spike": {
+   "cleared_at": "2026-10-19T12:59:45Z",
+   "first_seen": "2026-10-16T18:46:11Z",
+   "notified_severity": "WARN",
    "levels_as_of": null
   }
  }
