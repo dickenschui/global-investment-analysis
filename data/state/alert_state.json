@@ -94,14 +94,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-20T05:56:33Z",
-   "last_seen": "2026-10-20T11:25:47Z",
+   "last_seen": "2026-10-20T15:44:45Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-20T05:56:33Z; this check 2026-10-20T11:25:47Z; gap 5.5 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-20T11:25:47Z; this check 2026-10-20T15:44:45Z; gap 4.3 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -109,7 +109,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-20T05:56:33Z",
-   "last_seen": "2026-10-20T11:25:47Z",
+   "last_seen": "2026-10-20T15:44:45Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -122,7 +122,7 @@
    "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-20T11:25:47Z",
+ "last_run_utc": "2026-10-20T15:44:45Z",
  "recent": {
   "U11|Revisit trigger crossed": {
    "cleared_at": "2026-10-19T06:04:02Z",
