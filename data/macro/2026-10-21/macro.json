@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "retrieved_at": "2026-10-21T14:27:36Z",
+ "retrieved_at": "2026-10-21T18:16:03Z",
  "series": {
   "DGS3MO": {
    "id": "DGS3MO",
@@ -3161,7 +3161,9 @@
     "value": 4.27
    },
    "sha256": "8759a8a4e8e43824808cf34e336f737f46a087e701697393e6b04a3274ee08c0",
-   "bytes": 12448
+   "bytes": 12448,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['DGS3MO'] not in header ['<!doctype html>']"
   },
   "DGS2": {
    "id": "DGS2",
@@ -6322,7 +6324,9 @@
     "value": 4.77
    },
    "sha256": "51799e0b3fd26a9ea734210e5a1db8d87bd62e591719dea91bd11270f2ba8f80",
-   "bytes": 12446
+   "bytes": 12446,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['DGS2'] not in header ['<!doctype html>']"
   },
   "DGS10": {
    "id": "DGS10",
@@ -9483,7 +9487,9 @@
     "value": 5.15
    },
    "sha256": "2158f4f05af8d44127690e659df65f5e5544bca075ed308f54c540d4bd00a771",
-   "bytes": 12447
+   "bytes": 12447,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['DGS10'] not in header ['<!doctype html>']"
   },
   "T10Y3M": {
    "id": "T10Y3M",
@@ -12648,7 +12654,9 @@
     "value": 0.86
    },
    "sha256": "a7e94e96edf8dfd3765dc87ae6cb4a7a82a60c6b7e9b90d6f5353bc143652a2d",
-   "bytes": 12840
+   "bytes": 12840,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['T10Y3M'] not in header ['<!doctype html>']"
   },
   "T10Y2Y": {
    "id": "T10Y2Y",
@@ -15813,7 +15821,9 @@
     "value": 0.33
    },
    "sha256": "78c56614afd09a5cf1ff30b6b398250ad339d3549c3d9ec066d815aa408e14cb",
-   "bytes": 12682
+   "bytes": 12682,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['T10Y2Y'] not in header ['<!doctype html>']"
   },
   "BAMLH0A0HYM2": {
    "id": "BAMLH0A0HYM2",
@@ -19006,7 +19016,9 @@
     "value": 3.33
    },
    "sha256": "8ed9fcaccb64105cc118ac032f48b4d1761534450fc81941076087e19419e4fe",
-   "bytes": 12686
+   "bytes": 12686,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['BAMLH0A0HYM2'] not in header ['<!doctype html>']"
   },
   "CPIAUCSL": {
    "id": "CPIAUCSL",
@@ -19171,7 +19183,9 @@
     "value": 336.298
    },
    "sha256": "43883235801785db434418e4235862bb8a704492fd0ada6432e48da455132ea3",
-   "bytes": 703
+   "bytes": 703,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['CPIAUCSL'] not in header ['<!doctype html>']"
   },
   "UNRATE": {
    "id": "UNRATE",
@@ -19336,7 +19350,9 @@
     "value": 4.2
    },
    "sha256": "9ec697982f17f190c80b9ecb10255a90073fe283d1676c4012e25f3a2142badb",
-   "bytes": 561
+   "bytes": 561,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['UNRATE'] not in header ['<!doctype html>']"
   },
   "ICSA": {
    "id": "ICSA",
@@ -19981,7 +19997,9 @@
     "value": 199000.0
    },
    "sha256": "e3c5c9d62ee3c30523d50a6e845759dc854b4f16756e9abaac1bf54f3473cee2",
-   "bytes": 2830
+   "bytes": 2830,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['ICSA'] not in header ['<!doctype html>']"
   },
   "NFCI": {
    "id": "NFCI",
@@ -20630,7 +20648,9 @@
     "value": -0.496
    },
    "sha256": "970e12a8812546823bde1c35e74f4cff5baa242db7e636255456e2bdd3f6da70",
-   "bytes": 2848
+   "bytes": 2848,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['NFCI'] not in header ['<!doctype html>']"
   },
   "DTWEXBGS": {
    "id": "DTWEXBGS",
@@ -23787,7 +23807,9 @@
     "value": 121.4048
    },
    "sha256": "23c58184a280ec2e85e196d8614e571926a47e7e6c295243f747f7d1c9fc852c",
-   "bytes": 15442
+   "bytes": 15442,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['DTWEXBGS'] not in header ['<!doctype html>']"
   },
   "DCOILBRENTEU": {
    "id": "DCOILBRENTEU",
@@ -26936,7 +26958,9 @@
     "value": 126.55
    },
    "sha256": "7862ea1ce9008a7a56e99ef8b10321e1f6742e1428e98e0ac1823884919175fd",
-   "bytes": 13286
+   "bytes": 13286,
+   "carried_forward": true,
+   "last_error": "parse failed: ValueError: expected column(s) ['DCOILBRENTEU'] not in header ['<!doctype html>']"
   },
   "ECB_GBP_EUR": {
    "id": "ECB_GBP_EUR",
@@ -26952,7 +26976,7 @@
    "purpose": "GBP purchasing power; base currency of the investor",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.GBP.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-21T14:27:43Z",
+   "retrieved_at": "2026-10-21T18:16:10Z",
    "status": "ok",
    "observations": [
     {
@@ -28977,7 +29001,7 @@
    "purpose": "EUR/USD cross for USD exposure and GBP/USD derivation",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-21T14:27:45Z",
+   "retrieved_at": "2026-10-21T18:16:11Z",
    "status": "ok",
    "observations": [
     {
@@ -31002,7 +31026,7 @@
    "purpose": "Singapore dollar for the SG income sleeve",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.SGD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-21T14:27:46Z",
+   "retrieved_at": "2026-10-21T18:16:13Z",
    "status": "ok",
    "observations": [
     {
@@ -33027,7 +33051,7 @@
    "purpose": "Hong Kong dollar (pegged to USD) for HK holdings",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HKD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-21T14:27:47Z",
+   "retrieved_at": "2026-10-21T18:16:14Z",
    "status": "ok",
    "observations": [
     {
@@ -35052,7 +35076,7 @@
    "purpose": "Chinese renminbi for China holdings",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CNY.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-10-21T14:27:48Z",
+   "retrieved_at": "2026-10-21T18:16:15Z",
    "status": "ok",
    "observations": [
     {
@@ -37073,7 +37097,7 @@
    "purpose": "UK Bank Rate (official policy rate)",
    "verified": true,
    "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=17/Oct/2023&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-10-21T14:27:49Z",
+   "retrieved_at": "2026-10-21T18:16:16Z",
    "status": "ok",
    "observations": [
     {
@@ -40142,7 +40166,7 @@
    "purpose": "UK 10-year nominal zero-coupon gilt yield (BoE yield-curve estimate); UK discount rate",
    "verified": true,
    "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=17/Oct/2023&Dateto=now&SeriesCodes=IUDMNZC&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-10-21T14:27:50Z",
+   "retrieved_at": "2026-10-21T18:16:16Z",
    "status": "ok",
    "observations": [
     {
@@ -43208,7 +43232,7 @@
    "purpose": "UK CPIH annual rate (CPI including owner-occupiers' housing costs); headline UK inflation measure",
    "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23/data",
-   "retrieved_at": "2026-10-21T14:27:50Z",
+   "retrieved_at": "2026-10-21T18:16:17Z",
    "status": "ok",
    "observations": [
     {
@@ -45042,7 +45066,7 @@
    "purpose": "UK CPI annual rate (the Bank of England's 2% target measure); cross-check for CPIH",
    "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data",
-   "retrieved_at": "2026-10-21T14:27:51Z",
+   "retrieved_at": "2026-10-21T18:16:17Z",
    "status": "ok",
    "observations": [
     {
@@ -46876,7 +46900,7 @@
    "purpose": "Primary-source 3-month Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-21T14:28:07Z",
+   "retrieved_at": "2026-10-21T18:16:35Z",
    "status": "ok",
    "observations": [
     {
@@ -47702,7 +47726,7 @@
    "purpose": "Primary-source 2-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-21T14:28:07Z",
+   "retrieved_at": "2026-10-21T18:16:35Z",
    "status": "ok",
    "observations": [
     {
@@ -48528,7 +48552,7 @@
    "purpose": "Primary-source 10-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-21T14:28:07Z",
+   "retrieved_at": "2026-10-21T18:16:35Z",
    "status": "ok",
    "observations": [
     {
@@ -49354,7 +49378,7 @@
    "purpose": "Primary-source 30-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-10-21T14:28:07Z",
+   "retrieved_at": "2026-10-21T18:16:35Z",
    "status": "ok",
    "observations": [
     {
@@ -50181,7 +50205,7 @@
    "purpose": "Singapore real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/SG/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-21T14:28:07Z",
+   "retrieved_at": "2026-10-21T18:16:35Z",
    "status": "ok",
    "observations": [
     {
@@ -50468,7 +50492,7 @@
    "purpose": "Hong Kong SAR, China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/HK/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-21T14:28:08Z",
+   "retrieved_at": "2026-10-21T18:16:36Z",
    "status": "ok",
    "observations": [
     {
@@ -50755,7 +50779,7 @@
    "purpose": "China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/CN/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-21T14:28:08Z",
+   "retrieved_at": "2026-10-21T18:16:36Z",
    "status": "ok",
    "observations": [
     {
@@ -51042,7 +51066,7 @@
    "purpose": "United Kingdom real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/GB/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-21T14:28:38Z",
+   "retrieved_at": "2026-10-21T18:16:36Z",
    "status": "ok",
    "observations": [
     {
@@ -51329,7 +51353,7 @@
    "purpose": "United States real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/US/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-10-21T14:28:39Z",
+   "retrieved_at": "2026-10-21T18:16:36Z",
    "status": "ok",
    "observations": [
     {
@@ -51630,8 +51654,57 @@
   "configured": 30,
   "ok": 30,
   "failed": 0,
-  "carried_forward": 0
+  "carried_forward": 12
  },
  "note": "Current/revised official data, not first-release vintages. Missing values are None, never filled.",
- "carried_forward": []
+ "carried_forward": [
+  {
+   "id": "DGS3MO",
+   "error": "parse failed: ValueError: expected column(s) ['DGS3MO'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "DGS2",
+   "error": "parse failed: ValueError: expected column(s) ['DGS2'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "DGS10",
+   "error": "parse failed: ValueError: expected column(s) ['DGS10'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "T10Y3M",
+   "error": "parse failed: ValueError: expected column(s) ['T10Y3M'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "T10Y2Y",
+   "error": "parse failed: ValueError: expected column(s) ['T10Y2Y'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "BAMLH0A0HYM2",
+   "error": "parse failed: ValueError: expected column(s) ['BAMLH0A0HYM2'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "CPIAUCSL",
+   "error": "parse failed: ValueError: expected column(s) ['CPIAUCSL'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "UNRATE",
+   "error": "parse failed: ValueError: expected column(s) ['UNRATE'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "ICSA",
+   "error": "parse failed: ValueError: expected column(s) ['ICSA'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "NFCI",
+   "error": "parse failed: ValueError: expected column(s) ['NFCI'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "DTWEXBGS",
+   "error": "parse failed: ValueError: expected column(s) ['DTWEXBGS'] not in header ['<!doctype html>']"
+  },
+  {
+   "id": "DCOILBRENTEU",
+   "error": "parse failed: ValueError: expected column(s) ['DCOILBRENTEU'] not in header ['<!doctype html>']"
+  }
+ ]
 }
