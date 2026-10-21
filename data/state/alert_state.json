@@ -40,14 +40,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-21T05:57:10Z",
-   "last_seen": "2026-10-21T16:08:10Z",
+   "last_seen": "2026-10-21T20:16:14Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-21T11:39:53Z; this check 2026-10-21T16:08:10Z; gap 4.5 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-21T16:08:10Z; this check 2026-10-21T20:16:14Z; gap 4.1 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -55,7 +55,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-21T05:57:10Z",
-   "last_seen": "2026-10-21T16:08:10Z",
+   "last_seen": "2026-10-21T20:16:14Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -104,7 +104,7 @@
    "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-21T16:08:10Z",
+ "last_run_utc": "2026-10-21T20:16:14Z",
  "recent": {
   "VIX|Volatility spike": {
    "cleared_at": "2026-10-19T12:59:45Z",
