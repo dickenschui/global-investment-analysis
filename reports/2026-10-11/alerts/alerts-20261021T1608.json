@@ -1,0 +1,117 @@
+{
+ "retrieved_at_utc": "2026-10-21T16:08:10Z",
+ "levels_as_of": "2026-10-09",
+ "all": [
+  {
+   "severity": "WARN",
+   "symbol": "GOOGL",
+   "rule": "Option idea moving against",
+   "evidence": "GOOGL 332.96 vs 351.60 when the Bull call spread was priced",
+   "action": "Handbook \u00a79: check the \u221250% premium stop on any open Bull call spread.",
+   "observed": 332.96,
+   "reference": 334.02,
+   "kind": "below"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-21T11:39:53Z; this check 2026-10-21T16:08:10Z; gap 4.5 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Weekly levels stale",
+   "evidence": "Levels as of 2026-10-09 are 12 days old (limit 9)",
+   "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "WARN",
+   "symbol": "GOOGL",
+   "rule": "Option idea moving against",
+   "evidence": "GOOGL 332.96 vs 351.60 when the Bull call spread was priced",
+   "action": "Handbook \u00a79: check the \u221250% premium stop on any open Bull call spread.",
+   "observed": 332.96,
+   "reference": 334.02,
+   "kind": "below",
+   "key": "GOOGL|Option idea moving against",
+   "first_seen": "2026-10-21T16:08:10Z",
+   "last_seen": "2026-10-21T16:08:10Z"
+  }
+ ],
+ "repeats": [],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "not_live": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "no_quote": [],
+ "no_quote_reasons": {},
+ "news_fetched": true,
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError 403: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance",
+ "pushed": [
+  "GOOGL|Option idea moving against"
+ ]
+}
