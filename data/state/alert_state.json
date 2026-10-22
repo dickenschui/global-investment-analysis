@@ -22,16 +22,16 @@
   "000333|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-16T05:46:33Z",
-   "last_seen": "2026-10-21T05:57:10Z",
+   "last_seen": "2026-10-22T06:02:14Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "000333",
     "rule": "Revisit trigger crossed",
-    "evidence": "000333 84.32 above revisit level 84.05",
+    "evidence": "000333 84.37 above revisit level 84.05",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 84.32,
+    "observed": 84.37,
     "reference": 84.05000000000001,
     "kind": "above"
    },
@@ -39,15 +39,15 @@
   },
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
-   "first_seen": "2026-10-21T05:57:10Z",
-   "last_seen": "2026-10-21T23:29:23Z",
+   "first_seen": "2026-10-22T06:02:14Z",
+   "last_seen": "2026-10-22T06:02:14Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Weekly levels stale",
-    "evidence": "Levels as of 2026-10-09 are 12 days old (limit 9)",
+    "evidence": "Levels as of 2026-10-09 are 13 days old (limit 9)",
     "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
    },
    "levels_as_of": "2026-10-09"
@@ -55,16 +55,16 @@
   "U11|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-21T05:57:10Z",
-   "last_seen": "2026-10-21T05:57:10Z",
+   "last_seen": "2026-10-22T06:02:14Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "U11",
     "rule": "Revisit trigger crossed",
-    "evidence": "U11 42.06 above revisit level 41.71",
+    "evidence": "U11 41.85 above revisit level 41.71",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 42.06,
+    "observed": 41.85,
     "reference": 41.709999999999994,
     "kind": "above"
    },
@@ -87,9 +87,42 @@
     "kind": "below"
    },
    "levels_as_of": "2026-10-09"
+  },
+  "2800|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-10-22T06:02:14Z",
+   "last_seen": "2026-10-22T06:02:14Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "2800",
+    "rule": "Large daily move",
+    "evidence": "2800 -3.1% vs prior close (-3.1 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 23.58,
+    "reference": 24.34,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "MONITOR|Monitor heartbeat gap": {
+   "severity": "WARN",
+   "first_seen": "2026-10-22T06:02:14Z",
+   "last_seen": "2026-10-22T06:02:14Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "MONITOR",
+    "rule": "Monitor heartbeat gap",
+    "evidence": "Previous check 2026-10-21T23:29:23Z; this check 2026-10-22T06:02:14Z; gap 6.5 hours (limit 2.5)",
+    "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+   },
+   "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-21T23:29:23Z",
+ "last_run_utc": "2026-10-22T06:02:14Z",
  "recent": {
   "VIX|Volatility spike": {
    "cleared_at": "2026-10-19T12:59:45Z",
@@ -125,12 +158,6 @@
    "cleared_at": "2026-10-21T11:39:53Z",
    "first_seen": "2026-10-16T10:09:50Z",
    "notified_severity": "INFO",
-   "levels_as_of": "2026-10-09"
-  },
-  "MONITOR|Monitor heartbeat gap": {
-   "cleared_at": "2026-10-21T23:29:23Z",
-   "first_seen": "2026-10-21T05:57:10Z",
-   "notified_severity": "WARN",
    "levels_as_of": "2026-10-09"
   }
  }
