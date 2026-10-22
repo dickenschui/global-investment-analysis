@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-22T06:02:14Z",
-   "last_seen": "2026-10-22T16:03:53Z",
+   "last_seen": "2026-10-22T20:01:18Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -109,14 +109,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-22T06:02:14Z",
-   "last_seen": "2026-10-22T16:03:53Z",
+   "last_seen": "2026-10-22T20:01:18Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-22T11:41:12Z; this check 2026-10-22T16:03:53Z; gap 4.4 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-22T16:03:53Z; this check 2026-10-22T20:01:18Z; gap 4.0 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -135,24 +135,6 @@
     "action": "Review position and options on this underlying.",
     "observed": 93.24,
     "reference": 87.9,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "USD.HKD|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-10-22T11:41:12Z",
-   "last_seen": "2026-10-22T16:03:53Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "USD.HKD",
-    "rule": "Large daily move",
-    "evidence": "USD.HKD -0.1% vs prior close (-4.0 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 7.83657,
-    "reference": 7.8465,
     "kind": "move"
    },
    "levels_as_of": "2026-10-09"
@@ -247,9 +229,27 @@
     "kind": "above"
    },
    "levels_as_of": "2026-10-09"
+  },
+  "USD.HKD|Extreme daily move": {
+   "severity": "URGENT",
+   "first_seen": "2026-10-22T20:01:18Z",
+   "last_seen": "2026-10-22T20:01:18Z",
+   "notified_severity": "URGENT",
+   "delivered": true,
+   "alert": {
+    "severity": "URGENT",
+    "symbol": "USD.HKD",
+    "rule": "Extreme daily move",
+    "evidence": "USD.HKD -0.1% vs prior close (-4.2 standard deviations)",
+    "action": "Check news before acting; re-run the Decision Desk for this name.",
+    "observed": 7.8361,
+    "reference": 7.8465,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-22T16:03:53Z",
+ "last_run_utc": "2026-10-22T20:01:18Z",
  "recent": {
   "VIX|Volatility spike": {
    "cleared_at": "2026-10-19T12:59:45Z",
@@ -279,6 +279,12 @@
    "cleared_at": "2026-10-21T05:57:10Z",
    "first_seen": "2026-10-16T05:46:33Z",
    "notified_severity": "INFO",
+   "levels_as_of": "2026-10-09"
+  },
+  "USD.HKD|Large daily move": {
+   "cleared_at": "2026-10-22T20:01:18Z",
+   "first_seen": "2026-10-22T11:41:12Z",
+   "notified_severity": "WARN",
    "levels_as_of": "2026-10-09"
   }
  }
