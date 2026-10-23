@@ -78,6 +78,12 @@
    "recipients": 1,
    "sent_at": "2026-10-22T20:01:36Z",
    "subject": "URGENT: Market exceptions 2026-10-22 20:01Z (1)"
+  },
+  "2026-10-23|Market exceptions 2026-10-23 05:58Z (2)": {
+   "day": "2026-10-23",
+   "recipients": 1,
+   "sent_at": "2026-10-23T05:59:05Z",
+   "subject": "Market exceptions 2026-10-23 05:58Z (2)"
   }
  }
 }
