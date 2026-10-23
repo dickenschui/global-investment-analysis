@@ -4,16 +4,16 @@
   "SSE|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-10-22T11:41:12Z",
+   "last_seen": "2026-10-23T11:30:39Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "SSE",
     "rule": "Revisit trigger crossed",
-    "evidence": "SSE 25.46 above revisit level 24.73",
+    "evidence": "SSE 25.36 above revisit level 24.73",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 25.45599,
+    "observed": 25.36,
     "reference": 24.726499999999998,
     "kind": "above"
    },
@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-23T05:58:40Z",
-   "last_seen": "2026-10-23T05:58:40Z",
+   "last_seen": "2026-10-23T11:30:39Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -73,49 +73,31 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-23T05:58:40Z",
-   "last_seen": "2026-10-23T05:58:40Z",
+   "last_seen": "2026-10-23T11:30:39Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-22T23:16:32Z; this check 2026-10-23T05:58:40Z; gap 6.7 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-23T05:58:40Z; this check 2026-10-23T11:30:39Z; gap 5.5 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "LSEG|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-10-22T11:41:12Z",
-   "last_seen": "2026-10-22T11:41:12Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "LSEG",
-    "rule": "Large daily move",
-    "evidence": "LSEG +6.1% vs prior close (+2.8 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 93.24,
-    "reference": 87.9,
-    "kind": "move"
    },
    "levels_as_of": "2026-10-09"
   },
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-22T11:41:12Z",
-   "last_seen": "2026-10-22T11:41:12Z",
+   "last_seen": "2026-10-23T11:30:39Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 93.24 above revisit level 87.24",
+    "evidence": "LSEG 94.54 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 93.24,
+    "observed": 94.54,
     "reference": 87.236,
     "kind": "above"
    },
@@ -212,9 +194,45 @@
    },
    "levels_as_of": "2026-10-09",
    "repeat_of": "2026-10-16T05:46:33Z"
+  },
+  "RR.|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-10-23T11:30:39Z",
+   "last_seen": "2026-10-23T11:30:39Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "RR.",
+    "rule": "Large daily move",
+    "evidence": "RR. -6.1% vs prior close (-2.8 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 11.824000000000002,
+    "reference": 12.595999999999998,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "USD.HKD|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-10-23T11:30:39Z",
+   "last_seen": "2026-10-23T11:30:39Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "USD.HKD",
+    "rule": "Large daily move",
+    "evidence": "USD.HKD +0.1% vs prior close (+3.1 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 7.8432,
+    "reference": 7.8355,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-23T05:58:40Z",
+ "last_run_utc": "2026-10-23T11:30:39Z",
  "recent": {
   "VIX|Volatility spike": {
    "cleared_at": "2026-10-19T12:59:45Z",
@@ -240,12 +258,6 @@
    "notified_severity": "INFO",
    "levels_as_of": "2026-10-09"
   },
-  "USD.HKD|Large daily move": {
-   "cleared_at": "2026-10-22T20:01:18Z",
-   "first_seen": "2026-10-22T11:41:12Z",
-   "notified_severity": "WARN",
-   "levels_as_of": "2026-10-09"
-  },
   "USD.HKD|Extreme daily move": {
    "cleared_at": "2026-10-22T23:16:32Z",
    "first_seen": "2026-10-22T20:01:18Z",
@@ -261,6 +273,12 @@
   "2800|Large daily move": {
    "cleared_at": "2026-10-23T05:58:40Z",
    "first_seen": "2026-10-22T06:02:14Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "LSEG|Large daily move": {
+   "cleared_at": "2026-10-23T11:30:39Z",
+   "first_seen": "2026-10-22T11:41:12Z",
    "notified_severity": "WARN",
    "levels_as_of": "2026-10-09"
   }
