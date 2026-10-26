@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-26T06:02:25Z",
-   "last_seen": "2026-10-26T19:12:05Z",
+   "last_seen": "2026-10-26T23:13:24Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -73,14 +73,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-26T06:02:25Z",
-   "last_seen": "2026-10-26T19:12:05Z",
+   "last_seen": "2026-10-26T23:13:24Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-26T12:49:27Z; this check 2026-10-26T19:12:05Z; gap 6.4 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-26T19:12:05Z; this check 2026-10-26T23:13:24Z; gap 4.0 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -198,7 +198,7 @@
    "repeat_of": "2026-10-23T15:56:27Z"
   }
  },
- "last_run_utc": "2026-10-26T19:12:05Z",
+ "last_run_utc": "2026-10-26T23:13:24Z",
  "recent": {
   "000333|Large daily move": {
    "cleared_at": "2026-10-20T05:56:33Z",
