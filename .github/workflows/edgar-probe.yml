@@ -18,11 +18,13 @@ jobs:
       - name: Fetch XOM diluted EPS facts from data.sec.gov
         env:
           # SEC asks for a descriptive User-Agent with a contact address.
-          UA: global-investment-analysis research (github.com/dickenschui/global-investment-analysis)
+          # SEC requires "name email"; this is the public GitHub no-reply address, not a private mailbox.
+          UA: global-investment-analysis dickenschui@users.noreply.github.com
         run: |
           url="https://data.sec.gov/api/xbrl/companyconcept/CIK0000034088/us-gaap/EarningsPerShareDiluted.json"
           code=$(curl -sS -m 30 -H "User-Agent: $UA" -H "Accept: application/json" -o facts.json -w "%{http_code}" "$url" || echo "curl failed")
           echo "HTTP status: $code"
+          [ "$code" = "200" ] || { echo "body:"; head -c 400 facts.json; echo; }
           python3 - <<'EOF'
           import json
           try:
