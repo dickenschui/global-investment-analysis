@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-10-29T06:58:23Z",
-   "last_seen": "2026-10-29T19:44:26Z",
+   "last_seen": "2026-10-29T23:38:47Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -73,14 +73,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-10-29T06:58:23Z",
-   "last_seen": "2026-10-29T19:44:26Z",
+   "last_seen": "2026-10-29T23:38:47Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-10-29T14:09:46Z; this check 2026-10-29T19:44:26Z; gap 5.6 hours (limit 2.5)",
+    "evidence": "Previous check 2026-10-29T19:44:26Z; this check 2026-10-29T23:38:47Z; gap 3.9 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -289,14 +289,8 @@
    "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-10-29T19:44:26Z",
+ "last_run_utc": "2026-10-29T23:38:47Z",
  "recent": {
-  "USD.HKD|Extreme daily move": {
-   "cleared_at": "2026-10-22T23:16:32Z",
-   "first_seen": "2026-10-22T20:01:18Z",
-   "notified_severity": "URGENT",
-   "levels_as_of": "2026-10-09"
-  },
   "U11|Revisit trigger crossed": {
    "cleared_at": "2026-10-23T05:58:40Z",
    "first_seen": "2026-10-21T05:57:10Z",
