@@ -1,0 +1,35 @@
+name: EDGAR probe
+
+# One-off reachability test: can GitHub Actions read filing-dated fundamentals from SEC EDGAR?
+# Read-only; writes nothing to the repository.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch XOM diluted EPS facts from data.sec.gov
+        env:
+          # SEC asks for a descriptive User-Agent with a contact address.
+          UA: global-investment-analysis research (github.com/dickenschui/global-investment-analysis)
+        run: |
+          url="https://data.sec.gov/api/xbrl/companyconcept/CIK0000034088/us-gaap/EarningsPerShareDiluted.json"
+          code=$(curl -sS -m 30 -H "User-Agent: $UA" -H "Accept: application/json" -o facts.json -w "%{http_code}" "$url" || echo "curl failed")
+          echo "HTTP status: $code"
+          python3 - <<'EOF'
+          import json
+          try:
+              d = json.load(open("facts.json"))
+          except Exception as e:
+              print("no usable JSON:", e); raise SystemExit(0)
+          rows = d["units"]["USD/shares"]
+          filed = sorted(r["filed"] for r in rows)
+          q = [r for r in rows if r.get("fp") in ("Q1", "Q2", "Q3") and r.get("form") == "10-Q"]
+          print("facts:", len(rows), "| filed from", filed[0], "to", filed[-1])
+          print("quarterly 10-Q facts:", len(q), "| earliest quarter end", min(r["end"] for r in q))
+          print("sample:", {k: q[-1][k] for k in ("end", "val", "fy", "fp", "form", "filed")})
+          EOF
