@@ -1,0 +1,177 @@
+{
+ "retrieved_at_utc": "2026-10-29T19:44:26Z",
+ "levels_as_of": "2026-10-09",
+ "all": [
+  {
+   "severity": "URGENT",
+   "symbol": "GOOGL",
+   "rule": "Exit level breached",
+   "evidence": "GOOGL 282.71 below exit 330.58 (Accumulate), intraday",
+   "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
+   "observed": 282.715,
+   "reference": 330.58036500000003,
+   "kind": "below"
+  },
+  {
+   "severity": "URGENT",
+   "symbol": "GOOGL",
+   "rule": "Extreme daily move",
+   "evidence": "GOOGL -13.0% vs prior close (-6.1 standard deviations)",
+   "action": "Check news before acting; re-run the Decision Desk for this name.",
+   "observed": 282.715,
+   "reference": 324.89,
+   "kind": "move"
+  },
+  {
+   "severity": "URGENT",
+   "symbol": "NOW",
+   "rule": "Exit level breached",
+   "evidence": "NOW 109.38 below exit 110.10 (Hold), intraday",
+   "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
+   "observed": 109.38,
+   "reference": 110.10154749999998,
+   "kind": "below"
+  },
+  {
+   "severity": "URGENT",
+   "symbol": "NOW",
+   "rule": "Extreme daily move",
+   "evidence": "NOW -27.1% vs prior close (-7.4 standard deviations)",
+   "action": "Check news before acting; re-run the Decision Desk for this name.",
+   "observed": 109.38,
+   "reference": 150.13,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "GOOGL",
+   "rule": "Option idea moving against",
+   "evidence": "GOOGL 282.71 vs 351.60 when the Bull call spread was priced",
+   "action": "Handbook \u00a79: check the \u221250% premium stop on any open Bull call spread.",
+   "observed": 282.715,
+   "reference": 334.02,
+   "kind": "below"
+  },
+  {
+   "severity": "INFO",
+   "symbol": "XLB",
+   "rule": "Revisit trigger crossed",
+   "evidence": "XLB 52.46 above revisit level 51.36",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "observed": 52.46,
+   "reference": 51.359,
+   "kind": "above"
+  },
+  {
+   "severity": "INFO",
+   "symbol": "XLF",
+   "rule": "Revisit trigger crossed",
+   "evidence": "XLF 56.91 above revisit level 56.56",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "observed": 56.9058,
+   "reference": 56.561,
+   "kind": "above"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-29T14:09:46Z; this check 2026-10-29T19:44:26Z; gap 5.6 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Weekly levels stale",
+   "evidence": "Levels as of 2026-10-09 are 20 days old (limit 9)",
+   "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "URGENT",
+   "symbol": "NOW",
+   "rule": "Exit level breached",
+   "evidence": "NOW 109.38 below exit 110.10 (Hold), intraday",
+   "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
+   "observed": 109.38,
+   "reference": 110.10154749999998,
+   "kind": "below",
+   "key": "NOW|Exit level breached",
+   "first_seen": "2026-10-29T19:44:26Z",
+   "last_seen": "2026-10-29T19:44:26Z"
+  }
+ ],
+ "repeats": [],
+ "cleared": [],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "not_live": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "no_quote": [],
+ "no_quote_reasons": {},
+ "news_fetched": true,
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError 403: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance",
+ "pushed": [
+  "NOW|Exit level breached"
+ ]
+}
