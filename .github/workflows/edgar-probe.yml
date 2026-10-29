@@ -4,6 +4,9 @@ name: EDGAR probe
 # Read-only; writes nothing to the repository.
 on:
   workflow_dispatch:
+  push:  # dispatch by name only works from the default branch; a push of this file runs it on any branch
+    paths:
+      - .github/workflows/edgar-probe.yml
 
 permissions:
   contents: read
