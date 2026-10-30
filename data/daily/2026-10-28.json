@@ -1,0 +1,498 @@
+{
+  "session_date": "2026-10-28",
+  "source": "IBKR get_price_history ONE_DAY, last two bars as returned",
+  "retrieved_at_utc": "2026-10-28T20:26:11Z",
+  "closes": {
+    "HYG": {
+      "close": 77.59,
+      "prior_close": 77.6,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "LQD": {
+      "close": 104.07,
+      "prior_close": 104.3,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "2800": {
+      "close": 23.78,
+      "prior_close": 23.7,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "700": {
+      "close": 387.6,
+      "prior_close": 385.2,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "9988": {
+      "close": 98.9,
+      "prior_close": 97,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "3690": {
+      "close": 71.2,
+      "prior_close": 71.86,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "1299": {
+      "close": 70.9,
+      "prior_close": 72.5,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "5": {
+      "close": 135.6,
+      "prior_close": 134.3,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "941": {
+      "close": 78.04,
+      "prior_close": 78.1,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "857": {
+      "close": 9.95,
+      "prior_close": 10.06,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "388": {
+      "close": 365,
+      "prior_close": 367.6,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "823": {
+      "close": 39.08,
+      "prior_close": 39.3,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "1211": {
+      "close": 70.46,
+      "prior_close": 70.04,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "3188": {
+      "close": 49.8,
+      "prior_close": 49.58,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "600519": {
+      "close": 1330.75,
+      "prior_close": 1355.9,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "601318": {
+      "close": 52.31,
+      "prior_close": 52.61,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "600036": {
+      "close": 42.13,
+      "prior_close": 42.99,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "300750": {
+      "close": 229.15,
+      "prior_close": 232.98,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "000333": {
+      "close": 85.91,
+      "prior_close": 85.04,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "600900": {
+      "close": 29.4,
+      "prior_close": 29.83,
+      "bar_time": "2026-10-28T01:30:00Z"
+    },
+    "ES3": {
+      "close": 5.46,
+      "prior_close": 5.471,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "D05": {
+      "close": 73.99,
+      "prior_close": 73.92,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "O39": {
+      "close": 29.03,
+      "prior_close": 28.96,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "U11": {
+      "close": 41.54,
+      "prior_close": 41.37,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "Z74": {
+      "close": 4.08,
+      "prior_close": 4.1,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "CJLU": {
+      "close": 0.93,
+      "prior_close": 0.94,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "A17U": {
+      "close": 2.18,
+      "prior_close": 2.2,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "J69U": {
+      "close": 2.12,
+      "prior_close": 2.14,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "ME8U": {
+      "close": 1.74,
+      "prior_close": 1.79,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "M44U": {
+      "close": 1.07,
+      "prior_close": 1.08,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "N2IU": {
+      "close": 1.14,
+      "prior_close": 1.15,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "C38U": {
+      "close": 2.26,
+      "prior_close": 2.27,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "C2PU": {
+      "close": 3.97,
+      "prior_close": 4.02,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "AJBU": {
+      "close": 2.08,
+      "prior_close": 2.1,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "S63": {
+      "close": 10.18,
+      "prior_close": 10.16,
+      "bar_time": "2026-10-28T01:00:00Z"
+    },
+    "ISF": {
+      "close": 10.414,
+      "prior_close": 10.408,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "REL": {
+      "close": 28.93,
+      "prior_close": 29.41,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "LSEG": {
+      "close": 91.52,
+      "prior_close": 92.18,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "BA.": {
+      "close": 20.29,
+      "prior_close": 20.37,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "RR.": {
+      "close": 12.578,
+      "prior_close": 12.488,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "BARC": {
+      "close": 4.293,
+      "prior_close": 4.2276,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "HSBA": {
+      "close": 12.926,
+      "prior_close": 12.85,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "LLOY": {
+      "close": 1.041,
+      "prior_close": 1.0234,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "AZN": {
+      "close": 127.92,
+      "prior_close": 128.32,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "GSK": {
+      "close": 18.224,
+      "prior_close": 19.19,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "SHEL": {
+      "close": 39.56,
+      "prior_close": 39.304,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "RIO": {
+      "close": 63.91,
+      "prior_close": 64.01,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "NG.": {
+      "close": 12.376,
+      "prior_close": 12.22,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "SSE": {
+      "close": 25.97,
+      "prior_close": 24.9,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "ULVR": {
+      "close": 47.966,
+      "prior_close": 48.934,
+      "bar_time": "2026-10-28T08:00:00Z"
+    },
+    "SPY": {
+      "close": 772.31,
+      "prior_close": 769.66,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "QQQ": {
+      "close": 725.61,
+      "prior_close": 721.25,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "SOXX": {
+      "close": 521.94,
+      "prior_close": 511.06,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "IGV": {
+      "close": 111.91,
+      "prior_close": 111.78,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "NVDA": {
+      "close": 215.38,
+      "prior_close": 217.94,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "MSFT": {
+      "close": 531.01,
+      "prior_close": 531.33,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "AVGO": {
+      "close": 351.81,
+      "prior_close": 342.33,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "ANET": {
+      "close": 186.72,
+      "prior_close": 187,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "NOW": {
+      "close": 150.13,
+      "prior_close": 154.78,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "GOOGL": {
+      "close": 324.89,
+      "prior_close": 320.58,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "META": {
+      "close": 612.49,
+      "prior_close": 620.19,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "AMZN": {
+      "close": 254.6,
+      "prior_close": 253.1,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "AAPL": {
+      "close": 343.83,
+      "prior_close": 347.1,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "CRWD": {
+      "close": 266.66,
+      "prior_close": 268.02,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "PANW": {
+      "close": 394.49,
+      "prior_close": 401.7,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "ORCL": {
+      "close": 144.54,
+      "prior_close": 130.53,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "JPM": {
+      "close": 339.3,
+      "prior_close": 335.79,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XOM": {
+      "close": 182.02,
+      "prior_close": 179.91,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLK": {
+      "close": 191,
+      "prior_close": 189.49,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLF": {
+      "close": 56.13,
+      "prior_close": 55.88,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLE": {
+      "close": 68.45,
+      "prior_close": 68.21,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLV": {
+      "close": 179.72,
+      "prior_close": 179.18,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLI": {
+      "close": 168.49,
+      "prior_close": 167.92,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLY": {
+      "close": 115.33,
+      "prior_close": 115.45,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLP": {
+      "close": 86.84,
+      "prior_close": 87.15,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLU": {
+      "close": 42.49,
+      "prior_close": 42.85,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLB": {
+      "close": 51.86,
+      "prior_close": 51.78,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLRE": {
+      "close": 42.13,
+      "prior_close": 42.44,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "XLC": {
+      "close": 103.14,
+      "prior_close": 103.58,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "GLD": {
+      "close": 373.51,
+      "prior_close": 372.28,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "SLV": {
+      "close": 49.06,
+      "prior_close": 49.16,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "CPER": {
+      "close": 40.33,
+      "prior_close": 40.05,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "USO": {
+      "close": 166.57,
+      "prior_close": 163.88,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "UNG": {
+      "close": 9.5,
+      "prior_close": 9.64,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "DBA": {
+      "close": 27.11,
+      "prior_close": 27.4,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "TLT": {
+      "close": 80.99,
+      "prior_close": 81.63,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "IEF": {
+      "close": 90.85,
+      "prior_close": 91.1,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "UUP": {
+      "close": 29.06,
+      "prior_close": 29.12,
+      "bar_time": "2026-10-28T13:30:00Z"
+    },
+    "VIX": {
+      "close": 16.84,
+      "prior_close": 17.52,
+      "bar_time": "2026-10-28T07:15:00Z"
+    },
+    "GBP.USD": {
+      "close": 1.33265,
+      "prior_close": 1.3306,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "EUR.USD": {
+      "close": 1.115425,
+      "prior_close": 1.112475,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "EUR.GBP": {
+      "close": 0.836975,
+      "prior_close": 0.83615,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "USD.JPY": {
+      "close": 157.87,
+      "prior_close": 157.95,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "USD.SGD": {
+      "close": 1.2814,
+      "prior_close": 1.281025,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "USD.HKD": {
+      "close": 7.84565,
+      "prior_close": 7.8447,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "USD.CNH": {
+      "close": 6.66145,
+      "prior_close": 6.664625,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "AUD.USD": {
+      "close": 0.705325,
+      "prior_close": 0.702525,
+      "bar_time": "2026-10-27T21:15:00Z"
+    },
+    "USD.CHF": {
+      "close": 0.828275,
+      "prior_close": 0.829125,
+      "bar_time": "2026-10-27T21:15:00Z"
+    }
+  },
+  "missing": {}
+}
