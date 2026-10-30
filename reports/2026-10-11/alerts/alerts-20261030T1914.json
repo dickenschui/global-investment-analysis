@@ -1,0 +1,354 @@
+{
+ "retrieved_at_utc": "2026-10-30T19:14:11Z",
+ "levels_as_of": "2026-10-09",
+ "all": [
+  {
+   "severity": "URGENT",
+   "symbol": "GOOGL",
+   "rule": "Exit level breached",
+   "evidence": "GOOGL 277.92 below exit 330.58 (Accumulate), intraday",
+   "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
+   "observed": 277.9199,
+   "reference": 330.58036500000003,
+   "kind": "below"
+  },
+  {
+   "severity": "URGENT",
+   "symbol": "NOW",
+   "rule": "Exit level breached",
+   "evidence": "NOW 103.77 below exit 110.10 (Hold), intraday",
+   "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
+   "observed": 103.77,
+   "reference": 110.10154749999998,
+   "kind": "below"
+  },
+  {
+   "severity": "URGENT",
+   "symbol": "SOXX",
+   "rule": "Extreme daily move",
+   "evidence": "SOXX -10.1% vs prior close (-4.2 standard deviations)",
+   "action": "Check news before acting; re-run the Decision Desk for this name.",
+   "observed": 462.1,
+   "reference": 513.86,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "ANET",
+   "rule": "Large daily move",
+   "evidence": "ANET -8.7% vs prior close (-2.8 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 168.22,
+   "reference": 184.22,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "GOOGL",
+   "rule": "Option idea moving against",
+   "evidence": "GOOGL 277.92 vs 351.60 when the Bull call spread was priced",
+   "action": "Handbook \u00a79: check the \u221250% premium stop on any open Bull call spread.",
+   "observed": 277.9199,
+   "reference": 334.02,
+   "kind": "below"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "NVDA",
+   "rule": "Large daily move",
+   "evidence": "NVDA -5.4% vs prior close (-2.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 202.11,
+   "reference": 213.66,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "QQQ",
+   "rule": "Large daily move",
+   "evidence": "QQQ -4.0% vs prior close (-3.4 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 687.06,
+   "reference": 715.34,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "SPY",
+   "rule": "Large daily move",
+   "evidence": "SPY -2.3% vs prior close (-3.0 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 751.88,
+   "reference": 769.36,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "VIX",
+   "rule": "Volatility spike",
+   "evidence": "VIX 22.7, +32% on the day",
+   "action": "Tighten: no new risk until the close.",
+   "observed": 22.7,
+   "reference": 17.2,
+   "kind": "move"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "XLK",
+   "rule": "Large daily move",
+   "evidence": "XLK -5.5% vs prior close (-3.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 178.32,
+   "reference": 188.74,
+   "kind": "move"
+  },
+  {
+   "severity": "INFO",
+   "symbol": "XLB",
+   "rule": "Revisit trigger crossed",
+   "evidence": "XLB 52.41 above revisit level 51.36",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "observed": 52.41,
+   "reference": 51.359,
+   "kind": "above"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Monitor heartbeat gap",
+   "evidence": "Previous check 2026-10-30T14:02:01Z; this check 2026-10-30T19:14:11Z; gap 5.2 hours (limit 2.5)",
+   "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
+  },
+  {
+   "severity": "WARN",
+   "symbol": "MONITOR",
+   "rule": "Weekly levels stale",
+   "evidence": "Levels as of 2026-10-09 are 21 days old (limit 9)",
+   "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
+  }
+ ],
+ "sent": [
+  {
+   "severity": "URGENT",
+   "symbol": "SOXX",
+   "rule": "Extreme daily move",
+   "evidence": "SOXX -10.1% vs prior close (-4.2 standard deviations)",
+   "action": "Check news before acting; re-run the Decision Desk for this name.",
+   "observed": 462.1,
+   "reference": 513.86,
+   "kind": "move",
+   "key": "SOXX|Extreme daily move",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "ANET",
+   "rule": "Large daily move",
+   "evidence": "ANET -8.7% vs prior close (-2.8 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 168.22,
+   "reference": 184.22,
+   "kind": "move",
+   "key": "ANET|Large daily move",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "NVDA",
+   "rule": "Large daily move",
+   "evidence": "NVDA -5.4% vs prior close (-2.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 202.11,
+   "reference": 213.66,
+   "kind": "move",
+   "key": "NVDA|Large daily move",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z"
+  },
+  {
+   "severity": "WARN",
+   "symbol": "QQQ",
+   "rule": "Large daily move",
+   "evidence": "QQQ -4.0% vs prior close (-3.4 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 687.06,
+   "reference": 715.34,
+   "kind": "move",
+   "key": "QQQ|Large daily move",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z",
+   "context": [
+    {
+     "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+     "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+     "published": "2026-10-29T20:30:00+00:00",
+     "source": "fed_press"
+    }
+   ]
+  },
+  {
+   "severity": "WARN",
+   "symbol": "SPY",
+   "rule": "Large daily move",
+   "evidence": "SPY -2.3% vs prior close (-3.0 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 751.88,
+   "reference": 769.36,
+   "kind": "move",
+   "key": "SPY|Large daily move",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z",
+   "context": [
+    {
+     "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+     "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+     "published": "2026-10-29T20:30:00+00:00",
+     "source": "fed_press"
+    }
+   ]
+  },
+  {
+   "severity": "WARN",
+   "symbol": "VIX",
+   "rule": "Volatility spike",
+   "evidence": "VIX 22.7, +32% on the day",
+   "action": "Tighten: no new risk until the close.",
+   "observed": 22.7,
+   "reference": 17.2,
+   "kind": "move",
+   "key": "VIX|Volatility spike",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z",
+   "context": [
+    {
+     "title": "Federal Reserve Board announces approval of application by The Bank of Nova Scotia",
+     "link": "https://www.federalreserve.gov/newsevents/pressreleases/orders20261029a.htm",
+     "published": "2026-10-29T20:30:00+00:00",
+     "source": "fed_press"
+    }
+   ]
+  },
+  {
+   "severity": "WARN",
+   "symbol": "XLK",
+   "rule": "Large daily move",
+   "evidence": "XLK -5.5% vs prior close (-3.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 178.32,
+   "reference": 188.74,
+   "kind": "move",
+   "key": "XLK|Large daily move",
+   "first_seen": "2026-10-30T19:14:11Z",
+   "last_seen": "2026-10-30T19:14:11Z"
+  }
+ ],
+ "repeats": [],
+ "cleared": [
+  {
+   "severity": "WARN",
+   "symbol": "SOXX",
+   "rule": "Large daily move",
+   "evidence": "SOXX -6.6% vs prior close (-2.7 standard deviations)",
+   "action": "Review position and options on this underlying.",
+   "observed": 480.155,
+   "reference": 513.86,
+   "kind": "move",
+   "key": "SOXX|Large daily move",
+   "first_seen": "2026-10-30T14:02:01Z",
+   "last_seen": "2026-10-30T14:02:01Z",
+   "cleared_at": "2026-10-30T19:14:11Z"
+  },
+  {
+   "severity": "INFO",
+   "symbol": "XLF",
+   "rule": "Revisit trigger crossed",
+   "evidence": "XLF 56.61 above revisit level 56.56",
+   "action": "Opportunity: confirm on the weekly close before upgrading.",
+   "observed": 56.61,
+   "reference": 56.561,
+   "kind": "above",
+   "key": "XLF|Revisit trigger crossed",
+   "first_seen": "2026-10-29T14:09:46Z",
+   "last_seen": "2026-10-30T14:02:01Z",
+   "cleared_at": "2026-10-30T19:14:11Z"
+  }
+ ],
+ "missing_quotes": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "not_live": [
+  "000333",
+  "2800",
+  "3188",
+  "5",
+  "600036",
+  "600900",
+  "823",
+  "857",
+  "AZN",
+  "BARC",
+  "C2PU",
+  "D05",
+  "ES3",
+  "HSBA",
+  "ISF",
+  "LLOY",
+  "LSEG",
+  "O39",
+  "REL",
+  "RIO",
+  "RR.",
+  "S63",
+  "SHEL",
+  "SSE",
+  "U11",
+  "ULVR"
+ ],
+ "no_quote": [],
+ "no_quote_reasons": {},
+ "news_fetched": true,
+ "news_failures": [
+  {
+   "source": "bls_releases",
+   "url": "https://www.bls.gov/feed/bls_latest.rss",
+   "reason": "HTTPError 403: unavailable or not a valid feed"
+  }
+ ],
+ "pulse_source": "Yahoo Finance",
+ "pushed": [
+  "SOXX|Extreme daily move",
+  "ANET|Large daily move",
+  "NVDA|Large daily move",
+  "QQQ|Large daily move",
+  "SPY|Large daily move",
+  "VIX|Volatility spike",
+  "XLK|Large daily move"
+ ]
+}
