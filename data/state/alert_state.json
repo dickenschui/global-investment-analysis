@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-11-03T00:00:22Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-03T21:52:30Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -73,14 +73,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-11-03T00:00:22Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-03T21:52:30Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-11-03T07:50:06Z; this check 2026-11-03T16:07:38Z; gap 8.3 hours (limit 2.5)",
+    "evidence": "Previous check 2026-11-03T16:07:38Z; this check 2026-11-03T21:52:30Z; gap 5.7 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -237,23 +237,23 @@
   "USD.CNH|Large daily move": {
    "severity": "WARN",
    "first_seen": "2026-11-03T07:50:06Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-03T21:52:30Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "USD.CNH",
     "rule": "Large daily move",
-    "evidence": "USD.CNH +0.4% vs prior close (+2.7 standard deviations)",
+    "evidence": "USD.CNH +0.4% vs prior close (+2.8 standard deviations)",
     "action": "Review position and options on this underlying.",
-    "observed": 6.6683,
+    "observed": 6.66912,
     "reference": 6.64479,
     "kind": "move"
    },
    "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-11-03T16:07:38Z",
+ "last_run_utc": "2026-11-03T21:52:30Z",
  "recent": {
   "5|Large daily move": {
    "cleared_at": "2026-10-28T06:49:01Z",
