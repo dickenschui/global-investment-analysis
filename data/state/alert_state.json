@@ -39,15 +39,15 @@
   },
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
-   "first_seen": "2026-11-02T07:36:35Z",
-   "last_seen": "2026-11-02T17:27:28Z",
+   "first_seen": "2026-11-03T00:00:22Z",
+   "last_seen": "2026-11-03T00:00:22Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Weekly levels stale",
-    "evidence": "Levels as of 2026-10-09 are 24 days old (limit 9)",
+    "evidence": "Levels as of 2026-10-09 are 25 days old (limit 9)",
     "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
    },
    "levels_as_of": "2026-10-09"
@@ -72,15 +72,15 @@
   },
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
-   "first_seen": "2026-11-02T07:36:35Z",
-   "last_seen": "2026-11-02T17:27:28Z",
+   "first_seen": "2026-11-03T00:00:22Z",
+   "last_seen": "2026-11-03T00:00:22Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-11-02T07:36:35Z; this check 2026-11-02T17:27:28Z; gap 9.8 hours (limit 2.5)",
+    "evidence": "Previous check 2026-11-02T17:27:28Z; this check 2026-11-03T00:00:22Z; gap 6.5 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -271,7 +271,7 @@
    "repeat_of": "2026-10-29T14:09:46Z"
   }
  },
- "last_run_utc": "2026-11-02T17:27:28Z",
+ "last_run_utc": "2026-11-03T00:00:22Z",
  "recent": {
   "5|Large daily move": {
    "cleared_at": "2026-10-28T06:49:01Z",
