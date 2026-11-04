@@ -4,16 +4,16 @@
   "SSE|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "SSE",
     "rule": "Revisit trigger crossed",
-    "evidence": "SSE 25.85 above revisit level 24.73",
+    "evidence": "SSE 25.98 above revisit level 24.73",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 25.85,
+    "observed": 25.98,
     "reference": 24.726499999999998,
     "kind": "above"
    },
@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-11-04T07:27:23Z",
-   "last_seen": "2026-11-04T07:27:23Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -55,16 +55,16 @@
   "GOOGL|Option idea moving against": {
    "severity": "WARN",
    "first_seen": "2026-10-21T16:08:10Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "GOOGL",
     "rule": "Option idea moving against",
-    "evidence": "GOOGL 279.24 vs 351.60 when the Bull call spread was priced",
+    "evidence": "GOOGL 293.43 vs 351.60 when the Bull call spread was priced",
     "action": "Handbook \u00a79: check the \u221250% premium stop on any open Bull call spread.",
-    "observed": 279.24,
+    "observed": 293.425,
     "reference": 334.02,
     "kind": "below"
    },
@@ -73,14 +73,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-11-04T07:27:23Z",
-   "last_seen": "2026-11-04T07:27:23Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-11-03T21:52:30Z; this check 2026-11-04T07:27:23Z; gap 9.6 hours (limit 2.5)",
+    "evidence": "Previous check 2026-11-04T07:27:23Z; this check 2026-11-04T15:41:38Z; gap 8.2 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -88,16 +88,16 @@
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-22T11:41:12Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 94.24 above revisit level 87.24",
+    "evidence": "LSEG 96.69 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 94.24,
+    "observed": 96.69151,
     "reference": 87.236,
     "kind": "above"
    },
@@ -107,16 +107,16 @@
   "GOOGL|Exit level breached": {
    "severity": "URGENT",
    "first_seen": "2026-10-22T16:03:53Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "URGENT",
    "delivered": true,
    "alert": {
     "severity": "URGENT",
     "symbol": "GOOGL",
     "rule": "Exit level breached",
-    "evidence": "GOOGL 279.24 below exit 330.58 (Accumulate), intraday",
+    "evidence": "GOOGL 293.43 below exit 330.58 (Accumulate), intraday",
     "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 279.24,
+    "observed": 293.425,
     "reference": 330.58036500000003,
     "kind": "below"
    },
@@ -163,53 +163,35 @@
   "XLB|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-26T19:12:05Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "XLB",
     "rule": "Revisit trigger crossed",
-    "evidence": "XLB 52.80 above revisit level 51.36",
+    "evidence": "XLB 53.47 above revisit level 51.36",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 52.805,
+    "observed": 53.47,
     "reference": 51.359,
     "kind": "above"
    },
    "levels_as_of": "2026-10-09",
    "repeat_of": "2026-10-23T15:56:27Z"
   },
-  "NOW|Exit level breached": {
-   "severity": "URGENT",
-   "first_seen": "2026-10-29T19:44:26Z",
-   "last_seen": "2026-11-03T16:07:38Z",
-   "notified_severity": "URGENT",
-   "delivered": true,
-   "alert": {
-    "severity": "URGENT",
-    "symbol": "NOW",
-    "rule": "Exit level breached",
-    "evidence": "NOW 108.81 below exit 110.10 (Hold), intraday",
-    "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 108.805,
-    "reference": 110.10154749999998,
-    "kind": "below"
-   },
-   "levels_as_of": "2026-10-09"
-  },
   "AZN|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-30T14:02:01Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "AZN",
     "rule": "Revisit trigger crossed",
-    "evidence": "AZN 138.50 above revisit level 135.08",
+    "evidence": "AZN 139.42 above revisit level 135.08",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 138.5,
+    "observed": 139.42,
     "reference": 135.08350000000002,
     "kind": "above"
    },
@@ -218,16 +200,16 @@
   "XLF|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-11-02T17:27:28Z",
-   "last_seen": "2026-11-03T16:07:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "XLF",
     "rule": "Revisit trigger crossed",
-    "evidence": "XLF 57.32 above revisit level 56.56",
+    "evidence": "XLF 58.43 above revisit level 56.56",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 57.32,
+    "observed": 58.43,
     "reference": 56.561,
     "kind": "above"
    },
@@ -251,16 +233,137 @@
     "kind": "move"
    },
    "levels_as_of": "2026-10-09"
-  }
- },
- "last_run_utc": "2026-11-04T07:27:23Z",
- "recent": {
-  "HSBA|Extreme daily move": {
-   "cleared_at": "2026-10-28T13:57:53Z",
-   "first_seen": "2026-10-27T12:31:06Z",
+  },
+  "AAPL|Extreme daily move": {
+   "severity": "URGENT",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
    "notified_severity": "URGENT",
+   "delivered": true,
+   "alert": {
+    "severity": "URGENT",
+    "symbol": "AAPL",
+    "rule": "Extreme daily move",
+    "evidence": "AAPL +6.6% vs prior close (+4.4 standard deviations)",
+    "action": "Check news before acting; re-run the Decision Desk for this name.",
+    "observed": 353.94,
+    "reference": 331.9,
+    "kind": "move"
+   },
    "levels_as_of": "2026-10-09"
   },
+  "AMZN|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "AMZN",
+    "rule": "Large daily move",
+    "evidence": "AMZN +6.8% vs prior close (+2.9 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 267.8,
+    "reference": 250.69,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "HSBA|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "HSBA",
+    "rule": "Large daily move",
+    "evidence": "HSBA +4.4% vs prior close (+2.7 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 13.134,
+    "reference": 12.58,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "MSFT|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "MSFT",
+    "rule": "Large daily move",
+    "evidence": "MSFT +6.6% vs prior close (+2.8 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 555.43,
+    "reference": 520.99,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "XLE|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "XLE",
+    "rule": "Large daily move",
+    "evidence": "XLE -3.7% vs prior close (-2.5 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 64.22,
+    "reference": 66.68,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "XLF|Large daily move": {
+   "severity": "WARN",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "WARN",
+   "delivered": true,
+   "alert": {
+    "severity": "WARN",
+    "symbol": "XLF",
+    "rule": "Large daily move",
+    "evidence": "XLF +2.2% vs prior close (+2.5 standard deviations)",
+    "action": "Review position and options on this underlying.",
+    "observed": 58.43,
+    "reference": 57.19,
+    "kind": "move"
+   },
+   "levels_as_of": "2026-10-09"
+  },
+  "ISF|Revisit trigger crossed": {
+   "severity": "INFO",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "last_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "INFO",
+   "delivered": true,
+   "alert": {
+    "severity": "INFO",
+    "symbol": "ISF",
+    "rule": "Revisit trigger crossed",
+    "evidence": "ISF 10.53 above revisit level 10.46",
+    "action": "Opportunity: confirm on the weekly close before upgrading.",
+    "observed": 10.527999999999999,
+    "reference": 10.4624,
+    "kind": "above"
+   },
+   "levels_as_of": "2026-10-09",
+   "repeat_of": "2026-10-29T14:09:46Z"
+  }
+ },
+ "last_run_utc": "2026-11-04T15:41:38Z",
+ "recent": {
   "ORCL|Large daily move": {
    "cleared_at": "2026-10-29T14:09:46Z",
    "first_seen": "2026-10-28T19:29:03Z",
@@ -345,12 +448,6 @@
    "notified_severity": "WARN",
    "levels_as_of": "2026-10-09"
   },
-  "ISF|Revisit trigger crossed": {
-   "cleared_at": "2026-11-03T16:07:38Z",
-   "first_seen": "2026-10-29T14:09:46Z",
-   "notified_severity": "INFO",
-   "levels_as_of": "2026-10-09"
-  },
   "AZN|Large daily move": {
    "cleared_at": "2026-11-03T16:07:38Z",
    "first_seen": "2026-10-30T14:02:01Z",
@@ -361,6 +458,12 @@
    "cleared_at": "2026-11-04T07:27:23Z",
    "first_seen": "2026-11-03T07:50:06Z",
    "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "NOW|Exit level breached": {
+   "cleared_at": "2026-11-04T15:41:38Z",
+   "first_seen": "2026-10-29T19:44:26Z",
+   "notified_severity": "URGENT",
    "levels_as_of": "2026-10-09"
   }
  }
