@@ -348,7 +348,7 @@ function flagsFor(c) {
   if (c.trigger != null && (c.stance === "Watch" || c.stance === "Avoid") && p > c.trigger) out.push(["info", `Back above the revisit trigger ${px(c.trigger)}. Re-check this week.`]);
   if (c.vol && c.last) {
     const z = (p / c.last - 1) / (c.vol / Math.sqrt(52));
-    if (Math.abs(z) >= 2.5) out.push([Math.abs(z) >= 4 ? "crit" : "warn", `Moved ${pct(p / c.last - 1)} since the weekly close: ${Math.abs(z).toFixed(1)} weekly standard deviations.`]);
+    if (Math.abs(z) >= 2.5) out.push([Math.abs(z) >= 4 ? "crit" : "warn", `Moved ${pct(p / c.last - 1)} since the ${esc(D.as_of)} close: ${Math.abs(z).toFixed(1)} weekly standard deviations.`]);
   }
   return out;
 }
@@ -441,8 +441,13 @@ ${context({position: {...c, spark: undefined, contract: undefined, weekly_closes
 /* ---------- chrome ---------- */
 const TABS = [{id: "today", t: "Today"}, {id: "decisions", t: "Decisions"}, {id: "income", t: "SG income"},
               {id: "options", t: "Options sleeve"}, {id: "evidence", t: "Rule evidence"}, {id: "journal", t: "Journal"}];
+const STALE_DAYS = 9;   // the weekly refresh is overdue (same limit as the hourly "Weekly levels stale" notice)
+const levelsAge = () => D.daily ? Math.round((Date.parse(D.daily.session_date) - Date.parse(D.as_of)) / 864e5) : 0;
 function renderChrome() {
-  $("#asof").textContent = "week to " + D.as_of + (D.daily ? " · close " + D.daily.session_date : "");
+  const age = levelsAge();
+  $("#asof").innerHTML = D.daily
+    ? `close ${esc(D.daily.session_date)} · <span${age > STALE_DAYS ? ' style="color:var(--warn)"' : ""}>levels ${esc(D.as_of)}${age > STALE_DAYS ? ` (${age} days old)` : ""}</span>`
+    : "week to " + esc(D.as_of);
   const ev = D.evidence;
   $("#verdict").innerHTML = `<span class="chip ${D.posture.stressed ? "down" : "acc"}"><span class="dot"></span>Risk budget ${Math.round(D.posture.risk_budget * 100)}%</span>`
     + (ev ? `<span class="chip ${ev.level === "LOW" ? "warn" : ev.level === "HIGH" ? "up" : "info"}">Rule confidence ${esc(ev.level)}</span>` : "");
@@ -467,9 +472,10 @@ function dailyPanel(d) {   // official closes after the session, against this we
                  in_zone: ["good", "Closed inside the buy zone"]};
   const grouped = Object.entries(GROUP).map(([rule, [kind, text]]) => [kind, text, d.exceptions.filter(x => x.rule === rule)])
     .filter(([, , l]) => l.length);
-  const gaps = [[d.missing, "no close"], [d.stale, "no bar for that session yet"], [d.check, "too far from the weekly close: verify"]]
+  const gaps = [[d.missing, "no close"], [d.stale, "no bar for that session yet"], [d.check, `too far from the ${esc(D.as_of)} close: verify`]]
     .filter(([l]) => l.length).map(([l, why]) => `${esc(l.join(", "))} (${why})`);
-  return `<div class="panel"><header><h2>Close ${esc(d.session_date)}</h2><span class="mut small">${n} official closes · levels from the week to ${esc(D.as_of)}</span></header>
+  return `<div class="panel"><header><h2>Close ${esc(d.session_date)}</h2><span class="mut small">${n} official closes · levels set on the ${esc(D.as_of)} close</span></header>
+    ${levelsAge() > STALE_DAYS ? `<div class="flag warn" style="margin-bottom:8px"><span>Levels are ${levelsAge()} days old: the weekly refresh has not run since ${esc(D.as_of)}. Moves below are measured from that close, not from last Friday.</span></div>` : ""}
     ${one.length || grouped.length ? `<div style="display:grid;gap:8px">${one.map(x => `<div class="flag ${x.kind}"><b class="mono">${esc(x.symbol)}</b><span>${esc(x.text)}</span></div>`).join("")}
       ${grouped.map(([kind, text, l]) => `<div class="flag ${kind}"><span>${esc(text)}: <b class="mono">${l.map(x => `<span title="${esc(x.text)}">${esc(x.symbol)}</span>`).join(" · ")}</b></span></div>`).join("")}</div>`
       : `<div class="flag good">${gaps.length ? `No exceptions among the ${n - d.stale.length - d.check.length} names checked; see below for those not checked.` : "No exceptions: every name closed inside its plan."}</div>`}
@@ -550,7 +556,7 @@ function rDecisions() {
     <tbody>${rows.map(c => { const s = sizing(c), q = live[c.symbol], dc = D.daily?.rows[c.symbol], fl = q ? flagsFor(c) : (dc?.flags || []);
       return `<tr class="click" data-sym="${esc(c.symbol)}" tabindex="0"><td><b class="mono">${esc(c.symbol)}</b>${fl.length ? ` <span class="dot" style="color:var(--${fl[0][0] === "crit" ? "down" : fl[0][0] === "warn" ? "warn" : fl[0][0] === "good" ? "up" : "info"})" title="${esc(fl[0][1])}"></span>` : ""}<span class="nm">${esc(c.name)}</span></td>
       <td>${esc(c.market)}</td><td>${stanceChip(c.stance)}</td>
-      <td class="n">${px(q?.price ?? (dc && !dc.stale && !dc.check ? dc.close : c.last))}${q ? `<span class="nm ${cls(q.chg)}">live ${pct(q.chg)}</span>` : dc && !dc.stale && !dc.check ? `<span class="nm ${cls(dc.vs_week)}">close ${pct(dc.vs_week)} wk</span>` : ""}</td>
+      <td class="n">${px(q?.price ?? (dc && !dc.stale && !dc.check ? dc.close : c.last))}${q ? `<span class="nm ${cls(q.chg)}">live ${pct(q.chg)}</span>` : dc && !dc.stale && !dc.check ? `<span class="nm ${cls(dc.vs_week)}" title="Daily close vs the ${esc(D.as_of)} close">close ${pct(dc.vs_week)} vs ${esc(D.as_of.slice(5))}</span>` : ""}</td>
       <td class="n ${cls(c.ret_3m)}">${pct(c.ret_3m)}</td><td class="n ${cls(c.ret_1y)}">${pct(c.ret_1y)}</td><td>${trendChip(c.trend)}</td>
       <td class="n">${c.entry ? px(c.entry[0]) + "–" + px(c.entry[1]) : "—"}</td>
       <td class="n">${c.stop != null ? px(c.stop) : c.trigger != null ? `<span class="mut">↑ ${px(c.trigger)}</span>` : "—"}</td>

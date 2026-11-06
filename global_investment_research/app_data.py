@@ -38,7 +38,7 @@ def _contracts(snapshot_dir: Path) -> dict:
     return out
 
 
-def _flags(row: dict, close: float) -> list[list[str]]:
+def _flags(row: dict, close: float, levels_as_of: str | None = None) -> list[list[str]]:
     """The app's live-check rules (index.html flagsFor) applied to an official close: [[kind, text, rule], ...]."""
     out, stop, entry, trig, last = [], row.get("stop"), row.get("entry"), row.get("trigger"), row.get("last")
     if stop is not None and close < stop:
@@ -57,12 +57,12 @@ def _flags(row: dict, close: float) -> list[list[str]]:
         z = (close / last - 1) / (vol / 52 ** 0.5)
         if abs(z) >= 2.5:
             out.append(["crit" if abs(z) >= 4 else "warn",
-                        f"{(close / last - 1) * 100:+.1f}% since the weekly close: {abs(z):.1f} weekly standard deviations.",
+                        f"{(close / last - 1) * 100:+.1f}% since the {levels_as_of or 'weekly'} close: {abs(z):.1f} weekly standard deviations.",
                         "move"])
     return out
 
 
-def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
+def daily_view(calls: list[dict], others: list[dict], doc: dict, levels_as_of: str | None = None) -> dict:
     """Official closes for one session against this week's levels.
 
     `doc` is a data/daily/<date>.json file: {"session_date", "source", "retrieved_at_utc",
@@ -90,7 +90,7 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict) -> dict:
             row["check"] = True
             check.append(r["symbol"])
         elif "stance" in r:
-            row["flags"] = _flags(r, close)
+            row["flags"] = _flags(r, close, levels_as_of)
             exceptions += [{"symbol": r["symbol"], "kind": k, "text": t, "rule": rule} for k, t, rule in row["flags"]]
         rows[r["symbol"]] = row
     order = {"crit": 0, "warn": 1, "info": 2, "good": 3}
@@ -170,7 +170,7 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
         "links": notify.LINKS,
     }
     if daily:
-        out["daily"] = daily_view(calls, others, json.loads(Path(daily).read_text()))
+        out["daily"] = daily_view(calls, others, json.loads(Path(daily).read_text()), dec["as_of"])
     if opt:
         seen, ideas = set(), []
         for i in opt["ideas"]:
