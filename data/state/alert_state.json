@@ -4,16 +4,16 @@
   "SSE|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-13T07:37:18Z",
-   "last_seen": "2026-11-05T09:22:50Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "SSE",
     "rule": "Revisit trigger crossed",
-    "evidence": "SSE 26.46 above revisit level 24.73",
+    "evidence": "SSE 26.11 above revisit level 24.73",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 26.46,
+    "observed": 26.11,
     "reference": 24.726499999999998,
     "kind": "above"
    },
@@ -40,7 +40,7 @@
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
    "first_seen": "2026-11-06T07:52:16Z",
-   "last_seen": "2026-11-06T07:52:16Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
@@ -55,16 +55,16 @@
   "GOOGL|Option idea moving against": {
    "severity": "WARN",
    "first_seen": "2026-10-21T16:08:10Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "GOOGL",
     "rule": "Option idea moving against",
-    "evidence": "GOOGL 285.86 vs 351.60 when the Bull call spread was priced",
+    "evidence": "GOOGL 288.39 vs 351.60 when the Bull call spread was priced",
     "action": "Handbook \u00a79: check the \u221250% premium stop on any open Bull call spread.",
-    "observed": 285.855,
+    "observed": 288.395,
     "reference": 334.02,
     "kind": "below"
    },
@@ -73,14 +73,14 @@
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
    "first_seen": "2026-11-06T07:52:16Z",
-   "last_seen": "2026-11-06T07:52:16Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-11-05T22:54:58Z; this check 2026-11-06T07:52:16Z; gap 9.0 hours (limit 2.5)",
+    "evidence": "Previous check 2026-11-06T07:52:16Z; this check 2026-11-06T15:52:30Z; gap 8.0 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -88,16 +88,16 @@
   "LSEG|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-22T11:41:12Z",
-   "last_seen": "2026-11-05T09:22:50Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "LSEG",
     "rule": "Revisit trigger crossed",
-    "evidence": "LSEG 98.68 above revisit level 87.24",
+    "evidence": "LSEG 94.76 above revisit level 87.24",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 98.68,
+    "observed": 94.76,
     "reference": 87.236,
     "kind": "above"
    },
@@ -107,16 +107,16 @@
   "GOOGL|Exit level breached": {
    "severity": "URGENT",
    "first_seen": "2026-10-22T16:03:53Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "URGENT",
    "delivered": true,
    "alert": {
     "severity": "URGENT",
     "symbol": "GOOGL",
     "rule": "Exit level breached",
-    "evidence": "GOOGL 285.86 below exit 330.58 (Accumulate), intraday",
+    "evidence": "GOOGL 288.39 below exit 330.58 (Accumulate), intraday",
     "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 285.855,
+    "observed": 288.395,
     "reference": 330.58036500000003,
     "kind": "below"
    },
@@ -163,16 +163,16 @@
   "XLB|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-26T19:12:05Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "XLB",
     "rule": "Revisit trigger crossed",
-    "evidence": "XLB 52.23 above revisit level 51.36",
+    "evidence": "XLB 52.31 above revisit level 51.36",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 52.23,
+    "observed": 52.3101,
     "reference": 51.359,
     "kind": "above"
    },
@@ -182,16 +182,16 @@
   "AZN|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-30T14:02:01Z",
-   "last_seen": "2026-11-05T09:22:50Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "AZN",
     "rule": "Revisit trigger crossed",
-    "evidence": "AZN 141.70 above revisit level 135.08",
+    "evidence": "AZN 138.62 above revisit level 135.08",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 141.7,
+    "observed": 138.62,
     "reference": 135.08350000000002,
     "kind": "above"
    },
@@ -200,90 +200,35 @@
   "XLF|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-11-02T17:27:28Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "XLF",
     "rule": "Revisit trigger crossed",
-    "evidence": "XLF 57.87 above revisit level 56.56",
+    "evidence": "XLF 57.69 above revisit level 56.56",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 57.865,
+    "observed": 57.685,
     "reference": 56.561,
     "kind": "above"
    },
    "levels_as_of": "2026-10-09",
    "repeat_of": "2026-10-29T14:09:46Z"
   },
-  "XLF|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "XLF",
-    "rule": "Large daily move",
-    "evidence": "XLF -2.3% vs prior close (-2.6 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 57.865,
-    "reference": 59.2,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "ISF|Revisit trigger crossed": {
-   "severity": "INFO",
-   "first_seen": "2026-11-04T15:41:38Z",
-   "last_seen": "2026-11-05T09:22:50Z",
-   "notified_severity": "INFO",
-   "delivered": true,
-   "alert": {
-    "severity": "INFO",
-    "symbol": "ISF",
-    "rule": "Revisit trigger crossed",
-    "evidence": "ISF 10.63 above revisit level 10.46",
-    "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 10.628,
-    "reference": 10.4624,
-    "kind": "above"
-   },
-   "levels_as_of": "2026-10-09",
-   "repeat_of": "2026-10-29T14:09:46Z"
-  },
-  "META|Exit level breached": {
-   "severity": "URGENT",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "URGENT",
-   "delivered": true,
-   "alert": {
-    "severity": "URGENT",
-    "symbol": "META",
-    "rule": "Exit level breached",
-    "evidence": "META 606.28 below exit 607.49 (Hold), intraday",
-    "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 606.28,
-    "reference": 607.4908724999999,
-    "kind": "below"
-   },
-   "levels_as_of": "2026-10-09"
-  },
   "NOW|Exit level breached": {
    "severity": "URGENT",
    "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "URGENT",
    "delivered": true,
    "alert": {
     "severity": "URGENT",
     "symbol": "NOW",
     "rule": "Exit level breached",
-    "evidence": "NOW 104.11 below exit 110.10 (Hold), intraday",
+    "evidence": "NOW 102.62 below exit 110.10 (Hold), intraday",
     "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 104.11,
+    "observed": 102.62,
     "reference": 110.10154749999998,
     "kind": "below"
    },
@@ -293,270 +238,36 @@
   "NVDA|Exit level breached": {
    "severity": "URGENT",
    "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "URGENT",
    "delivered": true,
    "alert": {
     "severity": "URGENT",
     "symbol": "NVDA",
     "rule": "Exit level breached",
-    "evidence": "NVDA 184.70 below exit 196.31 (Accumulate), intraday",
+    "evidence": "NVDA 189.93 below exit 196.31 (Accumulate), intraday",
     "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 184.7,
+    "observed": 189.93,
     "reference": 196.30690250000004,
     "kind": "below"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "QQQ|Extreme daily move": {
-   "severity": "URGENT",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "URGENT",
-   "delivered": true,
-   "alert": {
-    "severity": "URGENT",
-    "symbol": "QQQ",
-    "rule": "Extreme daily move",
-    "evidence": "QQQ -5.3% vs prior close (-4.6 standard deviations)",
-    "action": "Check news before acting; re-run the Decision Desk for this name.",
-    "observed": 655.29,
-    "reference": 691.95,
-    "kind": "move"
    },
    "levels_as_of": "2026-10-09"
   },
   "SOXX|Exit level breached": {
    "severity": "URGENT",
    "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
+   "last_seen": "2026-11-06T15:52:30Z",
    "notified_severity": "URGENT",
    "delivered": true,
    "alert": {
     "severity": "URGENT",
     "symbol": "SOXX",
     "rule": "Exit level breached",
-    "evidence": "SOXX 135.12 below exit 455.48 (Accumulate), intraday",
+    "evidence": "SOXX 136.96 below exit 455.48 (Accumulate), intraday",
     "action": "Handbook \u00a73: the exit acts on the weekly close. Cancel any add orders now; if Friday's close is still below the exit, close the position or write down why you hold.",
-    "observed": 135.12,
+    "observed": 136.955,
     "reference": 455.4778075,
     "kind": "below"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "SOXX|Extreme daily move": {
-   "severity": "URGENT",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "URGENT",
-   "delivered": true,
-   "alert": {
-    "severity": "URGENT",
-    "symbol": "SOXX",
-    "rule": "Extreme daily move",
-    "evidence": "SOXX -10.0% vs prior close (-4.1 standard deviations)",
-    "action": "Check news before acting; re-run the Decision Desk for this name.",
-    "observed": 135.12,
-    "reference": 150.13652,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "SPY|Extreme daily move": {
-   "severity": "URGENT",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "URGENT",
-   "delivered": true,
-   "alert": {
-    "severity": "URGENT",
-    "symbol": "SPY",
-    "rule": "Extreme daily move",
-    "evidence": "SPY -3.5% vs prior close (-4.7 standard deviations)",
-    "action": "Check news before acting; re-run the Decision Desk for this name.",
-    "observed": 739.74,
-    "reference": 766.81,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "XLK|Extreme daily move": {
-   "severity": "URGENT",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "URGENT",
-   "delivered": true,
-   "alert": {
-    "severity": "URGENT",
-    "symbol": "XLK",
-    "rule": "Extreme daily move",
-    "evidence": "XLK -6.6% vs prior close (-4.4 standard deviations)",
-    "action": "Check news before acting; re-run the Decision Desk for this name.",
-    "observed": 164.895,
-    "reference": 176.5,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "ANET|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "ANET",
-    "rule": "Large daily move",
-    "evidence": "ANET -9.5% vs prior close (-3.1 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 161.47,
-    "reference": 178.48,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "AVGO|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "AVGO",
-    "rule": "Large daily move",
-    "evidence": "AVGO -7.9% vs prior close (-2.8 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 299.75,
-    "reference": 325.48,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "CRWD|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "CRWD",
-    "rule": "Large daily move",
-    "evidence": "CRWD -9.0% vs prior close (-2.6 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 219.24,
-    "reference": 241.0,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "JPM|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "JPM",
-    "rule": "Large daily move",
-    "evidence": "JPM -3.3% vs prior close (-2.7 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 340.32,
-    "reference": 352.11,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "NVDA|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "NVDA",
-    "rule": "Large daily move",
-    "evidence": "NVDA -7.7% vs prior close (-3.8 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 184.7,
-    "reference": 200.13,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "PANW|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "PANW",
-    "rule": "Large daily move",
-    "evidence": "PANW -8.0% vs prior close (-2.5 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 320.34,
-    "reference": 348.04,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "VIX|Volatility spike": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "VIX",
-    "rule": "Volatility spike",
-    "evidence": "VIX 24.4, +47% on the day",
-    "action": "Tighten: no new risk until the close.",
-    "observed": 24.35,
-    "reference": 16.61,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "XLB|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "XLB",
-    "rule": "Large daily move",
-    "evidence": "XLB -3.1% vs prior close (-2.9 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 52.23,
-    "reference": 53.9,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "XLI|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-05T17:30:33Z",
-   "last_seen": "2026-11-05T17:30:33Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "XLI",
-    "rule": "Large daily move",
-    "evidence": "XLI -3.3% vs prior close (-3.9 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 163.7997,
-    "reference": 169.46,
-    "kind": "move"
    },
    "levels_as_of": "2026-10-09"
   },
@@ -649,28 +360,28 @@
     "kind": "move"
    },
    "levels_as_of": "2026-10-09"
+  },
+  "VIX|Volatility stress": {
+   "severity": "URGENT",
+   "first_seen": "2026-11-06T15:52:30Z",
+   "last_seen": "2026-11-06T15:52:30Z",
+   "notified_severity": "URGENT",
+   "delivered": true,
+   "alert": {
+    "severity": "URGENT",
+    "symbol": "VIX",
+    "rule": "Volatility stress",
+    "evidence": "VIX 25.4 at or above 25",
+    "action": "Handbook \u00a74: risk budget to 50%; no new Accumulate in high-volatility names.",
+    "observed": 25.44,
+    "reference": 25.0,
+    "kind": "above"
+   },
+   "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-11-06T07:52:16Z",
+ "last_run_utc": "2026-11-06T15:52:30Z",
  "recent": {
-  "GOOGL|Extreme daily move": {
-   "cleared_at": "2026-10-30T14:02:01Z",
-   "first_seen": "2026-10-29T14:09:46Z",
-   "notified_severity": "URGENT",
-   "levels_as_of": "2026-10-09"
-  },
-  "NOW|Extreme daily move": {
-   "cleared_at": "2026-10-30T14:02:01Z",
-   "first_seen": "2026-10-29T14:09:46Z",
-   "notified_severity": "URGENT",
-   "levels_as_of": "2026-10-09"
-  },
-  "LLOY|Large daily move": {
-   "cleared_at": "2026-10-30T14:02:01Z",
-   "first_seen": "2026-10-29T14:09:46Z",
-   "notified_severity": "WARN",
-   "levels_as_of": "2026-10-09"
-  },
   "SOXX|Large daily move": {
    "cleared_at": "2026-10-30T19:14:11Z",
    "first_seen": "2026-10-30T14:02:01Z",
@@ -746,6 +457,102 @@
   "857|Large daily move": {
    "cleared_at": "2026-11-06T07:52:16Z",
    "first_seen": "2026-11-05T01:49:50Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "XLF|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "ISF|Revisit trigger crossed": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-04T15:41:38Z",
+   "notified_severity": "INFO",
+   "levels_as_of": "2026-10-09"
+  },
+  "META|Exit level breached": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "URGENT",
+   "levels_as_of": "2026-10-09"
+  },
+  "QQQ|Extreme daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "URGENT",
+   "levels_as_of": "2026-10-09"
+  },
+  "SOXX|Extreme daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "URGENT",
+   "levels_as_of": "2026-10-09"
+  },
+  "SPY|Extreme daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "URGENT",
+   "levels_as_of": "2026-10-09"
+  },
+  "XLK|Extreme daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "URGENT",
+   "levels_as_of": "2026-10-09"
+  },
+  "ANET|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "AVGO|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "CRWD|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "JPM|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "NVDA|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "PANW|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "VIX|Volatility spike": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "XLB|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "XLI|Large daily move": {
+   "cleared_at": "2026-11-06T15:52:30Z",
+   "first_seen": "2026-11-05T17:30:33Z",
    "notified_severity": "WARN",
    "levels_as_of": "2026-10-09"
   }
