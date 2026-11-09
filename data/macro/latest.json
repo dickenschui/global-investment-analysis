@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "retrieved_at": "2026-11-06T20:05:30Z",
+ "retrieved_at": "2026-11-09T16:43:57Z",
  "series": {
   "DGS3MO": {
    "id": "DGS3MO",
@@ -11,18 +11,10 @@
    "frequency": "daily",
    "purpose": "US Treasury 3-month constant-maturity yield; short end of the curve and cash return proxy",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:30Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:43:57Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 5.54
-    },
-    {
-     "date": "2023-11-03",
-     "value": 5.53
-    },
     {
      "date": "2023-11-06",
      "value": 5.56
@@ -3154,14 +3146,18 @@
     {
      "date": "2026-11-04",
      "value": 4.21
+    },
+    {
+     "date": "2026-11-05",
+     "value": 4.17
     }
    ],
    "latest": {
-    "date": "2026-11-04",
-    "value": 4.21
+    "date": "2026-11-05",
+    "value": 4.17
    },
-   "sha256": "401c3f4803e90bbd0d087d3d36504948b2b2c03363bde40c1c63836d867c4158",
-   "bytes": 12448
+   "sha256": "b5ccf6dec48021a43df7b81fd4b5c556fd568bac6b8f776819a3fd55ce84de0a",
+   "bytes": 12432
   },
   "DGS2": {
    "id": "DGS2",
@@ -3172,18 +3168,10 @@
    "frequency": "daily",
    "purpose": "US Treasury 2-year constant-maturity yield; market view of the Fed path",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:30Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:43:58Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 4.98
-    },
-    {
-     "date": "2023-11-03",
-     "value": 4.83
-    },
     {
      "date": "2023-11-06",
      "value": 4.93
@@ -6315,14 +6303,18 @@
     {
      "date": "2026-11-04",
      "value": 4.58
+    },
+    {
+     "date": "2026-11-05",
+     "value": 4.46
     }
    ],
    "latest": {
-    "date": "2026-11-04",
-    "value": 4.58
+    "date": "2026-11-05",
+    "value": 4.46
    },
-   "sha256": "5b2009ce42f583cebaee0cf26add97f1cd235ec86ccdb4b2b7e5952772cdc2db",
-   "bytes": 12446
+   "sha256": "e7eb80b6d650ff2563f643e4f73611f2c32c46ea4890102c274ef5fdcd2398c6",
+   "bytes": 12430
   },
   "DGS10": {
    "id": "DGS10",
@@ -6333,18 +6325,10 @@
    "frequency": "daily",
    "purpose": "US Treasury 10-year constant-maturity yield; discount rate for long-duration assets",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:31Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:43:58Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 4.67
-    },
-    {
-     "date": "2023-11-03",
-     "value": 4.57
-    },
     {
      "date": "2023-11-06",
      "value": 4.67
@@ -9476,14 +9460,18 @@
     {
      "date": "2026-11-04",
      "value": 4.9
+    },
+    {
+     "date": "2026-11-05",
+     "value": 4.84
     }
    ],
    "latest": {
-    "date": "2026-11-04",
-    "value": 4.9
+    "date": "2026-11-05",
+    "value": 4.84
    },
-   "sha256": "b614c6a6deaed6e8459548fef7ef33aea9cbb4caf933c4d7957714cf17754ef2",
-   "bytes": 12447
+   "sha256": "004e2313e70fc991e03fb81ae0eefcee56b8c3b904c933c218f397c498eaef96",
+   "bytes": 12431
   },
   "T10Y3M": {
    "id": "T10Y3M",
@@ -9494,18 +9482,10 @@
    "frequency": "daily",
    "purpose": "Yield-curve slope; inversion has preceded past US recessions",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y3M&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:31Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y3M&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:43:59Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": -0.87
-    },
-    {
-     "date": "2023-11-03",
-     "value": -0.96
-    },
     {
      "date": "2023-11-06",
      "value": -0.89
@@ -12641,14 +12621,18 @@
     {
      "date": "2026-11-05",
      "value": 0.67
+    },
+    {
+     "date": "2026-11-06",
+     "value": 0.67
     }
    ],
    "latest": {
-    "date": "2026-11-05",
+    "date": "2026-11-06",
     "value": 0.67
    },
-   "sha256": "971fbb4b14a64e4e245d62eeb351e0e7e718b7d7172eefbc0ea08a0cb43cc1ed",
-   "bytes": 12828
+   "sha256": "f44ed7b787740afd2892c77cf0c613b2499603ed43a4677dde96046af458c01f",
+   "bytes": 12810
   },
   "T10Y2Y": {
    "id": "T10Y2Y",
@@ -12659,18 +12643,10 @@
    "frequency": "daily",
    "purpose": "Alternative yield-curve slope, cross-check for T10Y3M",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y2Y&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:31Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y2Y&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:43:59Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": -0.31
-    },
-    {
-     "date": "2023-11-03",
-     "value": -0.26
-    },
     {
      "date": "2023-11-06",
      "value": -0.26
@@ -15806,14 +15782,18 @@
     {
      "date": "2026-11-05",
      "value": 0.38
+    },
+    {
+     "date": "2026-11-06",
+     "value": 0.35
     }
    ],
    "latest": {
-    "date": "2026-11-05",
-    "value": 0.38
+    "date": "2026-11-06",
+    "value": 0.35
    },
-   "sha256": "ea5617c3416e685560192482d90b77089b073f53d0fca2053acbd29b20166683",
-   "bytes": 12670
+   "sha256": "e27fb1dbf9a0795250e3c9cd3c986670b822edb16f0045a84b69d54f626501c6",
+   "bytes": 12652
   },
   "BAMLH0A0HYM2": {
    "id": "BAMLH0A0HYM2",
@@ -15824,22 +15804,10 @@
    "frequency": "daily",
    "purpose": "US high-yield credit stress; ICE BofA index (FRED only republishes a rolling ~3-year window under ICE licence)",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:32Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:00Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-07",
-     "value": 4.08
-    },
-    {
-     "date": "2023-11-08",
-     "value": 4.08
-    },
-    {
-     "date": "2023-11-09",
-     "value": 4.04
-    },
     {
      "date": "2023-11-10",
      "value": 4.03
@@ -19003,14 +18971,18 @@
     {
      "date": "2026-11-05",
      "value": 3.48
+    },
+    {
+     "date": "2026-11-06",
+     "value": 3.42
     }
    ],
    "latest": {
-    "date": "2026-11-05",
-    "value": 3.48
+    "date": "2026-11-06",
+    "value": 3.42
    },
-   "sha256": "2e1d3a06eaeaa43ec46b8595df85bf145aaa889fa04bd5d46fe76d408ebaf198",
-   "bytes": 12702
+   "sha256": "b1b0a7cec089d39618fb2b886009698951a8e4e987369e270162f23b4881a61a",
+   "bytes": 12670
   },
   "CPIAUCSL": {
    "id": "CPIAUCSL",
@@ -19021,8 +18993,8 @@
    "frequency": "monthly",
    "purpose": "US consumer price inflation (year-on-year computed from the index)",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:32Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:01Z",
    "status": "ok",
    "observations": [
     {
@@ -19182,8 +19154,8 @@
    "frequency": "monthly",
    "purpose": "US unemployment rate; labour-market slack",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:32Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:01Z",
    "status": "ok",
    "observations": [
     {
@@ -19347,14 +19319,10 @@
    "frequency": "weekly",
    "purpose": "US initial jobless claims; earliest labour-market turning signal",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:32Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:02Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-04",
-     "value": 216000.0
-    },
     {
      "date": "2023-11-11",
      "value": 230000.0
@@ -19984,8 +19952,8 @@
     "date": "2026-10-31",
     "value": 189000.0
    },
-   "sha256": "5269da2cd2d4bacc003600c355401266fec56aa9480630e4be0d2b1c650452e5",
-   "bytes": 2848
+   "sha256": "6425cd56f469532c8e87796cf2af1fcd21d43bbc73417d483a56a674c689da05",
+   "bytes": 2830
   },
   "NFCI": {
    "id": "NFCI",
@@ -19996,14 +19964,10 @@
    "frequency": "weekly",
    "purpose": "Chicago Fed National Financial Conditions Index; financial conditions",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:33Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:02Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-03",
-     "value": -0.29
-    },
     {
      "date": "2023-11-10",
      "value": -0.298
@@ -20633,8 +20597,8 @@
     "date": "2026-10-30",
     "value": -0.459
    },
-   "sha256": "19de46ab5fb9ebf2839cb685da2ec640c6068aeb4141c8de29ea688caedc9ddc",
-   "bytes": 2848
+   "sha256": "5f51fbdf63386994d5a12bdd5061fb1a35e67f6019046deb3cb1291898020f2e",
+   "bytes": 2830
   },
   "DTWEXBGS": {
    "id": "DTWEXBGS",
@@ -20645,18 +20609,10 @@
    "frequency": "daily",
    "purpose": "Nominal broad US dollar index; dollar strength drives HK/SG/China and GBP-based returns",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:33Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:03Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 122.8818
-    },
-    {
-     "date": "2023-11-03",
-     "value": 121.7564
-    },
     {
      "date": "2023-11-06",
      "value": 121.6484
@@ -23782,8 +23738,8 @@
     "date": "2026-10-30",
     "value": 121.6656
    },
-   "sha256": "5a019d0eb7ad613c6626c3939748a096118c237c985b40d001b73aae8e30ea98",
-   "bytes": 15402
+   "sha256": "8b7557ff66f31050b6be5356f062e5c3d13e6d49587d5e912c276a3f9f20e895",
+   "bytes": 15362
   },
   "DCOILBRENTEU": {
    "id": "DCOILBRENTEU",
@@ -23794,18 +23750,10 @@
    "frequency": "daily",
    "purpose": "Brent crude spot price; inflation and energy-sector input",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU&cosd=2023-11-02",
-   "retrieved_at": "2026-11-06T20:05:33Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU&cosd=2023-11-05",
+   "retrieved_at": "2026-11-09T16:44:03Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 89.02
-    },
-    {
-     "date": "2023-11-03",
-     "value": 87.55
-    },
     {
      "date": "2023-11-06",
      "value": 87.31
@@ -26939,8 +26887,8 @@
     "date": "2026-11-03",
     "value": 107.03
    },
-   "sha256": "d41e45c7a461695d366defcdeed087ebec3c1366e5d84c1159250ed2d963c08a",
-   "bytes": 13334
+   "sha256": "4f3179868edc46bc31c7747148921b9c72fa2b7802b0878650d67bc4beace8b4",
+   "bytes": 13300
   },
   "ECB_GBP_EUR": {
    "id": "ECB_GBP_EUR",
@@ -26956,13 +26904,9 @@
    "purpose": "GBP purchasing power; base currency of the investor",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.GBP.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-06T20:05:34Z",
+   "retrieved_at": "2026-11-09T16:44:04Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-11-21",
-     "value": 0.83273
-    },
     {
      "date": "2024-11-22",
      "value": 0.83205
@@ -28958,14 +28902,18 @@
     {
      "date": "2026-11-06",
      "value": 0.83415
+    },
+    {
+     "date": "2026-11-09",
+     "value": 0.8343
     }
    ],
    "latest": {
-    "date": "2026-11-06",
-    "value": 0.83415
+    "date": "2026-11-09",
+    "value": 0.8343
    },
-   "sha256": "45521516a88309dc0552973198447719ccd9f29f857694dddf643f5d6ce68ebe",
-   "bytes": 109524
+   "sha256": "2d5b0f131a80153c7d4ef78f4d34efc429b4bdd62d33d9fcc06515bfea176c52",
+   "bytes": 109523
   },
   "ECB_USD_EUR": {
    "id": "ECB_USD_EUR",
@@ -28981,13 +28929,9 @@
    "purpose": "EUR/USD cross for USD exposure and GBP/USD derivation",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-06T20:05:36Z",
+   "retrieved_at": "2026-11-09T16:44:05Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-11-21",
-     "value": 1.0526
-    },
     {
      "date": "2024-11-22",
      "value": 1.0412
@@ -30983,13 +30927,17 @@
     {
      "date": "2026-11-06",
      "value": 1.1165
+    },
+    {
+     "date": "2026-11-09",
+     "value": 1.1193
     }
    ],
    "latest": {
-    "date": "2026-11-06",
-    "value": 1.1165
+    "date": "2026-11-09",
+    "value": 1.1193
    },
-   "sha256": "c3d67ea9ae0d1541c8315e27e7c86c1aded429aad867b2dc7ff1699f0aae82eb",
+   "sha256": "892956d7aca235f5109c91802ff760d7c5fff574f2bb8dd8ecb5edd7128ac6be",
    "bytes": 104274
   },
   "ECB_SGD_EUR": {
@@ -31006,13 +30954,9 @@
    "purpose": "Singapore dollar for the SG income sleeve",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.SGD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-06T20:05:37Z",
+   "retrieved_at": "2026-11-09T16:44:06Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-11-21",
-     "value": 1.4144
-    },
     {
      "date": "2024-11-22",
      "value": 1.4034
@@ -33008,13 +32952,17 @@
     {
      "date": "2026-11-06",
      "value": 1.4309
+    },
+    {
+     "date": "2026-11-09",
+     "value": 1.4328
     }
    ],
    "latest": {
-    "date": "2026-11-06",
-    "value": 1.4309
+    "date": "2026-11-09",
+    "value": 1.4328
    },
-   "sha256": "42e3361d0eb9d30ce9a9219dbabbb32a64bc471ef961f53687d1a34409d0ca14",
+   "sha256": "67085e159e4dd6e37298705871a448f574a59ba6333408b4642cbd9b9a6da86a",
    "bytes": 111284
   },
   "ECB_HKD_EUR": {
@@ -33031,13 +32979,9 @@
    "purpose": "Hong Kong dollar (pegged to USD) for HK holdings",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HKD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-06T20:05:38Z",
+   "retrieved_at": "2026-11-09T16:44:37Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-11-21",
-     "value": 8.1921
-    },
     {
      "date": "2024-11-22",
      "value": 8.1052
@@ -35033,13 +34977,17 @@
     {
      "date": "2026-11-06",
      "value": 8.7505
+    },
+    {
+     "date": "2026-11-09",
+     "value": 8.7772
     }
    ],
    "latest": {
-    "date": "2026-11-06",
-    "value": 8.7505
+    "date": "2026-11-09",
+    "value": 8.7772
    },
-   "sha256": "e0fcde7db33d7e8679edb5a1109412757b08b2b4e61597431b007c7dddf0388e",
+   "sha256": "e2561ed63e5896c9d60ccb8cd2749384ba1090a2301024754c603c676fd65aa8",
    "bytes": 111279
   },
   "ECB_CNY_EUR": {
@@ -35056,13 +35004,9 @@
    "purpose": "Chinese renminbi for China holdings",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CNY.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-06T20:05:39Z",
+   "retrieved_at": "2026-11-09T16:44:38Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-11-21",
-     "value": 7.6204
-    },
     {
      "date": "2024-11-22",
      "value": 7.5458
@@ -37058,13 +37002,17 @@
     {
      "date": "2026-11-06",
      "value": 7.4485
+    },
+    {
+     "date": "2026-11-09",
+     "value": 7.4689
     }
    ],
    "latest": {
-    "date": "2026-11-06",
-    "value": 7.4485
+    "date": "2026-11-09",
+    "value": 7.4689
    },
-   "sha256": "2f72dfd5bbb28e61a63c0b685243339fac549925451d66287b54da32b4252cc5",
+   "sha256": "11c54f0100a70a44ed223feff2ee0f38fbf3301ce284571cdf1306eec1e42377",
    "bytes": 116271
   },
   "BOE_IUDBEDR": {
@@ -37076,18 +37024,10 @@
    "frequency": "daily",
    "purpose": "UK Bank Rate (official policy rate)",
    "verified": true,
-   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=02/Nov/2023&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-11-06T20:05:40Z",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=05/Nov/2023&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "retrieved_at": "2026-11-09T16:44:39Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 5.25
-    },
-    {
-     "date": "2023-11-03",
-     "value": 5.25
-    },
     {
      "date": "2023-11-06",
      "value": 5.25
@@ -40127,14 +40067,18 @@
     {
      "date": "2026-11-05",
      "value": 4.0
+    },
+    {
+     "date": "2026-11-06",
+     "value": 4.0
     }
    ],
    "latest": {
-    "date": "2026-11-05",
+    "date": "2026-11-06",
     "value": 4.0
    },
-   "sha256": "fa57ce119718effe4a521f93c3406be60d2b7cd17acdde8effff1d2c09e62dfb",
-   "bytes": 13176
+   "sha256": "2939b1032a2dd2b87236b4f30e951bd3847ac7ac683d7f25e41642403cf885c0",
+   "bytes": 13155
   },
   "BOE_IUDMNZC": {
    "id": "BOE_IUDMNZC",
@@ -40145,18 +40089,10 @@
    "frequency": "daily",
    "purpose": "UK 10-year nominal zero-coupon gilt yield (BoE yield-curve estimate); UK discount rate",
    "verified": true,
-   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=02/Nov/2023&Dateto=now&SeriesCodes=IUDMNZC&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-11-06T20:05:40Z",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=05/Nov/2023&Dateto=now&SeriesCodes=IUDMNZC&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "retrieved_at": "2026-11-09T16:44:39Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-02",
-     "value": 4.383
-    },
-    {
-     "date": "2023-11-03",
-     "value": 4.293
-    },
     {
      "date": "2023-11-06",
      "value": 4.3666
@@ -43192,14 +43128,18 @@
     {
      "date": "2026-11-04",
      "value": 5.146
+    },
+    {
+     "date": "2026-11-05",
+     "value": 5.1317
     }
    ],
    "latest": {
-    "date": "2026-11-04",
-    "value": 5.146
+    "date": "2026-11-05",
+    "value": 5.1317
    },
-   "sha256": "5460292c7138bd2dac983342234edbb751a223b930012f52ae2800abf73e9f2f",
-   "bytes": 15161
+   "sha256": "33432e8419ece10b3e7b938d9a3c8ff29ab32c560c31cbce5cd55c286f3f2a45",
+   "bytes": 15143
   },
   "ONS_L55O": {
    "id": "ONS_L55O",
@@ -43212,7 +43152,7 @@
    "purpose": "UK CPIH annual rate (CPI including owner-occupiers' housing costs); headline UK inflation measure",
    "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23/data",
-   "retrieved_at": "2026-11-06T20:05:40Z",
+   "retrieved_at": "2026-11-09T16:44:39Z",
    "status": "ok",
    "observations": [
     {
@@ -45046,7 +44986,7 @@
    "purpose": "UK CPI annual rate (the Bank of England's 2% target measure); cross-check for CPIH",
    "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data",
-   "retrieved_at": "2026-11-06T20:05:41Z",
+   "retrieved_at": "2026-11-09T16:44:40Z",
    "status": "ok",
    "observations": [
     {
@@ -46880,7 +46820,7 @@
    "purpose": "Primary-source 3-month Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:44:56Z",
    "status": "ok",
    "observations": [
     {
@@ -47734,14 +47674,18 @@
     {
      "date": "2026-11-05",
      "value": 4.17
+    },
+    {
+     "date": "2026-11-06",
+     "value": 4.19
     }
    ],
    "latest": {
-    "date": "2026-11-05",
-    "value": 4.17
+    "date": "2026-11-06",
+    "value": 4.19
    },
-   "sha256": "e2e93e7771195613cd0f89531e089dbb3062d674f9b69348ab1f8d42b05c7daa",
-   "bytes": 17363
+   "sha256": "a2c61c27a95c6a45ceac850ce9e5ed00903bed1b9ac43732c027c15d94e657da",
+   "bytes": 17444
   },
   "UST_PAR_2Y": {
    "id": "UST_PAR_2Y",
@@ -47754,7 +47698,7 @@
    "purpose": "Primary-source 2-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:44:56Z",
    "status": "ok",
    "observations": [
     {
@@ -48608,14 +48552,18 @@
     {
      "date": "2026-11-05",
      "value": 4.46
+    },
+    {
+     "date": "2026-11-06",
+     "value": 4.51
     }
    ],
    "latest": {
-    "date": "2026-11-05",
-    "value": 4.46
+    "date": "2026-11-06",
+    "value": 4.51
    },
-   "sha256": "e2e93e7771195613cd0f89531e089dbb3062d674f9b69348ab1f8d42b05c7daa",
-   "bytes": 17363
+   "sha256": "a2c61c27a95c6a45ceac850ce9e5ed00903bed1b9ac43732c027c15d94e657da",
+   "bytes": 17444
   },
   "UST_PAR_10Y": {
    "id": "UST_PAR_10Y",
@@ -48628,7 +48576,7 @@
    "purpose": "Primary-source 10-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:44:56Z",
    "status": "ok",
    "observations": [
     {
@@ -49482,14 +49430,18 @@
     {
      "date": "2026-11-05",
      "value": 4.84
+    },
+    {
+     "date": "2026-11-06",
+     "value": 4.86
     }
    ],
    "latest": {
-    "date": "2026-11-05",
-    "value": 4.84
+    "date": "2026-11-06",
+    "value": 4.86
    },
-   "sha256": "e2e93e7771195613cd0f89531e089dbb3062d674f9b69348ab1f8d42b05c7daa",
-   "bytes": 17363
+   "sha256": "a2c61c27a95c6a45ceac850ce9e5ed00903bed1b9ac43732c027c15d94e657da",
+   "bytes": 17444
   },
   "UST_PAR_30Y": {
    "id": "UST_PAR_30Y",
@@ -49502,7 +49454,7 @@
    "purpose": "Primary-source 30-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:44:56Z",
    "status": "ok",
    "observations": [
     {
@@ -50356,14 +50308,18 @@
     {
      "date": "2026-11-05",
      "value": 5.25
+    },
+    {
+     "date": "2026-11-06",
+     "value": 5.26
     }
    ],
    "latest": {
-    "date": "2026-11-05",
-    "value": 5.25
+    "date": "2026-11-06",
+    "value": 5.26
    },
-   "sha256": "e2e93e7771195613cd0f89531e089dbb3062d674f9b69348ab1f8d42b05c7daa",
-   "bytes": 17363
+   "sha256": "a2c61c27a95c6a45ceac850ce9e5ed00903bed1b9ac43732c027c15d94e657da",
+   "bytes": 17444
   },
   "WB_GDP_SG": {
    "id": "WB_GDP_SG",
@@ -50377,7 +50333,7 @@
    "purpose": "Singapore real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/SG/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:45:46Z",
    "status": "ok",
    "observations": [
     {
@@ -50664,7 +50620,7 @@
    "purpose": "Hong Kong SAR, China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/HK/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:45:48Z",
    "status": "ok",
    "observations": [
     {
@@ -50951,7 +50907,7 @@
    "purpose": "China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/CN/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:45:48Z",
    "status": "ok",
    "observations": [
     {
@@ -51238,7 +51194,7 @@
    "purpose": "United Kingdom real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/GB/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:45:49Z",
    "status": "ok",
    "observations": [
     {
@@ -51525,7 +51481,7 @@
    "purpose": "United States real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/US/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-06T20:06:01Z",
+   "retrieved_at": "2026-11-09T16:45:49Z",
    "status": "ok",
    "observations": [
     {
