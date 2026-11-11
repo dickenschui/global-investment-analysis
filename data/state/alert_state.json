@@ -39,15 +39,15 @@
   },
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
-   "first_seen": "2026-11-10T01:46:48Z",
-   "last_seen": "2026-11-10T22:18:25Z",
+   "first_seen": "2026-11-11T07:42:33Z",
+   "last_seen": "2026-11-11T07:42:33Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Weekly levels stale",
-    "evidence": "Levels as of 2026-10-09 are 32 days old (limit 9)",
+    "evidence": "Levels as of 2026-10-09 are 33 days old (limit 9)",
     "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
    },
    "levels_as_of": "2026-10-09"
@@ -110,16 +110,16 @@
   "823|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-23T05:58:40Z",
-   "last_seen": "2026-11-10T01:46:48Z",
+   "last_seen": "2026-11-11T07:42:33Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "823",
     "rule": "Revisit trigger crossed",
-    "evidence": "823 40.80 above revisit level 38.09",
+    "evidence": "823 40.22 above revisit level 38.09",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 40.8,
+    "observed": 40.22,
     "reference": 38.088,
     "kind": "above"
    },
@@ -129,16 +129,16 @@
   "857|Revisit trigger crossed": {
    "severity": "INFO",
    "first_seen": "2026-10-26T06:02:25Z",
-   "last_seen": "2026-11-10T01:46:48Z",
+   "last_seen": "2026-11-11T07:42:33Z",
    "notified_severity": "INFO",
    "delivered": true,
    "alert": {
     "severity": "INFO",
     "symbol": "857",
     "rule": "Revisit trigger crossed",
-    "evidence": "857 10.20 above revisit level 9.94",
+    "evidence": "857 10.14 above revisit level 9.94",
     "action": "Opportunity: confirm on the weekly close before upgrading.",
-    "observed": 10.2,
+    "observed": 10.14,
     "reference": 9.935875,
     "kind": "above"
    },
@@ -258,15 +258,15 @@
   },
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
-   "first_seen": "2026-11-10T01:46:48Z",
-   "last_seen": "2026-11-10T22:18:25Z",
+   "first_seen": "2026-11-11T07:42:33Z",
+   "last_seen": "2026-11-11T07:42:33Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-11-10T16:59:21Z; this check 2026-11-10T22:18:25Z; gap 5.3 hours (limit 2.5)",
+    "evidence": "Previous check 2026-11-10T22:18:25Z; this check 2026-11-11T07:42:33Z; gap 9.4 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -285,42 +285,6 @@
     "action": "Review position and options on this underlying.",
     "observed": 166.89,
     "reference": 178.67,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "ES3|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-10T01:46:48Z",
-   "last_seen": "2026-11-10T08:52:11Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "ES3",
-    "rule": "Large daily move",
-    "evidence": "ES3 +1.8% vs prior close (+2.7 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 5.341,
-    "reference": 5.246,
-    "kind": "move"
-   },
-   "levels_as_of": "2026-10-09"
-  },
-  "O39|Large daily move": {
-   "severity": "WARN",
-   "first_seen": "2026-11-10T01:46:48Z",
-   "last_seen": "2026-11-10T08:52:11Z",
-   "notified_severity": "WARN",
-   "delivered": true,
-   "alert": {
-    "severity": "WARN",
-    "symbol": "O39",
-    "rule": "Large daily move",
-    "evidence": "O39 +3.2% vs prior close (+2.5 standard deviations)",
-    "action": "Review position and options on this underlying.",
-    "observed": 28.62,
-    "reference": 27.73,
     "kind": "move"
    },
    "levels_as_of": "2026-10-09"
@@ -381,14 +345,8 @@
    "levels_as_of": "2026-10-09"
   }
  },
- "last_run_utc": "2026-11-10T22:18:25Z",
+ "last_run_utc": "2026-11-11T07:42:33Z",
  "recent": {
-  "USD.CNH|Large daily move": {
-   "cleared_at": "2026-11-04T07:27:23Z",
-   "first_seen": "2026-11-03T07:50:06Z",
-   "notified_severity": "WARN",
-   "levels_as_of": "2026-10-09"
-  },
   "HSBA|Large daily move": {
    "cleared_at": "2026-11-05T09:22:50Z",
    "first_seen": "2026-11-04T15:41:38Z",
@@ -566,6 +524,18 @@
   "SPY|Large daily move": {
    "cleared_at": "2026-11-10T16:59:21Z",
    "first_seen": "2026-11-09T18:42:04Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "ES3|Large daily move": {
+   "cleared_at": "2026-11-11T07:42:33Z",
+   "first_seen": "2026-11-10T01:46:48Z",
+   "notified_severity": "WARN",
+   "levels_as_of": "2026-10-09"
+  },
+  "O39|Large daily move": {
+   "cleared_at": "2026-11-11T07:42:33Z",
+   "first_seen": "2026-11-10T01:46:48Z",
    "notified_severity": "WARN",
    "levels_as_of": "2026-10-09"
   }
