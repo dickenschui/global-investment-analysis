@@ -66,12 +66,15 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict, levels_as_of: s
     """Official closes for one session against this week's levels.
 
     `doc` is a data/daily/<date>.json file: {"session_date", "source", "retrieved_at_utc",
-    "closes": {symbol: {"close", "prior_close", "bar_time"}}, "missing": {symbol: reason}}. A close about 100x the
+    "closes": {symbol: {"close", "prior_close", "bar_time"}}, "missing": {symbol: reason}}, optionally with
+    "instruments": the symbols it set out to collect (a pre-open Asia file covers only Hong Kong, China and
+    Singapore), in which case only those count as missing. A close about 100x the
     weekly close (a London line in pence) is divided by 100; a bar that does not belong to the session date (a
     holiday, or IBKR not yet updated) is marked stale and not checked; a close further from the weekly close than
     DAILY_CHECK, or five weekly standard deviations of the instrument's own volatility if wider (VIX moves 35% in a
     normal week), is flagged for checking instead of being used."""
     session = dt.date.fromisoformat(doc["session_date"])
+    expected = set(doc["instruments"]) if doc.get("instruments") else {r["symbol"] for r in calls + others}
     rows, exceptions, stale, check = {}, [], [], []
     for r in calls + others:
         q = doc["closes"].get(r["symbol"])
@@ -96,12 +99,14 @@ def daily_view(calls: list[dict], others: list[dict], doc: dict, levels_as_of: s
     order = {"crit": 0, "warn": 1, "info": 2, "good": 3}
     return {"session_date": doc["session_date"], "source": doc.get("source"), "retrieved_at_utc": doc.get("retrieved_at_utc"),
             "rows": rows, "exceptions": sorted(exceptions, key=lambda x: (order[x["kind"]], x["symbol"])),
-            "missing": sorted(set(doc.get("missing") or {}) | {r["symbol"] for r in calls + others} - set(rows)),
+            "missing": sorted(set(doc.get("missing") or {})
+                              | {r["symbol"] for r in calls + others if r["symbol"] in expected} - set(rows)),
             "stale": sorted(stale), "check": sorted(check)}
 
 
 def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
-          state_dir: str | Path | None = None, daily: str | Path | None = None) -> dict:
+          state_dir: str | Path | None = None, daily: str | Path | None = None,
+          overnight: str | Path | None = None) -> dict:
     rep, snap = Path(reports_dir), Path(snapshot_dir)
     dec = json.loads((rep / "decisions.json").read_text())
     mon = json.loads((rep / "monitor.json").read_text())
@@ -171,6 +176,8 @@ def build(reports_dir: str | Path, snapshot_dir: str | Path, universe: dict,
     }
     if daily:
         out["daily"] = daily_view(calls, others, json.loads(Path(daily).read_text()), dec["as_of"])
+    if overnight:   # the pre-open update: Asian closes for the new session, shown above the previous US close
+        out["overnight"] = daily_view(calls, others, json.loads(Path(overnight).read_text()), dec["as_of"])
     if opt:
         seen, ideas = set(), []
         for i in opt["ideas"]:

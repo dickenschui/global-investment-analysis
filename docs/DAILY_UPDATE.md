@@ -47,3 +47,20 @@ Read-only against markets: never place orders, create alerts or watchlists, or t
    cover delivery.
 
 If the connector is unavailable or more than a tenth of the closes are missing, do not publish; say what failed.
+
+## Pre-open update (08:41 New York, weekdays)
+
+Before the US bell the Desk is republished with the Asian closes of the session that is about to open, and the link is
+sent to the owner. The US and UK lines keep the previous session's official closes: nothing is re-priced live.
+
+1. Start from main as above. The US file is the latest `data/daily/<date>.json` (the after-hours publish).
+2. Collect, in a subagent, today's ONE_DAY closes (step_count 2, read-only) for the Hong Kong, China and Singapore
+   instruments only: `data/snapshots/<date>/hk_cn.json` and `sg.json` (33 names). Write
+   `data/daily/<today>-asia.json` in the same form as the daily file, with one extra field, `"instruments"`: the
+   list of symbols attempted, so that only those count as missing. A closed market leaves its bars dated the previous
+   session; app-data then marks them stale and says so.
+3. Build with both files: `app-data ... --daily data/daily/<US date>.json --overnight data/daily/<today>-asia.json`.
+   Investigate anything listed as to check. Publish as in step 4 above; commit the Asia file and `app/data.json`.
+4. Send the Desk link with a digest of at most five lines (exit breaches first, then the overnight Asia flags, then
+   gaps) to Telegram (Zapier TelegramCLIAPI send_message, chat_id 979860585, format html) and by Gmail to
+   dickenschui@gmail.com, subject "Desk pre-open · <date>". On a US market holiday send one line saying so instead.
