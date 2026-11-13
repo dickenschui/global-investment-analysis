@@ -55,6 +55,13 @@ def test_daily_closes_are_checked_against_this_weeks_levels():
     assert not any(x["symbol"] == "LATE" for x in d["exceptions"])        # a prior-day bar is never judged
     assert "stale" not in d["rows"]["USD.SGD"] and d["exceptions"][0]["symbol"] == "XOM"
     assert "check" not in d["rows"]["VIX"] and d["rows"]["VIX"]["close"] == 19.99
+    # a pre-open Asia file lists the names it set out to collect: only those can be missing
+    asia = {"session_date": "2026-10-16", "instruments": ["2800", "ODD"],
+            "closes": {"2800": {"close": 25.1, "prior_close": 25.0, "bar_time": "2026-10-16T01:30:00Z"}}}
+    o = app_data.daily_view(calls, others, asia)
+    assert o["missing"] == ["ODD"] and list(o["rows"]) == ["2800"] and o["stale"] == []
+    move = app_data._flags({"stance": "Hold", "last": 100.0, "vol": 0.2}, 80.0, "2026-10-09")
+    assert move == [["crit", "-20.0% since the 2026-10-09 close: 7.2 weekly standard deviations.", "move"]]
 
 
 def test_cli_app_data_with_daily_closes(tmp_path):

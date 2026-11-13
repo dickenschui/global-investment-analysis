@@ -1,0 +1,208 @@
+{
+  "session_date": "2026-11-12",
+  "source": "IBKR get_price_history ONE_DAY, last two bars as returned (pre-open: Hong Kong, China and Singapore only)",
+  "retrieved_at_utc": "2026-11-12T13:47:32Z",
+  "instruments": [
+    "2800",
+    "700",
+    "9988",
+    "3690",
+    "1299",
+    "5",
+    "941",
+    "857",
+    "388",
+    "823",
+    "1211",
+    "3188",
+    "600519",
+    "601318",
+    "600036",
+    "300750",
+    "000333",
+    "600900",
+    "ES3",
+    "D05",
+    "O39",
+    "U11",
+    "Z74",
+    "CJLU",
+    "A17U",
+    "J69U",
+    "ME8U",
+    "M44U",
+    "N2IU",
+    "C38U",
+    "C2PU",
+    "AJBU",
+    "S63"
+  ],
+  "closes": {
+    "2800": {
+      "close": 24.1,
+      "prior_close": 24.4,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "700": {
+      "close": 398.8,
+      "prior_close": 409.6,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "9988": {
+      "close": 93.8,
+      "prior_close": 100.6,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "3690": {
+      "close": 72.1,
+      "prior_close": 72.84,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "1299": {
+      "close": 79.26,
+      "prior_close": 78.9,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "5": {
+      "close": 140.7,
+      "prior_close": 141.6,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "941": {
+      "close": 80.7,
+      "prior_close": 80.84,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "857": {
+      "close": 10.05,
+      "prior_close": 10.1,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "388": {
+      "close": 382,
+      "prior_close": 383.6,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "823": {
+      "close": 41.5,
+      "prior_close": 40.2,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "1211": {
+      "close": 67.54,
+      "prior_close": 69.2,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "3188": {
+      "close": 49.18,
+      "prior_close": 49.36,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "600519": {
+      "close": 1410.27,
+      "prior_close": 1402.3,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "601318": {
+      "close": 53.33,
+      "prior_close": 53.41,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "600036": {
+      "close": 42.63,
+      "prior_close": 42.56,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "300750": {
+      "close": 240.26,
+      "prior_close": 246.67,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "000333": {
+      "close": 87.99,
+      "prior_close": 87.68,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "600900": {
+      "close": 29.61,
+      "prior_close": 29.48,
+      "bar_time": "2026-11-12T01:30:00Z"
+    },
+    "ES3": {
+      "close": 5.35,
+      "prior_close": 5.37,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "D05": {
+      "close": 71,
+      "prior_close": 70.97,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "O39": {
+      "close": 28.67,
+      "prior_close": 28.82,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "U11": {
+      "close": 37.77,
+      "prior_close": 37.58,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "Z74": {
+      "close": 4.15,
+      "prior_close": 4.14,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "CJLU": {
+      "close": 0.925,
+      "prior_close": 0.935,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "A17U": {
+      "close": 2.21,
+      "prior_close": 2.23,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "J69U": {
+      "close": 2.14,
+      "prior_close": 2.14,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "ME8U": {
+      "close": 1.73,
+      "prior_close": 1.73,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "M44U": {
+      "close": 1.1,
+      "prior_close": 1.1,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "N2IU": {
+      "close": 1.16,
+      "prior_close": 1.15,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "C38U": {
+      "close": 2.35,
+      "prior_close": 2.34,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "C2PU": {
+      "close": 4.03,
+      "prior_close": 4.02,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "AJBU": {
+      "close": 2.17,
+      "prior_close": 2.17,
+      "bar_time": "2026-11-12T01:00:00Z"
+    },
+    "S63": {
+      "close": 9.76,
+      "prior_close": 9.74,
+      "bar_time": "2026-11-12T01:00:00Z"
+    }
+  },
+  "missing": {}
+}

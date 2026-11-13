@@ -213,6 +213,8 @@ def main(argv=None) -> int:
     ad.add_argument("--snapshot", required=True, help="data/snapshots/<date> directory (for IBKR contract ids)")
     ad.add_argument("--state-dir", default=None)
     ad.add_argument("--daily", help="data/daily/<date>.json: one session's official closes (docs/DAILY_UPDATE.md)")
+    ad.add_argument("--overnight", help="data/daily/<date>-asia.json: Hong Kong, China and Singapore closes for the "
+                                        "session that opens next (the pre-open update)")
     ad.add_argument("--out", required=True)
     mf = sub.add_parser("manifest", help="write (or --verify) SHA-256 manifests for snapshot/history directories")
     mf.add_argument("dirs", nargs="+")
@@ -281,14 +283,15 @@ def main(argv=None) -> int:
         print(md)
         return 0
     if args.cmd == "app-data":
-        res = app_data.build(args.reports, args.snapshot, universe, args.state_dir, args.daily)
+        res = app_data.build(args.reports, args.snapshot, universe, args.state_dir, args.daily, args.overnight)
         Path(args.out).write_text(json.dumps(_clean(res), separators=(",", ":"), default=_json_default))
         print(f"App data {res['as_of']}: {len(res['calls'])} decisions, {len(res['others'])} other instruments, "
               f"{Path(args.out).stat().st_size / 1024:.0f} KB -> {args.out}")
-        if res.get("daily"):
-            d = res["daily"]
-            print(f"Daily closes {d['session_date']}: {len(d['rows'])} priced, {len(d['exceptions'])} exceptions, "
-                  f"missing {len(d['missing'])}, stale {len(d['stale'])}, to check {d['check'] or 'none'}")
+        for key, label in (("daily", "Daily closes"), ("overnight", "Overnight closes")):
+            if res.get(key):
+                d = res[key]
+                print(f"{label} {d['session_date']}: {len(d['rows'])} priced, {len(d['exceptions'])} exceptions, "
+                      f"missing {len(d['missing'])}, stale {len(d['stale'])}, to check {d['check'] or 'none'}")
         return 0
 
     if args.cmd == "backtest":
