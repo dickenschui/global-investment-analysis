@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "retrieved_at": "2026-11-24T23:16:22Z",
+ "retrieved_at": "2026-11-25T17:29:43Z",
  "series": {
   "DGS3MO": {
    "id": "DGS3MO",
@@ -11,14 +11,10 @@
    "frequency": "daily",
    "purpose": "US Treasury 3-month constant-maturity yield; short end of the curve and cash return proxy",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:23Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3MO&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:43Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 5.54
-    },
     {
      "date": "2023-11-21",
      "value": 5.53
@@ -3164,8 +3160,8 @@
     "date": "2026-11-23",
     "value": 4.37
    },
-   "sha256": "9d9c5a2f0c38520214669159335338bb6539a0e54186ba64e5d8611ea4198a91",
-   "bytes": 12460
+   "sha256": "12844f169321521464bf13cb132892168eec67d48cb1b5c588d055da853b73ea",
+   "bytes": 12444
   },
   "DGS2": {
    "id": "DGS2",
@@ -3176,14 +3172,10 @@
    "frequency": "daily",
    "purpose": "US Treasury 2-year constant-maturity yield; market view of the Fed path",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:24Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:44Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 4.89
-    },
     {
      "date": "2023-11-21",
      "value": 4.86
@@ -6329,8 +6321,8 @@
     "date": "2026-11-23",
     "value": 4.63
    },
-   "sha256": "c5155ec80d7db1a21807b64d248f65f99ae10bcfd5f94d18c0b88063653f73ef",
-   "bytes": 12458
+   "sha256": "285828a3235b27740814e73ab008e17ed5964355afdeffd5d0b9039a3eb36be1",
+   "bytes": 12442
   },
   "DGS10": {
    "id": "DGS10",
@@ -6341,14 +6333,10 @@
    "frequency": "daily",
    "purpose": "US Treasury 10-year constant-maturity yield; discount rate for long-duration assets",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:24Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:44Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 4.42
-    },
     {
      "date": "2023-11-21",
      "value": 4.41
@@ -9494,8 +9482,8 @@
     "date": "2026-11-23",
     "value": 4.92
    },
-   "sha256": "530a2ee6cfc8f209b75a5cc566f728f19a4ecb8b96a4b3fa3c3ef2501c026c05",
-   "bytes": 12459
+   "sha256": "3b7a7a4e0e560b60ad7edf497784856a21bd792a0b6409d9bd668297d9c581b9",
+   "bytes": 12443
   },
   "T10Y3M": {
    "id": "T10Y3M",
@@ -9506,14 +9494,10 @@
    "frequency": "daily",
    "purpose": "Yield-curve slope; inversion has preceded past US recessions",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y3M&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:25Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y3M&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:44Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": -1.12
-    },
     {
      "date": "2023-11-21",
      "value": -1.12
@@ -12663,8 +12647,8 @@
     "date": "2026-11-24",
     "value": 0.55
    },
-   "sha256": "ca8a68d3cdca4d0c507a39a66abc3be6efb22ba84491b8c0ff7dc050160ffdd2",
-   "bytes": 12828
+   "sha256": "0be231f41d864ae8914305896d05d6bf1e54535f1c35ba520d7f4bd4894a056c",
+   "bytes": 12811
   },
   "T10Y2Y": {
    "id": "T10Y2Y",
@@ -12675,14 +12659,10 @@
    "frequency": "daily",
    "purpose": "Alternative yield-curve slope, cross-check for T10Y3M",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y2Y&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:25Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=T10Y2Y&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:45Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": -0.47
-    },
     {
      "date": "2023-11-21",
      "value": -0.45
@@ -15832,8 +15812,8 @@
     "date": "2026-11-24",
     "value": 0.28
    },
-   "sha256": "3fc5f58d3c1195dfcc65faf5f5c242c257f922bfc2e6c3b2f9382b42ee8ccb6a",
-   "bytes": 12670
+   "sha256": "1e34d9ab9e66316dc40012b35053112c6776f5235ad93f1af8a3a2759d4ebb67",
+   "bytes": 12653
   },
   "BAMLH0A0HYM2": {
    "id": "BAMLH0A0HYM2",
@@ -15844,8 +15824,8 @@
    "frequency": "daily",
    "purpose": "US high-yield credit stress; ICE BofA index (FRED only republishes a rolling ~3-year window under ICE licence)",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:25Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:45Z",
    "status": "ok",
    "observations": [
     {
@@ -19015,14 +18995,18 @@
     {
      "date": "2026-11-23",
      "value": 3.63
+    },
+    {
+     "date": "2026-11-24",
+     "value": 3.72
     }
    ],
    "latest": {
-    "date": "2026-11-23",
-    "value": 3.63
+    "date": "2026-11-24",
+    "value": 3.72
    },
-   "sha256": "e6f1be18f6f2f31edf22afcf66d8289b71f43e8f87599f6b8718b29bec5144ae",
-   "bytes": 12670
+   "sha256": "4981d5a2653d47ff4921a03076209bf780dc8c02ac2ff8a9f9653a261027e765",
+   "bytes": 12686
   },
   "CPIAUCSL": {
    "id": "CPIAUCSL",
@@ -19033,8 +19017,8 @@
    "frequency": "monthly",
    "purpose": "US consumer price inflation (year-on-year computed from the index)",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:26Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCSL&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:45Z",
    "status": "ok",
    "observations": [
     {
@@ -19198,8 +19182,8 @@
    "frequency": "monthly",
    "purpose": "US unemployment rate; labour-market slack",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:26Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=UNRATE&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:45Z",
    "status": "ok",
    "observations": [
     {
@@ -19363,8 +19347,8 @@
    "frequency": "weekly",
    "purpose": "US initial jobless claims; earliest labour-market turning signal",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:26Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=ICSA&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:46Z",
    "status": "ok",
    "observations": [
     {
@@ -19989,15 +19973,19 @@
     },
     {
      "date": "2026-11-14",
-     "value": 203000.0
+     "value": 202000.0
+    },
+    {
+     "date": "2026-11-21",
+     "value": 189000.0
     }
    ],
    "latest": {
-    "date": "2026-11-14",
-    "value": 203000.0
+    "date": "2026-11-21",
+    "value": 189000.0
    },
-   "sha256": "64f4dc409b59d6270b2605b1b22009faa01a590b86f927fcdf840ddea4546540",
-   "bytes": 2830
+   "sha256": "4d6c1b825b54112333091f7f770cfa9b6dc9b7421b8202c47590da7696cd124b",
+   "bytes": 2848
   },
   "NFCI": {
    "id": "NFCI",
@@ -20008,641 +19996,645 @@
    "frequency": "weekly",
    "purpose": "Chicago Fed National Financial Conditions Index; financial conditions",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:27Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NFCI&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:46Z",
    "status": "ok",
    "observations": [
     {
      "date": "2023-11-24",
-     "value": -0.319
+     "value": -0.317
     },
     {
      "date": "2023-12-01",
-     "value": -0.33
+     "value": -0.328
     },
     {
      "date": "2023-12-08",
-     "value": -0.339
+     "value": -0.337
     },
     {
      "date": "2023-12-15",
-     "value": -0.348
+     "value": -0.346
     },
     {
      "date": "2023-12-22",
-     "value": -0.357
+     "value": -0.355
     },
     {
      "date": "2023-12-29",
-     "value": -0.366
+     "value": -0.363
     },
     {
      "date": "2024-01-05",
-     "value": -0.374
+     "value": -0.371
     },
     {
      "date": "2024-01-12",
-     "value": -0.382
-    },
-    {
-     "date": "2024-01-19",
-     "value": -0.389
-    },
-    {
-     "date": "2024-01-26",
-     "value": -0.395
-    },
-    {
-     "date": "2024-02-02",
-     "value": -0.402
-    },
-    {
-     "date": "2024-02-09",
-     "value": -0.41
-    },
-    {
-     "date": "2024-02-16",
-     "value": -0.418
-    },
-    {
-     "date": "2024-02-23",
-     "value": -0.426
-    },
-    {
-     "date": "2024-03-01",
-     "value": -0.433
-    },
-    {
-     "date": "2024-03-08",
-     "value": -0.437
-    },
-    {
-     "date": "2024-03-15",
-     "value": -0.438
-    },
-    {
-     "date": "2024-03-22",
-     "value": -0.437
-    },
-    {
-     "date": "2024-03-29",
-     "value": -0.432
-    },
-    {
-     "date": "2024-04-05",
-     "value": -0.426
-    },
-    {
-     "date": "2024-04-12",
-     "value": -0.42
-    },
-    {
-     "date": "2024-04-19",
-     "value": -0.415
-    },
-    {
-     "date": "2024-04-26",
-     "value": -0.413
-    },
-    {
-     "date": "2024-05-03",
-     "value": -0.412
-    },
-    {
-     "date": "2024-05-10",
-     "value": -0.412
-    },
-    {
-     "date": "2024-05-17",
-     "value": -0.412
-    },
-    {
-     "date": "2024-05-24",
-     "value": -0.411
-    },
-    {
-     "date": "2024-05-31",
-     "value": -0.408
-    },
-    {
-     "date": "2024-06-07",
-     "value": -0.402
-    },
-    {
-     "date": "2024-06-14",
-     "value": -0.394
-    },
-    {
-     "date": "2024-06-21",
-     "value": -0.386
-    },
-    {
-     "date": "2024-06-28",
      "value": -0.379
     },
     {
-     "date": "2024-07-05",
-     "value": -0.373
+     "date": "2024-01-19",
+     "value": -0.386
     },
     {
-     "date": "2024-07-12",
-     "value": -0.367
-    },
-    {
-     "date": "2024-07-19",
-     "value": -0.362
-    },
-    {
-     "date": "2024-07-26",
-     "value": -0.358
-    },
-    {
-     "date": "2024-08-02",
-     "value": -0.357
-    },
-    {
-     "date": "2024-08-09",
-     "value": -0.358
-    },
-    {
-     "date": "2024-08-16",
-     "value": -0.367
-    },
-    {
-     "date": "2024-08-23",
-     "value": -0.377
-    },
-    {
-     "date": "2024-08-30",
-     "value": -0.389
-    },
-    {
-     "date": "2024-09-06",
-     "value": -0.401
-    },
-    {
-     "date": "2024-09-13",
-     "value": -0.411
-    },
-    {
-     "date": "2024-09-20",
-     "value": -0.419
-    },
-    {
-     "date": "2024-09-27",
-     "value": -0.426
-    },
-    {
-     "date": "2024-10-04",
-     "value": -0.431
-    },
-    {
-     "date": "2024-10-11",
-     "value": -0.435
-    },
-    {
-     "date": "2024-10-18",
-     "value": -0.439
-    },
-    {
-     "date": "2024-10-25",
-     "value": -0.445
-    },
-    {
-     "date": "2024-11-01",
-     "value": -0.451
-    },
-    {
-     "date": "2024-11-08",
-     "value": -0.459
-    },
-    {
-     "date": "2024-11-15",
-     "value": -0.467
-    },
-    {
-     "date": "2024-11-22",
-     "value": -0.472
-    },
-    {
-     "date": "2024-11-29",
-     "value": -0.475
-    },
-    {
-     "date": "2024-12-06",
-     "value": -0.478
-    },
-    {
-     "date": "2024-12-13",
-     "value": -0.479
-    },
-    {
-     "date": "2024-12-20",
-     "value": -0.481
-    },
-    {
-     "date": "2024-12-27",
-     "value": -0.485
-    },
-    {
-     "date": "2025-01-03",
-     "value": -0.489
-    },
-    {
-     "date": "2025-01-10",
-     "value": -0.495
-    },
-    {
-     "date": "2025-01-17",
-     "value": -0.5
-    },
-    {
-     "date": "2025-01-24",
-     "value": -0.505
-    },
-    {
-     "date": "2025-01-31",
-     "value": -0.508
-    },
-    {
-     "date": "2025-02-07",
-     "value": -0.507
-    },
-    {
-     "date": "2025-02-14",
-     "value": -0.503
-    },
-    {
-     "date": "2025-02-21",
-     "value": -0.493
-    },
-    {
-     "date": "2025-02-28",
-     "value": -0.479
-    },
-    {
-     "date": "2025-03-07",
-     "value": -0.462
-    },
-    {
-     "date": "2025-03-14",
-     "value": -0.443
-    },
-    {
-     "date": "2025-03-21",
-     "value": -0.424
-    },
-    {
-     "date": "2025-03-28",
-     "value": -0.407
-    },
-    {
-     "date": "2025-04-04",
+     "date": "2024-01-26",
      "value": -0.392
     },
     {
-     "date": "2025-04-11",
-     "value": -0.381
+     "date": "2024-02-02",
+     "value": -0.399
     },
     {
-     "date": "2025-04-18",
-     "value": -0.381
+     "date": "2024-02-09",
+     "value": -0.406
     },
     {
-     "date": "2025-04-25",
-     "value": -0.388
+     "date": "2024-02-16",
+     "value": -0.414
     },
     {
-     "date": "2025-05-02",
-     "value": -0.401
+     "date": "2024-02-23",
+     "value": -0.423
     },
     {
-     "date": "2025-05-09",
-     "value": -0.419
+     "date": "2024-03-01",
+     "value": -0.429
     },
     {
-     "date": "2025-05-16",
-     "value": -0.437
+     "date": "2024-03-08",
+     "value": -0.433
     },
     {
-     "date": "2025-05-23",
-     "value": -0.452
+     "date": "2024-03-15",
+     "value": -0.434
     },
     {
-     "date": "2025-05-30",
-     "value": -0.465
+     "date": "2024-03-22",
+     "value": -0.433
     },
     {
-     "date": "2025-06-06",
-     "value": -0.475
+     "date": "2024-03-29",
+     "value": -0.428
     },
     {
-     "date": "2025-06-13",
-     "value": -0.482
+     "date": "2024-04-05",
+     "value": -0.422
     },
     {
-     "date": "2025-06-20",
-     "value": -0.489
+     "date": "2024-04-12",
+     "value": -0.416
     },
     {
-     "date": "2025-06-27",
-     "value": -0.496
+     "date": "2024-04-19",
+     "value": -0.411
     },
     {
-     "date": "2025-07-04",
-     "value": -0.502
+     "date": "2024-04-26",
+     "value": -0.409
     },
     {
-     "date": "2025-07-11",
-     "value": -0.509
+     "date": "2024-05-03",
+     "value": -0.408
     },
     {
-     "date": "2025-07-18",
-     "value": -0.513
+     "date": "2024-05-10",
+     "value": -0.409
     },
     {
-     "date": "2025-07-25",
-     "value": -0.517
+     "date": "2024-05-17",
+     "value": -0.409
     },
     {
-     "date": "2025-08-01",
-     "value": -0.52
+     "date": "2024-05-24",
+     "value": -0.408
     },
     {
-     "date": "2025-08-08",
-     "value": -0.522
+     "date": "2024-05-31",
+     "value": -0.404
     },
     {
-     "date": "2025-08-15",
-     "value": -0.524
+     "date": "2024-06-07",
+     "value": -0.398
     },
     {
-     "date": "2025-08-22",
-     "value": -0.526
+     "date": "2024-06-14",
+     "value": -0.391
     },
     {
-     "date": "2025-08-29",
-     "value": -0.527
+     "date": "2024-06-21",
+     "value": -0.383
     },
     {
-     "date": "2025-09-05",
-     "value": -0.527
+     "date": "2024-06-28",
+     "value": -0.376
     },
     {
-     "date": "2025-09-12",
-     "value": -0.527
+     "date": "2024-07-05",
+     "value": -0.37
     },
     {
-     "date": "2025-09-19",
-     "value": -0.526
+     "date": "2024-07-12",
+     "value": -0.364
     },
     {
-     "date": "2025-09-26",
-     "value": -0.526
+     "date": "2024-07-19",
+     "value": -0.359
     },
     {
-     "date": "2025-10-03",
-     "value": -0.525
+     "date": "2024-07-26",
+     "value": -0.355
     },
     {
-     "date": "2025-10-10",
-     "value": -0.523
+     "date": "2024-08-02",
+     "value": -0.354
     },
     {
-     "date": "2025-10-17",
-     "value": -0.52
+     "date": "2024-08-09",
+     "value": -0.356
     },
     {
-     "date": "2025-10-24",
-     "value": -0.517
+     "date": "2024-08-16",
+     "value": -0.364
     },
     {
-     "date": "2025-10-31",
-     "value": -0.514
+     "date": "2024-08-23",
+     "value": -0.374
     },
     {
-     "date": "2025-11-07",
-     "value": -0.511
+     "date": "2024-08-30",
+     "value": -0.386
     },
     {
-     "date": "2025-11-14",
-     "value": -0.509
+     "date": "2024-09-06",
+     "value": -0.397
     },
     {
-     "date": "2025-11-21",
-     "value": -0.508
+     "date": "2024-09-13",
+     "value": -0.407
     },
     {
-     "date": "2025-11-28",
-     "value": -0.51
+     "date": "2024-09-20",
+     "value": -0.416
     },
     {
-     "date": "2025-12-05",
-     "value": -0.513
+     "date": "2024-09-27",
+     "value": -0.422
     },
     {
-     "date": "2025-12-12",
-     "value": -0.519
+     "date": "2024-10-04",
+     "value": -0.427
     },
     {
-     "date": "2025-12-19",
-     "value": -0.528
+     "date": "2024-10-11",
+     "value": -0.431
     },
     {
-     "date": "2025-12-26",
-     "value": -0.539
+     "date": "2024-10-18",
+     "value": -0.436
     },
     {
-     "date": "2026-01-02",
-     "value": -0.551
+     "date": "2024-10-25",
+     "value": -0.441
     },
     {
-     "date": "2026-01-09",
-     "value": -0.562
+     "date": "2024-11-01",
+     "value": -0.447
     },
     {
-     "date": "2026-01-16",
-     "value": -0.569
+     "date": "2024-11-08",
+     "value": -0.455
     },
     {
-     "date": "2026-01-23",
-     "value": -0.571
+     "date": "2024-11-15",
+     "value": -0.462
     },
     {
-     "date": "2026-01-30",
-     "value": -0.567
+     "date": "2024-11-22",
+     "value": -0.467
     },
     {
-     "date": "2026-02-06",
-     "value": -0.559
-    },
-    {
-     "date": "2026-02-13",
-     "value": -0.545
-    },
-    {
-     "date": "2026-02-20",
-     "value": -0.528
-    },
-    {
-     "date": "2026-02-27",
-     "value": -0.509
-    },
-    {
-     "date": "2026-03-06",
-     "value": -0.49
-    },
-    {
-     "date": "2026-03-13",
-     "value": -0.474
-    },
-    {
-     "date": "2026-03-20",
-     "value": -0.464
-    },
-    {
-     "date": "2026-03-27",
-     "value": -0.46
-    },
-    {
-     "date": "2026-04-03",
-     "value": -0.465
-    },
-    {
-     "date": "2026-04-10",
-     "value": -0.475
-    },
-    {
-     "date": "2026-04-17",
-     "value": -0.487
-    },
-    {
-     "date": "2026-04-24",
-     "value": -0.497
-    },
-    {
-     "date": "2026-05-01",
-     "value": -0.505
-    },
-    {
-     "date": "2026-05-08",
-     "value": -0.51
-    },
-    {
-     "date": "2026-05-15",
-     "value": -0.512
-    },
-    {
-     "date": "2026-05-22",
-     "value": -0.511
-    },
-    {
-     "date": "2026-05-29",
-     "value": -0.51
-    },
-    {
-     "date": "2026-06-05",
-     "value": -0.509
-    },
-    {
-     "date": "2026-06-12",
-     "value": -0.508
-    },
-    {
-     "date": "2026-06-19",
-     "value": -0.509
-    },
-    {
-     "date": "2026-06-26",
-     "value": -0.512
-    },
-    {
-     "date": "2026-07-03",
-     "value": -0.517
-    },
-    {
-     "date": "2026-07-10",
-     "value": -0.522
-    },
-    {
-     "date": "2026-07-17",
-     "value": -0.528
-    },
-    {
-     "date": "2026-07-24",
-     "value": -0.534
-    },
-    {
-     "date": "2026-07-31",
-     "value": -0.539
-    },
-    {
-     "date": "2026-08-07",
-     "value": -0.544
-    },
-    {
-     "date": "2026-08-14",
-     "value": -0.548
-    },
-    {
-     "date": "2026-08-21",
-     "value": -0.549
-    },
-    {
-     "date": "2026-08-28",
-     "value": -0.547
-    },
-    {
-     "date": "2026-09-04",
-     "value": -0.541
-    },
-    {
-     "date": "2026-09-11",
-     "value": -0.532
-    },
-    {
-     "date": "2026-09-18",
-     "value": -0.52
-    },
-    {
-     "date": "2026-09-25",
-     "value": -0.507
-    },
-    {
-     "date": "2026-10-02",
-     "value": -0.494
-    },
-    {
-     "date": "2026-10-09",
-     "value": -0.484
-    },
-    {
-     "date": "2026-10-16",
-     "value": -0.476
-    },
-    {
-     "date": "2026-10-23",
+     "date": "2024-11-29",
      "value": -0.471
     },
     {
-     "date": "2026-10-30",
-     "value": -0.47
-    },
-    {
-     "date": "2026-11-06",
+     "date": "2024-12-06",
      "value": -0.473
     },
     {
+     "date": "2024-12-13",
+     "value": -0.475
+    },
+    {
+     "date": "2024-12-20",
+     "value": -0.476
+    },
+    {
+     "date": "2024-12-27",
+     "value": -0.48
+    },
+    {
+     "date": "2025-01-03",
+     "value": -0.485
+    },
+    {
+     "date": "2025-01-10",
+     "value": -0.491
+    },
+    {
+     "date": "2025-01-17",
+     "value": -0.496
+    },
+    {
+     "date": "2025-01-24",
+     "value": -0.501
+    },
+    {
+     "date": "2025-01-31",
+     "value": -0.504
+    },
+    {
+     "date": "2025-02-07",
+     "value": -0.503
+    },
+    {
+     "date": "2025-02-14",
+     "value": -0.499
+    },
+    {
+     "date": "2025-02-21",
+     "value": -0.489
+    },
+    {
+     "date": "2025-02-28",
+     "value": -0.476
+    },
+    {
+     "date": "2025-03-07",
+     "value": -0.459
+    },
+    {
+     "date": "2025-03-14",
+     "value": -0.44
+    },
+    {
+     "date": "2025-03-21",
+     "value": -0.422
+    },
+    {
+     "date": "2025-03-28",
+     "value": -0.404
+    },
+    {
+     "date": "2025-04-04",
+     "value": -0.389
+    },
+    {
+     "date": "2025-04-11",
+     "value": -0.379
+    },
+    {
+     "date": "2025-04-18",
+     "value": -0.379
+    },
+    {
+     "date": "2025-04-25",
+     "value": -0.386
+    },
+    {
+     "date": "2025-05-02",
+     "value": -0.399
+    },
+    {
+     "date": "2025-05-09",
+     "value": -0.417
+    },
+    {
+     "date": "2025-05-16",
+     "value": -0.434
+    },
+    {
+     "date": "2025-05-23",
+     "value": -0.449
+    },
+    {
+     "date": "2025-05-30",
+     "value": -0.461
+    },
+    {
+     "date": "2025-06-06",
+     "value": -0.471
+    },
+    {
+     "date": "2025-06-13",
+     "value": -0.479
+    },
+    {
+     "date": "2025-06-20",
+     "value": -0.485
+    },
+    {
+     "date": "2025-06-27",
+     "value": -0.491
+    },
+    {
+     "date": "2025-07-04",
+     "value": -0.498
+    },
+    {
+     "date": "2025-07-11",
+     "value": -0.504
+    },
+    {
+     "date": "2025-07-18",
+     "value": -0.509
+    },
+    {
+     "date": "2025-07-25",
+     "value": -0.513
+    },
+    {
+     "date": "2025-08-01",
+     "value": -0.516
+    },
+    {
+     "date": "2025-08-08",
+     "value": -0.518
+    },
+    {
+     "date": "2025-08-15",
+     "value": -0.52
+    },
+    {
+     "date": "2025-08-22",
+     "value": -0.521
+    },
+    {
+     "date": "2025-08-29",
+     "value": -0.522
+    },
+    {
+     "date": "2025-09-05",
+     "value": -0.522
+    },
+    {
+     "date": "2025-09-12",
+     "value": -0.522
+    },
+    {
+     "date": "2025-09-19",
+     "value": -0.521
+    },
+    {
+     "date": "2025-09-26",
+     "value": -0.521
+    },
+    {
+     "date": "2025-10-03",
+     "value": -0.52
+    },
+    {
+     "date": "2025-10-10",
+     "value": -0.518
+    },
+    {
+     "date": "2025-10-17",
+     "value": -0.515
+    },
+    {
+     "date": "2025-10-24",
+     "value": -0.512
+    },
+    {
+     "date": "2025-10-31",
+     "value": -0.509
+    },
+    {
+     "date": "2025-11-07",
+     "value": -0.505
+    },
+    {
+     "date": "2025-11-14",
+     "value": -0.503
+    },
+    {
+     "date": "2025-11-21",
+     "value": -0.503
+    },
+    {
+     "date": "2025-11-28",
+     "value": -0.504
+    },
+    {
+     "date": "2025-12-05",
+     "value": -0.507
+    },
+    {
+     "date": "2025-12-12",
+     "value": -0.512
+    },
+    {
+     "date": "2025-12-19",
+     "value": -0.521
+    },
+    {
+     "date": "2025-12-26",
+     "value": -0.533
+    },
+    {
+     "date": "2026-01-02",
+     "value": -0.544
+    },
+    {
+     "date": "2026-01-09",
+     "value": -0.555
+    },
+    {
+     "date": "2026-01-16",
+     "value": -0.562
+    },
+    {
+     "date": "2026-01-23",
+     "value": -0.564
+    },
+    {
+     "date": "2026-01-30",
+     "value": -0.56
+    },
+    {
+     "date": "2026-02-06",
+     "value": -0.552
+    },
+    {
+     "date": "2026-02-13",
+     "value": -0.539
+    },
+    {
+     "date": "2026-02-20",
+     "value": -0.522
+    },
+    {
+     "date": "2026-02-27",
+     "value": -0.503
+    },
+    {
+     "date": "2026-03-06",
+     "value": -0.485
+    },
+    {
+     "date": "2026-03-13",
+     "value": -0.469
+    },
+    {
+     "date": "2026-03-20",
+     "value": -0.46
+    },
+    {
+     "date": "2026-03-27",
+     "value": -0.456
+    },
+    {
+     "date": "2026-04-03",
+     "value": -0.461
+    },
+    {
+     "date": "2026-04-10",
+     "value": -0.471
+    },
+    {
+     "date": "2026-04-17",
+     "value": -0.482
+    },
+    {
+     "date": "2026-04-24",
+     "value": -0.492
+    },
+    {
+     "date": "2026-05-01",
+     "value": -0.5
+    },
+    {
+     "date": "2026-05-08",
+     "value": -0.504
+    },
+    {
+     "date": "2026-05-15",
+     "value": -0.506
+    },
+    {
+     "date": "2026-05-22",
+     "value": -0.505
+    },
+    {
+     "date": "2026-05-29",
+     "value": -0.503
+    },
+    {
+     "date": "2026-06-05",
+     "value": -0.502
+    },
+    {
+     "date": "2026-06-12",
+     "value": -0.501
+    },
+    {
+     "date": "2026-06-19",
+     "value": -0.503
+    },
+    {
+     "date": "2026-06-26",
+     "value": -0.506
+    },
+    {
+     "date": "2026-07-03",
+     "value": -0.511
+    },
+    {
+     "date": "2026-07-10",
+     "value": -0.517
+    },
+    {
+     "date": "2026-07-17",
+     "value": -0.522
+    },
+    {
+     "date": "2026-07-24",
+     "value": -0.529
+    },
+    {
+     "date": "2026-07-31",
+     "value": -0.534
+    },
+    {
+     "date": "2026-08-07",
+     "value": -0.538
+    },
+    {
+     "date": "2026-08-14",
+     "value": -0.542
+    },
+    {
+     "date": "2026-08-21",
+     "value": -0.542
+    },
+    {
+     "date": "2026-08-28",
+     "value": -0.54
+    },
+    {
+     "date": "2026-09-04",
+     "value": -0.535
+    },
+    {
+     "date": "2026-09-11",
+     "value": -0.526
+    },
+    {
+     "date": "2026-09-18",
+     "value": -0.516
+    },
+    {
+     "date": "2026-09-25",
+     "value": -0.504
+    },
+    {
+     "date": "2026-10-02",
+     "value": -0.492
+    },
+    {
+     "date": "2026-10-09",
+     "value": -0.483
+    },
+    {
+     "date": "2026-10-16",
+     "value": -0.474
+    },
+    {
+     "date": "2026-10-23",
+     "value": -0.466
+    },
+    {
+     "date": "2026-10-30",
+     "value": -0.46
+    },
+    {
+     "date": "2026-11-06",
+     "value": -0.455
+    },
+    {
      "date": "2026-11-13",
-     "value": -0.478
+     "value": -0.45
+    },
+    {
+     "date": "2026-11-20",
+     "value": -0.444
     }
    ],
    "latest": {
-    "date": "2026-11-13",
-    "value": -0.478
+    "date": "2026-11-20",
+    "value": -0.444
    },
-   "sha256": "af4ac6b10d0956f50c9b9e2396883f4613109c50548a335b3b1896b25bb9b872",
-   "bytes": 2830
+   "sha256": "9524cbe1811f204a91bc71f298b6384a83680a249146a2dc5b25ec6ae0cc0159",
+   "bytes": 2848
   },
   "DTWEXBGS": {
    "id": "DTWEXBGS",
@@ -20653,14 +20645,10 @@
    "frequency": "daily",
    "purpose": "Nominal broad US dollar index; dollar strength drives HK/SG/China and GBP-based returns",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:28Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:46Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 120.2533
-    },
     {
      "date": "2023-11-21",
      "value": 120.2241
@@ -23802,8 +23790,8 @@
     "date": "2026-11-20",
     "value": 123.5978
    },
-   "sha256": "4ecf66373bb36f926c5fc819422777f8bdef4091e792a13e6414d2527d01a92d",
-   "bytes": 15462
+   "sha256": "cf31c7af66c625a7a91b595e6dc6c3c87c4efdf8f09e4871595abe80b9c42d64",
+   "bytes": 15442
   },
   "DCOILBRENTEU": {
    "id": "DCOILBRENTEU",
@@ -23814,14 +23802,10 @@
    "frequency": "daily",
    "purpose": "Brent crude spot price; inflation and energy-sector input",
    "verified": true,
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU&cosd=2023-11-20",
-   "retrieved_at": "2026-11-24T23:16:28Z",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU&cosd=2023-11-21",
+   "retrieved_at": "2026-11-25T17:29:47Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 83.25
-    },
     {
      "date": "2023-11-21",
      "value": 82.42
@@ -26951,8 +26935,8 @@
     "date": "2026-11-17",
     "value": 92.94
    },
-   "sha256": "d1eb0aee10a60912b476e6e00282ddac0c3d5b4b8bbb48c8f1ad3e49facd6af0",
-   "bytes": 13300
+   "sha256": "e50f6cb8905933eea0d21c10f04af76baafbc4f3b333e1409cd9593f0e3e2073",
+   "bytes": 13283
   },
   "ECB_GBP_EUR": {
    "id": "ECB_GBP_EUR",
@@ -26968,13 +26952,9 @@
    "purpose": "GBP purchasing power; base currency of the investor",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.GBP.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-24T23:16:29Z",
+   "retrieved_at": "2026-11-25T17:29:49Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-12-09",
-     "value": 0.82805
-    },
     {
      "date": "2024-12-10",
      "value": 0.82555
@@ -28970,14 +28950,18 @@
     {
      "date": "2026-11-24",
      "value": 0.837
+    },
+    {
+     "date": "2026-11-25",
+     "value": 0.8373
     }
    ],
    "latest": {
-    "date": "2026-11-24",
-    "value": 0.837
+    "date": "2026-11-25",
+    "value": 0.8373
    },
-   "sha256": "57053721ff383570391e323b7668ed475150fc0e0650dc31bf634431def0f83a",
-   "bytes": 109526
+   "sha256": "2865e18228932be484dd80d8f7f56155ee6b1d7dde0cad048215920153d7652b",
+   "bytes": 109525
   },
   "ECB_USD_EUR": {
    "id": "ECB_USD_EUR",
@@ -28993,13 +28977,9 @@
    "purpose": "EUR/USD cross for USD exposure and GBP/USD derivation",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-24T23:16:31Z",
+   "retrieved_at": "2026-11-25T17:29:52Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-12-09",
-     "value": 1.0568
-    },
     {
      "date": "2024-12-10",
      "value": 1.0527
@@ -30995,13 +30975,17 @@
     {
      "date": "2026-11-24",
      "value": 1.0963
+    },
+    {
+     "date": "2026-11-25",
+     "value": 1.0935
     }
    ],
    "latest": {
-    "date": "2026-11-24",
-    "value": 1.0963
+    "date": "2026-11-25",
+    "value": 1.0935
    },
-   "sha256": "bed801b201901a618bc245cb3d33753df56f70983b1470e04df92a788dfb8e8d",
+   "sha256": "61897a8b34833cb29dd903de2db16b39691681e10ea61907df6d89dba8cca2b9",
    "bytes": 104274
   },
   "ECB_SGD_EUR": {
@@ -31018,13 +31002,9 @@
    "purpose": "Singapore dollar for the SG income sleeve",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.SGD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-24T23:16:32Z",
+   "retrieved_at": "2026-11-25T17:29:54Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-12-09",
-     "value": 1.4157
-    },
     {
      "date": "2024-12-10",
      "value": 1.4118
@@ -33020,13 +33000,17 @@
     {
      "date": "2026-11-24",
      "value": 1.4141
+    },
+    {
+     "date": "2026-11-25",
+     "value": 1.4129
     }
    ],
    "latest": {
-    "date": "2026-11-24",
-    "value": 1.4141
+    "date": "2026-11-25",
+    "value": 1.4129
    },
-   "sha256": "3ea827d0e25e6aaa608353828c109d6a836a2b5af0cb3ed2a9f83e5ca4702422",
+   "sha256": "38c1d4f17081aa9ba2fcd818fbb5453cb890aa0e129f5c049c8feb8ca6ace6dd",
    "bytes": 111284
   },
   "ECB_HKD_EUR": {
@@ -33043,13 +33027,9 @@
    "purpose": "Hong Kong dollar (pegged to USD) for HK holdings",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HKD.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-24T23:16:33Z",
+   "retrieved_at": "2026-11-25T17:29:56Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-12-09",
-     "value": 8.2164
-    },
     {
      "date": "2024-12-10",
      "value": 8.1858
@@ -35045,13 +35025,17 @@
     {
      "date": "2026-11-24",
      "value": 8.597
+    },
+    {
+     "date": "2026-11-25",
+     "value": 8.5709
     }
    ],
    "latest": {
-    "date": "2026-11-24",
-    "value": 8.597
+    "date": "2026-11-25",
+    "value": 8.5709
    },
-   "sha256": "7053c4bdcbd45f48fd54777f3d9b6346f9dcbf14b336be98fc43bb545b159080",
+   "sha256": "1860b5a0130ae67e3216ba8ed8c45bcfa39179e24ad330d56d6086642da60b89",
    "bytes": 111279
   },
   "ECB_CNY_EUR": {
@@ -35068,13 +35052,9 @@
    "purpose": "Chinese renminbi for China holdings",
    "verified": true,
    "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CNY.EUR.SP00.A?format=csvdata&lastNObservations=500",
-   "retrieved_at": "2026-11-24T23:16:34Z",
+   "retrieved_at": "2026-11-25T17:29:59Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2024-12-09",
-     "value": 7.677
-    },
     {
      "date": "2024-12-10",
      "value": 7.6354
@@ -37070,14 +37050,18 @@
     {
      "date": "2026-11-24",
      "value": 7.3063
+    },
+    {
+     "date": "2026-11-25",
+     "value": 7.2999
     }
    ],
    "latest": {
-    "date": "2026-11-24",
-    "value": 7.3063
+    "date": "2026-11-25",
+    "value": 7.2999
    },
-   "sha256": "cf9df61e5549623d080294f6e4af75c57feadf01093474d6e7579d056a005a8f",
-   "bytes": 116270
+   "sha256": "7a70e119de3f0c7e1432c6b964acebdaeb4e379813fa78bd22aeb37891230b4d",
+   "bytes": 116271
   },
   "BOE_IUDBEDR": {
    "id": "BOE_IUDBEDR",
@@ -37088,14 +37072,10 @@
    "frequency": "daily",
    "purpose": "UK Bank Rate (official policy rate)",
    "verified": true,
-   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=20/Nov/2023&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-11-24T23:16:35Z",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=21/Nov/2023&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "retrieved_at": "2026-11-25T17:30:00Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 5.25
-    },
     {
      "date": "2023-11-21",
      "value": 5.25
@@ -40139,14 +40119,18 @@
     {
      "date": "2026-11-23",
      "value": 4.0
+    },
+    {
+     "date": "2026-11-24",
+     "value": 4.0
     }
    ],
    "latest": {
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "value": 4.0
    },
-   "sha256": "19c6f1c92f658932c67af3d11044f7959a6fe8f9898064a6eb9c3b29c022c685",
-   "bytes": 13140
+   "sha256": "45cae22843c76bcadad02eef61e7cdc36710055da48f1cf397fd3b83719c73fc",
+   "bytes": 13137
   },
   "BOE_IUDMNZC": {
    "id": "BOE_IUDMNZC",
@@ -40157,14 +40141,10 @@
    "frequency": "daily",
    "purpose": "UK 10-year nominal zero-coupon gilt yield (BoE yield-curve estimate); UK discount rate",
    "verified": true,
-   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=20/Nov/2023&Dateto=now&SeriesCodes=IUDMNZC&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-   "retrieved_at": "2026-11-24T23:16:35Z",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=21/Nov/2023&Dateto=now&SeriesCodes=IUDMNZC&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "retrieved_at": "2026-11-25T17:30:01Z",
    "status": "ok",
    "observations": [
-    {
-     "date": "2023-11-20",
-     "value": 4.1265
-    },
     {
      "date": "2023-11-21",
      "value": 4.1005
@@ -43204,13 +43184,17 @@
     {
      "date": "2026-11-20",
      "value": 5.2334
+    },
+    {
+     "date": "2026-11-23",
+     "value": 5.1928
     }
    ],
    "latest": {
-    "date": "2026-11-20",
-    "value": 5.2334
+    "date": "2026-11-23",
+    "value": 5.1928
    },
-   "sha256": "c1fb2c816ad7ad820859f027120d14bddf8b7234045b31f6fde29aae1aa2bb40",
+   "sha256": "6776d15da066f14f7473bc76ab5dc4764e338fc7c40703cde124779e70395a18",
    "bytes": 15163
   },
   "ONS_L55O": {
@@ -43224,7 +43208,7 @@
    "purpose": "UK CPIH annual rate (CPI including owner-occupiers' housing costs); headline UK inflation measure",
    "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23/data",
-   "retrieved_at": "2026-11-24T23:16:35Z",
+   "retrieved_at": "2026-11-25T17:30:01Z",
    "status": "ok",
    "observations": [
     {
@@ -45062,7 +45046,7 @@
    "purpose": "UK CPI annual rate (the Bank of England's 2% target measure); cross-check for CPIH",
    "verified": true,
    "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data",
-   "retrieved_at": "2026-11-24T23:16:35Z",
+   "retrieved_at": "2026-11-25T17:30:01Z",
    "status": "ok",
    "observations": [
     {
@@ -46900,7 +46884,7 @@
    "purpose": "Primary-source 3-month Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:18Z",
    "status": "ok",
    "observations": [
     {
@@ -47822,7 +47806,7 @@
    "purpose": "Primary-source 2-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:18Z",
    "status": "ok",
    "observations": [
     {
@@ -48744,7 +48728,7 @@
    "purpose": "Primary-source 10-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:18Z",
    "status": "ok",
    "observations": [
     {
@@ -49666,7 +49650,7 @@
    "purpose": "Primary-source 30-year Treasury par yield; cross-check for the FRED constant-maturity series (same underlying data, not independent)",
    "verified": true,
    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:18Z",
    "status": "ok",
    "observations": [
     {
@@ -50589,7 +50573,7 @@
    "purpose": "Singapore real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/SG/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:18Z",
    "status": "ok",
    "observations": [
     {
@@ -50876,7 +50860,7 @@
    "purpose": "Hong Kong SAR, China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/HK/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:19Z",
    "status": "ok",
    "observations": [
     {
@@ -51163,7 +51147,7 @@
    "purpose": "China real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/CN/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:19Z",
    "status": "ok",
    "observations": [
     {
@@ -51450,7 +51434,7 @@
    "purpose": "United Kingdom real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/GB/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:19Z",
    "status": "ok",
    "observations": [
     {
@@ -51737,7 +51721,7 @@
    "purpose": "United States real GDP growth; slow-moving growth backdrop (latest year often lags by one year)",
    "verified": true,
    "url": "https://api.worldbank.org/v2/country/US/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=100",
-   "retrieved_at": "2026-11-24T23:16:52Z",
+   "retrieved_at": "2026-11-25T17:30:19Z",
    "status": "ok",
    "observations": [
     {
