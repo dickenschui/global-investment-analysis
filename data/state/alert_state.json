@@ -39,15 +39,15 @@
   },
   "MONITOR|Weekly levels stale": {
    "severity": "WARN",
-   "first_seen": "2026-11-24T05:24:12Z",
-   "last_seen": "2026-11-24T16:06:12Z",
+   "first_seen": "2026-11-25T00:37:20Z",
+   "last_seen": "2026-11-25T00:37:20Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Weekly levels stale",
-    "evidence": "Levels as of 2026-10-09 are 46 days old (limit 9)",
+    "evidence": "Levels as of 2026-10-09 are 47 days old (limit 9)",
     "action": "The weekly refresh did not land: alerts still use last week's exits and revisit levels. Check the weekly routine and merge its pull request."
    },
    "levels_as_of": "2026-10-09"
@@ -183,15 +183,15 @@
   },
   "MONITOR|Monitor heartbeat gap": {
    "severity": "WARN",
-   "first_seen": "2026-11-24T05:24:12Z",
-   "last_seen": "2026-11-24T16:06:12Z",
+   "first_seen": "2026-11-25T00:37:20Z",
+   "last_seen": "2026-11-25T00:37:20Z",
    "notified_severity": "WARN",
    "delivered": true,
    "alert": {
     "severity": "WARN",
     "symbol": "MONITOR",
     "rule": "Monitor heartbeat gap",
-    "evidence": "Previous check 2026-11-24T05:24:12Z; this check 2026-11-24T16:06:12Z; gap 10.7 hours (limit 2.5)",
+    "evidence": "Previous check 2026-11-24T16:06:12Z; this check 2026-11-25T00:37:20Z; gap 8.5 hours (limit 2.5)",
     "action": "The monitor was not observing during the gap: review exit levels and news for that interval manually. Check the scheduler if this repeats."
    },
    "levels_as_of": "2026-10-09"
@@ -418,14 +418,8 @@
    "repeat_of": "2026-10-30T14:02:01Z"
   }
  },
- "last_run_utc": "2026-11-24T16:06:12Z",
+ "last_run_utc": "2026-11-25T00:37:20Z",
  "recent": {
-  "XLB|Revisit trigger crossed": {
-   "cleared_at": "2026-11-17T19:25:44Z",
-   "first_seen": "2026-10-26T19:12:05Z",
-   "notified_severity": "INFO",
-   "levels_as_of": "2026-10-09"
-  },
   "ISF|Revisit trigger crossed": {
    "cleared_at": "2026-11-18T10:02:08Z",
    "first_seen": "2026-11-10T08:52:11Z",
